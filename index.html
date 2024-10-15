@@ -29,7 +29,14 @@
       transform: scale(0.5); /* Skaliert den Inhalt auf 50% */
       transform-origin: 0 0; /* Ursprung der Skalierung oben links */
     }
-
+  /* Für Mobilgeräte */
+  @media (max-width: 768px) {
+    .iframe-container iframe {
+      width: 800px;
+      height: 600px;
+      transform: scale(1); /* Keine Skalierung auf mobilen Geräten */
+    }
+  }
 
     /* iFrame für 100% Zoom (kein Zoom) */
     .zoom-100 iframe {
