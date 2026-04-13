@@ -454,7 +454,8 @@
         <div class="media-container">
           <img class="live-cam" data-src="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg"
                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-               width="640" height="360" alt="Mollis Nord">
+               width="640" height="360" alt="Mollis Nord"
+               style="object-position: center top;">
         </div>
       </div>
 
@@ -808,6 +809,45 @@
           '<div class="wx-stat-value" style="font-size:0.95rem;">' + txt + '</div></div>';
       }
 
+      // Dichtehöhe berechnen (ICAO-Formel)
+      // DA = Platzhöhe + 118.8 * (ISA-Abweichung) + (1013.25 - QNH) * 27
+      // ISA-Temp auf LSZK-Elevation (536m = 1758ft): 15 - (1758/1000 * 2) = 11.5°C
+      var daHtml = '';
+      if (m.temp !== undefined && m.altim !== undefined) {
+        var elevFt  = 1758;                          // LSZK Platzhöhe ft
+        var isaTemp = 15 - (elevFt / 1000 * 2);     // ISA-Temp auf Platzhöhe
+        var tempDev = parseFloat(m.temp) - isaTemp;  // ISA-Abweichung
+        var pressAlt = elevFt + (1013.25 - parseFloat(m.altim)) * 27;
+        var densAlt  = Math.round(pressAlt + 118.8 * tempDev);
+        var daColor  = densAlt > 5000 ? '#ef4444' : densAlt > 3000 ? '#f59e0b' : '#10b981';
+        daHtml = '<div class="wx-stat"><div class="wx-stat-label">Dichtehöhe</div>' +
+          '<div class="wx-stat-value" style="color:' + daColor + ';">' + densAlt + ' ft</div>' +
+          '<div class="wx-stat-sub">' + Math.round(densAlt / 3.28084) + ' m</div></div>';
+      }
+
+      // Wetter (wxString aus METAR, z.B. "-RA", "TSRA", "SN" etc.)
+      var wxMap = {
+        'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
+        'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
+        'DZ': 'Sprühregen', '-DZ': 'Leichter Sprühregen',
+        'TSRA': 'Gewitter mit Regen', 'TS': 'Gewitter',
+        'FG': 'Nebel', 'BR': 'Dunst', 'HZ': 'Dunst',
+        'FZRA': 'Gefrierender Regen', 'FZDZ': 'Gefr. Sprühregen',
+        'GR': 'Hagel', 'GS': 'Graupel', 'SG': 'Schneegriesel',
+        'RASN': 'Regen und Schnee', 'NSW': 'Kein sig. Wetter'
+      };
+      var wetterHtml = '';
+      var wxRaw = m.wxString || '';
+      if (!wxRaw && m.rawOb) {
+        var wxM = m.rawOb.match(/\b([-+]?(?:TS|FZ)?(?:RA|SN|DZ|GR|GS|SG|PL|IC)(?:RA|SN)?|FG|BR|HZ|NSW)\b/);
+        if (wxM) wxRaw = wxM[1];
+      }
+      if (wxRaw) {
+        var wxText = wxMap[wxRaw] || wxRaw;
+        wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetter</div>' +
+          '<div class="wx-stat-value" style="font-size:0.95rem;">' + wxText + '</div></div>';
+      }
+
       // Sonnenzeiten aktualisieren
       var sunTimes = calcSunTimes(47.37557, 8.76169);
       var sunBar = document.getElementById('sunrise-bar');
@@ -833,6 +873,8 @@
             (boeen !== '–' ? stat('Böen', boeen) : '') +
             stat('Sicht',       sicht) +
             wolkenHtml +
+            wetterHtml +
+            daHtml +
           '</div>' +
         '</div>' +
         '<div class="wx-updated">' +
