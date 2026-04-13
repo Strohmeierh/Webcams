@@ -266,6 +266,13 @@
       height: 100%;
       border: none;
       display: block;
+      /* Auf Touch-Geräten: Touch-Events an die Seite weitergeben,
+         verhindert dass Wischen im iframe stecken bleibt */
+      pointer-events: none;
+    }
+    /* Auf Desktop (mit Maus) Klicks wieder erlauben */
+    @media (hover: hover) and (pointer: fine) {
+      .media-container iframe { pointer-events: auto; }
     }
 
     .media-container::after {
