@@ -562,10 +562,6 @@
         </div>
       </div>
 
-    </div>
-
-    <div class="cam-grid">
-
       <div class="cam-card">
         <div class="cam-header">
           <a href="https://webcam.skiarena.ch/oberalppass/image.jpg" target="_blank" rel="noopener">Oberalppass</a>
@@ -716,23 +712,23 @@
        URL: https://aviationweather.gov/api/data/metar?ids=LSZK&format=json */
     function loadWetter() {
       var el  = document.getElementById('wx-content');
-      var src = 'https://aviationweather.gov/api/data/metar?ids=LSZK&format=json';
-      var url = 'https://api.allorigins.win/get?url=' + encodeURIComponent(src) + '&t=' + Date.now();
+      // metar-lszk.json liegt im gleichen Repository auf GitHub Pages
+      // → kein Proxy, kein CORS-Problem, direkt HTTPS
+      var url = 'metar-lszk.json?t=' + Date.now();
 
       el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">Lade Wetterdaten…</div>';
 
-      var controller = new AbortController();
-      setTimeout(function() { controller.abort(); }, 12000);
-
-      fetch(url, { cache: 'no-store', signal: controller.signal })
+      fetch(url, { cache: 'no-store' })
         .then(function(r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
           return r.json();
         })
-        .then(function(json) {
-          var data = JSON.parse(json.contents);
+        .then(function(data) {
           if (!data || !data.length) throw new Error('kein METAR');
-          renderWetter(el, data[0]);
+          var m = data[0];
+          // Quelle 2 liefert nur rawOb + reportTime → rawOb parsen
+          if (!m.temp && m.rawOb) m = parsRawMetar(m);
+          renderWetter(el, m);
         })
         .catch(function() { renderFallback(el); });
     }
@@ -1119,6 +1115,47 @@
       }
 
       return { rise: jdToTime(Jrise), set: jdToTime(Jset) };
+    }
+
+    /* ── Rohen METAR-String parsen ──────────────────────────────
+       Format: LSZK 131055Z 29005KT 9999 FEW035 09/05 Q1018 NOSIG */
+    function parsRawMetar(m) {
+      var raw = m.rawOb || '';
+      var r = { rawOb: raw, reportTime: m.reportTime };
+
+      // Windrichtung + Stärke: z.B. 29005KT oder VRB03KT
+      var wm = raw.match(/\b(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT\b/);
+      if (wm) {
+        r.wdir = wm[1] === 'VRB' ? 0 : parseInt(wm[1]);
+        r.wspd = parseInt(wm[2]);
+        if (wm[3]) r.wgst = parseInt(wm[3]);
+      }
+
+      // Temperatur/Taupunkt: z.B. 09/05 oder M02/M05
+      var tm = raw.match(/\bM?(\d{2})\/M?(\d{2})\b/);
+      if (tm) {
+        r.temp = (raw.match(/\bM\d{2}\//) ? -1 : 1) * parseInt(tm[1]);
+        r.dewp = (raw.match(/\/M\d{2}\b/)  ? -1 : 1) * parseInt(tm[2]);
+      }
+
+      // QNH: z.B. Q1018
+      var qm = raw.match(/\bQ(\d{4})\b/);
+      if (qm) r.altim = parseInt(qm[1]);
+
+      // Wolken: z.B. FEW035 SCT040 BKN080
+      var clouds = [];
+      var re = /\b(FEW|SCT|BKN|OVC)(\d{3})\b/g;
+      var cm;
+      while ((cm = re.exec(raw)) !== null) {
+        clouds.push({ cover: cm[1], base: parseInt(cm[2]) * 100 });
+      }
+      if (clouds.length) r.clouds = clouds;
+
+      // Sicht: z.B. 9999 oder 6000
+      var vm = raw.match(/\b(\d{4})\b/);
+      if (vm) r.visib = (parseInt(vm[1]) / 1000).toFixed(1); // km
+
+      return r;
     }
 
     function renderFallback(el) {
