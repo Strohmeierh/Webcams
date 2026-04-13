@@ -418,7 +418,17 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://fgzo.ch/#galerie-2" target="_blank" rel="noopener">Speck</a>
+          <a href="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" target="_blank" rel="noopener">Speck – Kamera 1</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <iframe src="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://fgzo.ch/#galerie-2" target="_blank" rel="noopener">Speck – Kamera 2</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -462,8 +472,8 @@
 
     </div>
 
-    <!-- ===== Umgebung ===== -->
-    <h2 class="section-title">Umgebung</h2>
+    <!-- ===== Alpen ===== -->
+    <h2 class="section-title">Alpen</h2>
     <div class="cam-grid">
 
       <div class="cam-card">
@@ -472,7 +482,9 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
+          <img class="live-cam" data-src="https://bachtel.it-wms.com/panorama1_raw.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Bachtel">
         </div>
       </div>
 
@@ -699,15 +711,12 @@
       if (open && !wxLoaded) { wxLoaded = true; loadWetter(); }
     };
 
-    /* ── Wetterdaten aus index.html scrapen ─────────────────────
-       gauge-data.txt ist per Proxy nicht erreichbar (HTTP+CORS).
-       Die index.html enthält alle Werte als fertigen HTML-Text
-       und ist über corsproxy.io abrufbar.                        */
+    /* ── Wetterdaten aus METAR LSZK (NOAA Aviation Weather API) ──
+       Kostenlos, kein API-Key, direkt HTTPS, kein Proxy nötig.
+       URL: https://aviationweather.gov/api/data/metar?ids=LSZK&format=json */
     function loadWetter() {
       var el  = document.getElementById('wx-content');
-      // gauge-data.txt liegt im gleichen Repository auf GitHub Pages
-      // → kein Proxy, kein CORS-Problem, direkt HTTPS
-      var url = 'gauge-data.txt?t=' + Date.now();
+      var url = 'https://aviationweather.gov/api/data/metar?ids=LSZK&format=json&t=' + Date.now();
 
       el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">Lade Wetterdaten…</div>';
 
@@ -716,49 +725,106 @@
           if (!r.ok) throw new Error('HTTP ' + r.status);
           return r.json();
         })
-        .then(function(d) { renderWetter(el, d); })
-        .catch(function()  { renderFallback(el); });
+        .then(function(data) {
+          if (!data || !data.length) throw new Error('kein METAR');
+          renderWetter(el, data[0]);
+        })
+        .catch(function() { renderFallback(el); });
     }
 
-    function renderWetter(el, d) {
-      function f(v, dez) {
-        if (v === undefined || v === null || v === '') return '–';
-        // gauge-data.txt liefert Dezimalzahlen mit Komma ("3,6") → für parseFloat in Punkt umwandeln
-        var n = parseFloat(String(v).replace(',', '.'));
-        if (isNaN(n)) return String(v);
+    function renderWetter(el, m) {
+      /* NOAA METAR JSON-Felder (Auswahl):
+         m.temp        – Temperatur °C (float)
+         m.dewp        – Taupunkt °C
+         m.wdir        – Windrichtung Grad
+         m.wspd        – Windgeschwindigkeit kt
+         m.wgst        – Böen kt (optional)
+         m.altim       – QNH hPa
+         m.visib       – Sicht Meilen
+         m.clouds      – Array [{cover, base}] base in ft AGL
+         m.rawOb       – Roher METAR-String
+         m.reportTime  – Zeitstempel "2026-04-13T10:55:00Z"        */
+
+      function fc(val, dez) {
+        // Zahl formatieren mit Komma
+        if (val === undefined || val === null) return '–';
+        var n = parseFloat(val);
+        if (isNaN(n)) return '–';
         return n.toFixed(dez !== undefined ? dez : 1).replace('.', ',');
       }
 
-      var bearing = d.bearing !== undefined ? parseFloat(d.bearing) : 0;
-      var wspeed  = d.wspeed  !== undefined ? parseFloat(d.wspeed)  : 0;
-      var wgust   = d.wgust   !== undefined ? parseFloat(d.wgust)   : 0;
+      // Zeitstempel: UTC → MEZ/MESZ
+      var zeit = '–';
+      if (m.reportTime) {
+        var d = new Date(m.reportTime);
+        // MEZ/MESZ Offset berechnen
+        var year = d.getUTCFullYear();
+        function lastSun(mo) {
+          var x = new Date(Date.UTC(year, mo, 31));
+          x.setUTCDate(31 - (x.getUTCDay() || 7) % 7);
+          return x;
+        }
+        var offset = (d >= lastSun(2) && d < lastSun(9)) ? 2 : 1;
+        var loc = new Date(d.getTime() + offset * 3600000);
+        var pad = function(n) { return ('0'+n).slice(-2); };
+        zeit = pad(loc.getUTCDate()) + '.' + pad(loc.getUTCMonth()+1) + '.' +
+               loc.getUTCFullYear() + ' ' +
+               pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' MEZ';
+      }
 
-      // Datum von "2026.04.12 00:55" → "12.04.2026 00:55" umformatieren
-      var rawDate = d.date || '–';
-      var zeit = rawDate.replace(/^(\d{4})\.(\d{2})\.(\d{2})(.*)$/, '$3.$2.$1$4');
-      var windDir = (d.bearingTxt && d.bearingTxt !== '---') ? d.bearingTxt : (d.bearing ? d.bearing + '°' : '');
-      var windKt  = Math.round(wspeed / 1.852);
-      var guestKt = Math.round(wgust  / 1.852);
-      var wind    = f(d.wspeed, 0) + ' km/h / ' + windKt + ' kt' + (windDir ? ' aus ' + windDir : '');
-      var boeen   = f(d.wgust,  0) + ' km/h / ' + guestKt + ' kt';
-      var cbFt = d.cloudbasevalue ? Math.round(parseFloat(d.cloudbasevalue)) : null;
-      var cbM  = cbFt ? Math.round(cbFt / 3.28084) : null;
-      var cbHtml = cbFt
+      // Wind: METAR liefert kt → umrechnen in km/h
+      var wspdKt  = m.wspd  !== undefined ? parseFloat(m.wspd)  : 0;
+      var wgstKt  = m.wgst  !== undefined ? parseFloat(m.wgst)  : 0;
+      var bearing = m.wdir  !== undefined ? parseFloat(m.wdir)  : 0;
+      var wspdKmh = Math.round(wspdKt * 1.852);
+      var wgstKmh = Math.round(wgstKt * 1.852);
+
+      // Windrichtungstext
+      var dirs = ['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+      var windDirTxt = bearing > 0 ? dirs[Math.round(bearing / 22.5) % 16] : '';
+      var wind  = wspdKmh + ' km/h / ' + Math.round(wspdKt) + ' kt' + (windDirTxt ? ' aus ' + windDirTxt : '');
+      var boeen = wgstKt > 0 ? wgstKmh + ' km/h / ' + Math.round(wgstKt) + ' kt' : '–';
+
+      // Wolken: unterste signifikante Schicht (BKN/OVC = Wolkenbasis)
+      var cbFt = null;
+      if (m.clouds && m.clouds.length) {
+        for (var i = 0; i < m.clouds.length; i++) {
+          var cl = m.clouds[i];
+          if (cl.cover === 'BKN' || cl.cover === 'OVC' || cl.cover === 'FEW' || cl.cover === 'SCT') {
+            var baseFt = parseInt(cl.base);
+            if (!isNaN(baseFt) && (cbFt === null || baseFt < cbFt)) cbFt = baseFt;
+          }
+        }
+      }
+      // Wolkenbasis AGL → MSL: Platz liegt auf 1758 ft
+      var cbFtMSL = cbFt !== null ? cbFt + 1758 : null;
+      var cbMSL_m = cbFtMSL !== null ? Math.round(cbFtMSL / 3.28084) : null;
+      var cbHtml = cbFtMSL !== null
         ? '<div class="wx-stat"><div class="wx-stat-label">Wolkenbasis (MSL)</div>' +
-          '<div class="wx-stat-value">' + cbFt + ' ft</div>' +
-          '<div class="wx-stat-value">' + cbM  + ' m</div></div>'
+          '<div class="wx-stat-value">' + cbFtMSL + ' ft</div>' +
+          '<div class="wx-stat-value">' + cbMSL_m  + ' m</div></div>'
         : '';
 
-      // Sonnenauf-/-untergang für LSZK (47.37557°N, 8.76169°E) berechnen
+      // QNH: METAR liefert hPa
+      var qnh = m.altim ? fc(m.altim, 0) + ' hPa' : '–';
+
+      // Sicht
+      var sicht = m.visib !== undefined ? fc(m.visib, 0) + ' sm' : '';
+
+      // Niederschlag aus raw METAR parsen (RA, SN, DZ, etc.)
+      var niederschlag = '–';
+      if (m.wxString) {
+        niederschlag = m.wxString;
+      } else if (m.rawOb) {
+        var wxMatch = m.rawOb.match(/\b([-+]?(?:RA|SN|DZ|GR|GS|PL|SG|IC|RASN|SNRA|FZRA|FZDZ|TSRA|TSSN)[A-Z]*)\b/);
+        if (wxMatch) niederschlag = wxMatch[1];
+        else if (/\bNSW\b/.test(m.rawOb)) niederschlag = 'kein Niederschlag';
+      }
+
+      // Sonnenzeiten aktualisieren
       var sunTimes = calcSunTimes(47.37557, 8.76169);
       var sunBar = document.getElementById('sunrise-bar');
-      if (sunBar) {
-        sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (MEZ)';
-      }
-      var regen   = f(d.rfall, 1) + ' mm';
-      var trend   = d.presstrend != null
-        ? 'Trend: ' + (parseFloat(d.presstrend) >= 0 ? '+' : '') + f(d.presstrend, 1) + ' hPa/h'
-        : '';
+      if (sunBar) sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (MEZ)';
 
       function stat(label, val, sub) {
         if (!val || val === '–') return '';
@@ -771,29 +837,23 @@
 
       el.innerHTML =
         '<div class="wx-layout">' +
-
-          /* ── Pisten-Winddiagramm ── */
-          buildRunwayDiagram(bearing, wspeed, wgust) +
-
-          /* ── Werte-Kacheln ── */
+          buildRunwayDiagram(bearing, wspdKmh, wgstKmh) +
           '<div class="wx-stats">' +
-            stat('Temperatur',   f(d.temp, 1) + ' °C',
-                 'Min ' + f(d.tempTL,1) + ' / Max ' + f(d.tempTH,1) + ' °C') +
-            stat('Taupunkt',     f(d.dew,  1) + ' °C') +
-            stat('Feuchte',      f(d.hum,  0) + ' %') +
-            stat('QNH',          f(d.press,1) + ' hPa', trend) +
-            stat('Wind',         wind) +
-            stat('Böen',         boeen) +
+            stat('Temperatur',  fc(m.temp, 1) + ' °C') +
+            stat('Taupunkt',    fc(m.dewp, 1) + ' °C') +
+            stat('QNH',         qnh) +
+            stat('Wind',        wind) +
+            stat('Böen',        boeen) +
             cbHtml +
-            stat('Niederschlag', regen) +
+            stat('Sicht',       sicht) +
+            stat('Niederschlag', niederschlag) +
           '</div>' +
-
         '</div>' +
         '<div class="wx-updated">' +
           'Stand: ' + zeit +
           '<br class="wx-updated-br">' +
-          ' · <a href="https://www.lszk.ch/wetter" target="_blank" rel="noopener" ' +
-          'style="color:var(--accent);">Wetterdaten Flugplatz Speck ↗</a>' +
+          ' · <a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" ' +
+          'target="_blank" rel="noopener" style="color:var(--accent);">Wetterdaten LSZK direkt öffnen ↗</a>' +
         '</div>';
     }
 
@@ -1059,7 +1119,7 @@
     function renderFallback(el) {
       el.innerHTML =
         '<div class="wx-error">Wetterdaten konnten nicht geladen werden.</div>' +
-        '<a href="https://www.lszk.ch/wetter" target="_blank" rel="noopener" ' +
+        '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener" ' +
            'class="top-btn" style="display:inline-flex;font-size:0.85rem;padding:9px 16px;margin-top:10px;">' +
           'Wetterdaten LSZK direkt öffnen ↗' +
         '</a>';
