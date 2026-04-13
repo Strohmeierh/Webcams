@@ -20,27 +20,27 @@ jobs:
           # Mehrere Quellen versuchen
           STATUS=0
 
-          # Quelle 1: aviationweather.gov mit User-Agent
+          # Quelle 1: aviationweather.gov - LSMD (Dübendorf, 8.6km von LSZK)
+          # LSZK veröffentlicht kein eigenes METAR
           curl -s --max-time 15 \
             -A "Mozilla/5.0 (compatible; LSZK-Dashboard/1.0)" \
             -H "Accept: application/json" \
             -o metar-lszk.json \
-            "https://aviationweather.gov/api/data/metar?ids=LSZK&format=json" || STATUS=$?
+            "https://aviationweather.gov/api/data/metar?ids=LSMD&format=json" || STATUS=$?
 
-          # Prüfen ob Inhalt gültig (nicht leer, enthält LSZK)
-          if [ -s metar-lszk.json ] && grep -q "LSZK" metar-lszk.json; then
-            echo "Quelle 1 (aviationweather.gov) erfolgreich"
+          # Prüfen ob Inhalt gültig (nicht leer, enthält LSMD)
+          if [ -s metar-lszk.json ] && grep -q "LSMD" metar-lszk.json; then
+            echo "Quelle 1 (aviationweather.gov/LSMD) erfolgreich"
           else
             echo "Quelle 1 fehlgeschlagen, versuche Quelle 2..."
-            # Quelle 2: NOAA text METAR → in JSON umwandeln
+            # Quelle 2: NOAA text METAR für LSMD
             RAW=$(curl -s --max-time 15 \
-              "https://tgftp.nws.noaa.gov/data/observations/metar/stations/LSZK.TXT")
-            if [ -n "$RAW" ]; then
-              # Rohen METAR-Text als JSON verpacken
+              "https://tgftp.nws.noaa.gov/data/observations/metar/stations/LSMD.TXT")
+            if [ -n "$RAW" ] && echo "$RAW" | grep -q "LSMD"; then
               METAR=$(echo "$RAW" | tail -1)
               DATE=$(echo "$RAW" | head -1)
               echo "[{\"rawOb\":\"$METAR\",\"reportTime\":\"$DATE\"}]" > metar-lszk.json
-              echo "Quelle 2 (NOAA text) erfolgreich: $METAR"
+              echo "Quelle 2 (NOAA text/LSMD) erfolgreich: $METAR"
             else
               echo "Beide Quellen fehlgeschlagen"
               exit 1
