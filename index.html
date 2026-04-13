@@ -773,53 +773,39 @@
                pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' MEZ';
       }
 
-      // Wind: METAR liefert kt → umrechnen in km/h
-      var wspdKt  = m.wspd  !== undefined ? parseFloat(m.wspd)  : 0;
-      var wgstKt  = m.wgst  !== undefined ? parseFloat(m.wgst)  : 0;
+      // Wind: nur Knoten, Richtung in Grad
+      var wspdKt  = m.wspd  !== undefined ? Math.round(parseFloat(m.wspd))  : 0;
+      var wgstKt  = m.wgst  !== undefined ? Math.round(parseFloat(m.wgst))  : 0;
       var bearing = m.wdir  !== undefined ? parseFloat(m.wdir)  : 0;
-      var wspdKmh = Math.round(wspdKt * 1.852);
-      var wgstKmh = Math.round(wgstKt * 1.852);
+      var windDirStr = bearing > 0 ? bearing + '°' : 'variabel';
+      var wind  = wspdKt + ' kt aus ' + windDirStr;
+      var boeen = wgstKt > 0 ? wgstKt + ' kt' : '–';
 
-      // Windrichtungstext
-      var dirs = ['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-      var windDirTxt = bearing > 0 ? dirs[Math.round(bearing / 22.5) % 16] : '';
-      var wind  = wspdKmh + ' km/h / ' + Math.round(wspdKt) + ' kt' + (windDirTxt ? ' aus ' + windDirTxt : '');
-      var boeen = wgstKt > 0 ? wgstKmh + ' km/h / ' + Math.round(wgstKt) + ' kt' : '–';
-
-      // Wolken: unterste signifikante Schicht (BKN/OVC = Wolkenbasis)
-      var cbFt = null;
-      if (m.clouds && m.clouds.length) {
-        for (var i = 0; i < m.clouds.length; i++) {
-          var cl = m.clouds[i];
-          if (cl.cover === 'BKN' || cl.cover === 'OVC' || cl.cover === 'FEW' || cl.cover === 'SCT') {
-            var baseFt = parseInt(cl.base);
-            if (!isNaN(baseFt) && (cbFt === null || baseFt < cbFt)) cbFt = baseFt;
-          }
+      // Sicht: direkt aus JSON (z.B. "9999" oder "9999NDV")
+      var sicht = '–';
+      if (m.visib !== undefined && m.visib !== null && m.visib !== '') {
+        var visNum = parseInt(m.visib);
+        if (!isNaN(visNum)) {
+          sicht = visNum >= 9999 ? '≥ 10 km' : visNum + ' m';
         }
       }
-      // Wolkenbasis AGL → MSL: Platz liegt auf 1758 ft
-      var cbFtMSL = cbFt !== null ? cbFt + 1758 : null;
-      var cbMSL_m = cbFtMSL !== null ? Math.round(cbFtMSL / 3.28084) : null;
-      var cbHtml = cbFtMSL !== null
-        ? '<div class="wx-stat"><div class="wx-stat-label">Wolkenbasis (MSL)</div>' +
-          '<div class="wx-stat-value">' + cbFtMSL + ' ft</div>' +
-          '<div class="wx-stat-value">' + cbMSL_m  + ' m</div></div>'
-        : '';
 
-      // QNH: METAR liefert hPa
-      var qnh = m.altim ? fc(m.altim, 0) + ' hPa' : '–';
-
-      // Sicht
-      var sicht = m.visib !== undefined ? fc(m.visib, 0) + ' sm' : '';
-
-      // Niederschlag aus raw METAR parsen (RA, SN, DZ, etc.)
-      var niederschlag = '–';
-      if (m.wxString) {
-        niederschlag = m.wxString;
-      } else if (m.rawOb) {
-        var wxMatch = m.rawOb.match(/\b([-+]?(?:RA|SN|DZ|GR|GS|PL|SG|IC|RASN|SNRA|FZRA|FZDZ|TSRA|TSSN)[A-Z]*)\b/);
-        if (wxMatch) niederschlag = wxMatch[1];
-        else if (/\bNSW\b/.test(m.rawOb)) niederschlag = 'kein Niederschlag';
+      // Wolken: aus clouds-Array, Cover + Basis in ft
+      var coverText = { FEW: 'Few', SCT: 'Scattered', BKN: 'Broken', OVC: 'Overcast', SKC: 'Clear', NSC: 'No sig. clouds', CAVOK: 'CAVOK' };
+      var wolkenHtml = '';
+      if (m.clouds && m.clouds.length) {
+        var wolkenLines = m.clouds.map(function(cl) {
+          var txt = coverText[cl.cover] || cl.cover;
+          return txt + (cl.base ? ' bei ' + cl.base + ' ft' : '');
+        });
+        wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
+          wolkenLines.map(function(l) {
+            return '<div class="wx-stat-value" style="font-size:0.95rem;">' + l + '</div>';
+          }).join('') + '</div>';
+      } else if (m.cover) {
+        var txt = coverText[m.cover] || m.cover;
+        wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
+          '<div class="wx-stat-value" style="font-size:0.95rem;">' + txt + '</div></div>';
       }
 
       // Sonnenzeiten aktualisieren
@@ -838,16 +824,15 @@
 
       el.innerHTML =
         '<div class="wx-layout">' +
-          buildRunwayDiagram(bearing, wspdKmh, wgstKmh) +
+          buildRunwayDiagram(bearing, wspdKt * 1.852, wgstKt * 1.852) +
           '<div class="wx-stats">' +
             stat('Temperatur',  fc(m.temp, 1) + ' °C') +
             stat('Taupunkt',    fc(m.dewp, 1) + ' °C') +
-            stat('QNH',         qnh) +
+            stat('QNH',         m.altim ? Math.round(m.altim) + ' hPa' : '–') +
             stat('Wind',        wind) +
-            stat('Böen',        boeen) +
-            cbHtml +
+            (boeen !== '–' ? stat('Böen', boeen) : '') +
             stat('Sicht',       sicht) +
-            stat('Niederschlag', niederschlag) +
+            wolkenHtml +
           '</div>' +
         '</div>' +
         '<div class="wx-updated">' +
