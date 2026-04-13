@@ -280,16 +280,21 @@
     .media-container img.loaded { opacity: 1; }
 
     /* iframe-Hacks für Roundshot und ähnliche Seiten */
+    .media-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* scale-hack: iframe wird 2x so gross gerendert und dann auf 50% skaliert */
+    .scale-hack {
+      overflow: hidden;
+      aspect-ratio: 16 / 10;  /* etwas höher als 16:9 damit mehr Inhalt sichtbar */
+    }
     .scale-hack iframe {
       width: 200%;
       height: 200%;
       transform: scale(0.5);
       transform-origin: 0 0;
-      border: none;
-    }
-    .media-container iframe {
-      width: 100%;
-      height: 100%;
       border: none;
     }
     .crop-header { position: relative; overflow: hidden; }
@@ -548,10 +553,6 @@
       </div>
 
     </div>
-
-    <!-- ===== Weitere Flugplätze ===== -->
-    <h2 class="section-title">Weitere Flugplätze &amp; Pässe</h2>
-    <div class="cam-grid">
 
       <div class="cam-card">
         <div class="cam-header">
