@@ -448,18 +448,6 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
-          <span class="status-dot"></span>
-        </div>
-        <div class="media-container">
-          <img class="live-cam" data-src="https://eichi.ch/cam/webcam/eichi.jpg"
-               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-               width="640" height="360" alt="Webcam Uznach">
-        </div>
-      </div>
-
-      <div class="cam-card">
-        <div class="cam-header">
           <a href="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank" rel="noopener">Flugplatz Mollis Nord</a>
           <span class="status-dot"></span>
         </div>
@@ -472,9 +460,21 @@
 
     </div>
 
-    <!-- ===== Alpen ===== -->
-    <h2 class="section-title">Alpen</h2>
+    <!-- ===== Alpen & Umgebung ===== -->
+    <h2 class="section-title">Alpen &amp; Umgebung</h2>
     <div class="cam-grid">
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://eichi.ch/cam/webcam/eichi.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Webcam Uznach">
+        </div>
+      </div>
 
       <div class="cam-card">
         <div class="cam-header">
@@ -716,16 +716,21 @@
        URL: https://aviationweather.gov/api/data/metar?ids=LSZK&format=json */
     function loadWetter() {
       var el  = document.getElementById('wx-content');
-      var url = 'https://aviationweather.gov/api/data/metar?ids=LSZK&format=json&t=' + Date.now();
+      var src = 'https://aviationweather.gov/api/data/metar?ids=LSZK&format=json';
+      var url = 'https://api.allorigins.win/get?url=' + encodeURIComponent(src) + '&t=' + Date.now();
 
       el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">Lade Wetterdaten…</div>';
 
-      fetch(url, { cache: 'no-store' })
+      var controller = new AbortController();
+      setTimeout(function() { controller.abort(); }, 12000);
+
+      fetch(url, { cache: 'no-store', signal: controller.signal })
         .then(function(r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
           return r.json();
         })
-        .then(function(data) {
+        .then(function(json) {
+          var data = JSON.parse(json.contents);
           if (!data || !data.length) throw new Error('kein METAR');
           renderWetter(el, data[0]);
         })
