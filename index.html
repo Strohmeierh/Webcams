@@ -3,111 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Huberts Alpen Webcam-Übersicht</title>
+  <meta name="description" content="Live-Webcam-Übersicht für LSZK Flugplatz Speck">
+  <title>Huberts LSZK Dashboard</title>
+
+  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=FZO&background=ffffff&color=0f172a&size=180&rounded=false&bold=true&format=png&length=3&v=6">
+  <link rel="apple-touch-icon-precomposed" href="https://ui-avatars.com/api/?name=FZO&background=ffffff&color=0f172a&size=180&rounded=false&bold=true&format=png&length=3&v=6">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://ui-avatars.com/api/?name=FZO&background=ffffff&color=0f172a&size=32&rounded=true&bold=true&format=png&length=3&v=6">
+  <link rel="shortcut icon" href="https://ui-avatars.com/api/?name=FZO&background=ffffff&color=0f172a&size=32&rounded=true&bold=true&format=png&length=3&v=6">
+
   <style>
-    /* --- 1. Grundeinstellungen & Typografie --- */
     :root {
-      --bg-color: #0f172a;       /* Dunkles Blau-Grau */
-      --card-bg: #1e293b;        /* Karten-Hintergrund */
-      --text-main: #e2e8f0;      /* Textfarbe */
-      --accent-color: #38bdf8;   /* Neon Blau */
-      --accent-glow: 0 0 10px rgba(56, 189, 248, 0.5);
-      --font-stack: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --bg:          #0f172a;
+      --card-bg:     #1e293b;
+      --card-border: #334155;
+      --text:        #e2e8f0;
+      --text-muted:  #94a3b8;
+      --accent:      #38bdf8;
+      --accent-dim:  rgba(56, 189, 248, 0.15);
+      --green:       #10b981;
+      --font:        'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --radius:      12px;
+      --ease:        0.25s ease;
     }
+
+    *, *::before, *::after { box-sizing: border-box; }
 
     body {
       margin: 0;
-      padding: 20px;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: var(--font-stack);
+      padding: 24px 20px 40px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.5;
     }
+
+    /* === Header === */
+    header { text-align: center; margin-bottom: 24px; }
 
     h1 {
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 40px;
-      color: var(--accent-color);
-      text-shadow: var(--accent-glow);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 16px;
+      padding-bottom: 12px;
+      color: var(--accent);
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
       font-weight: 300;
-      border-bottom: 1px solid var(--accent-color);
-      display: inline-block;
-      padding-bottom: 10px;
-      left: 50%;
-      position: relative;
-      transform: translateX(-50%);
+      letter-spacing: 2px;
+      border-bottom: 1px solid var(--accent);
     }
 
-    /* --- 2. Das Raster (Grid) Layout --- */
-    .dashboard-grid {
-      display: grid;
-      /* Mindestens 350px breit, sonst füllen */
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-      gap: 20px;
+    /* === Buttons === */
+    .header-links {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .top-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: var(--card-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 5px 10px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color var(--ease), color var(--ease),
+                  box-shadow var(--ease), transform var(--ease);
+    }
+
+    .top-btn:hover {
+      background-color: var(--accent);
+      color: var(--bg);
+      box-shadow: 0 0 16px rgba(56,189,248,0.45);
+      transform: translateY(-2px);
+    }
+
+    .sunrise-bar {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    /* === Wetter-Panel === */
+    .wx-panel {
       max-width: 1600px;
-      margin: 0 auto;
+      margin: 0 auto 32px;
+      display: none;
+    }
+    .wx-panel.open { display: block; }
+
+    /* Wetterdaten-Karte */
+    .wx-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
     }
 
-    /* --- 3. Karten-Design --- */
+    .wx-card-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Datenkacheln */
+    .wx-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .wx-stat {
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .wx-stat-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .wx-stat-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      line-height: 1.4;
+    }
+
+    .wx-stat-sub {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .wx-updated {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .wx-error {
+      color: #f87171;
+      font-size: 0.82rem;
+      padding: 12px 0;
+    }
+
+    /* === Sektionen === */
+    main { max-width: 1600px; margin: 0 auto; }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 32px 0 12px 4px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* === Kamera-Grid === */
+    .cam-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
     .cam-card {
       background-color: var(--card-bg);
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid #334155;
       display: flex;
       flex-direction: column;
+      transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
     }
 
     .cam-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.7), var(--accent-glow);
-      border-color: var(--accent-color);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6), 0 0 0 1px var(--accent-dim);
+      border-color: var(--accent);
     }
 
     .cam-header {
-      padding: 15px;
-      background: rgba(0,0,0,0.2);
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .cam-header h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 500;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.18);
+      gap: 8px;
     }
 
     .cam-header a {
-      color: var(--accent-color);
+      color: var(--accent);
       text-decoration: none;
-      transition: color 0.2s;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--ease);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .cam-header a:hover {
-      color: #fff;
-      text-shadow: var(--accent-glow);
-    }
+    .cam-header a:hover { color: #fff; }
 
     .status-dot {
-      height: 8px;
+      flex-shrink: 0;
       width: 8px;
-      background-color: #10b981; /* Grün */
+      height: 8px;
+      background-color: var(--green);
       border-radius: 50%;
-      display: inline-block;
-      box-shadow: 0 0 5px #10b981;
+      animation: pulse 2.5s infinite;
     }
 
-    /* --- 4. Medien Container --- */
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.6); }
+      70%  { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
+    }
+
     .media-container {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9; 
+      aspect-ratio: 16 / 9;
       background-color: #000;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-container::after {
+      content: "Lade…";
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      position: absolute;
+      z-index: 0;
     }
 
     .media-container img {
@@ -115,162 +271,275 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    .media-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+    .media-container img.loaded { opacity: 1; }
 
-    /* --- 5. Spezial-Hacks --- */
-
-    /* SCALE HACK: Für Roundshot/Webseiten, zoomt heraus */
+    /* iframe-Hacks für Roundshot und ähnliche Seiten */
     .scale-hack iframe {
       width: 200%;
       height: 200%;
       transform: scale(0.5);
       transform-origin: 0 0;
+      border: none;
     }
-
-    /* CROP HACK: Für Grimsel, schiebt Header weg */
+    .media-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .crop-header { position: relative; overflow: hidden; }
     .crop-header iframe {
-      top: -250px !important; 
-      height: calc(100% + 250px) !important; 
       position: absolute;
+      top: -250px;
       left: 0;
+      width: 100%;
+      height: calc(100% + 250px);
+      border: none;
     }
 
-    /* --- 6. Mobile Anpassung --- */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .wx-updated-br { display: none; }
+
+    /* Wetter-Layout: Desktop = nebeneinander, Mobil = übereinander */
+    .wx-layout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
     @media (max-width: 600px) {
-      .dashboard-grid {
+      body { padding: 12px 10px 32px; }
+      .cam-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 1.1rem; letter-spacing: 1px; }
+      /* Mobil: Diagramm oben (volle Breite), Kacheln darunter */
+      .wx-layout {
         grid-template-columns: 1fr;
       }
-      body {
-        padding: 10px;
+      .wx-layout > div:first-child {
+        display: flex;
+        justify-content: center;
       }
+      .wx-updated-br { display: inline; }
     }
   </style>
 </head>
 <body>
 
-  <h1>Huberts Alpen-Webcams</h1>
+  <header>
+    <h1>
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+           viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      Huberts LSZK Dashboard
+    </h1>
 
-  <div class="dashboard-grid">
+    <div class="header-links">
+      <button class="top-btn" id="wx-toggle" onclick="toggleWx()" aria-expanded="false">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 18a5 5 0 0 0-1.89-9.55 5 5 0 0 0-9 2.5 5 5 0 0 0 0 8.5h9z"/>
+          <line x1="8" y1="18" x2="8" y2="22"/>
+          <line x1="12" y1="18" x2="12" y2="22"/>
+          <line x1="16" y1="18" x2="16" y2="22"/>
+        </svg>
+        Wetter
+      </button>
 
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://fgzo.ch/#galerie-2" target="_blank">Speck</a>
-        <span class="status-dot"></span>
+      <a href="https://glidertracker.de/#lat=47.375&lon=8.761&z=11&nowelcome"
+         target="_blank" rel="noopener" class="top-btn">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        Glidertracker
+      </a>
+
+      <a href="https://www.weglide.org/flight?club=FG%2520Z%25C3%25BCrcher%2520Oberland,1013"
+         target="_blank" rel="noopener" class="top-btn">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8l-4 4 4 4 4-4-4-4z"/>
+        </svg>
+        WeGlide
+      </a>
+    </div>
+    <div class="sunrise-bar" id="sunrise-bar"></div>
+  </header>
+
+  <!-- ===== WETTER-PANEL ===== -->
+  <div class="wx-panel" id="wx-panel">
+    <div class="wx-card">
+      <div class="wx-card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 18a5 5 0 0 0-1.89-9.55 5 5 0 0 0-9 2.5 5 5 0 0 0 0 8.5h9z"/>
+          <line x1="8" y1="18" x2="8" y2="22"/>
+          <line x1="12" y1="18" x2="12" y2="22"/>
+          <line x1="16" y1="18" x2="16" y2="22"/>
+        </svg>
+        LSZK – Flugplatz Speck · 536 m (1758 ft)
       </div>
-      <div class="media-container scale-hack">
-        <iframe src="https://fgzo.ch/#galerie-2" loading="lazy"></iframe>
+      <div id="wx-content">
+        <div style="color:var(--text-muted);font-size:0.85rem;padding:10px 0;">Lade Wetterdaten…</div>
       </div>
     </div>
+  </div>
 
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://bachtel.it-wms.com/" target="_blank">Bachtel</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container scale-hack">
-        <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
-      </div>
-    </div>
+  <main>
 
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://cams.lspv.dyndns.info/cams" target="_blank">Wangen-Lachen</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container">
-        <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
-      </div>
-    </div>
-    
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://eichi.ch/cam/webcam/eichi.jpg" target="_blank">Uznach</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container">
-        <img src="https://eichi.ch/cam/webcam/eichi.jpg" alt="Webcam Uznach">
-      </div>
-    </div>
+    <!-- ===== LSZK ===== -->
+    <h2 class="section-title">LSZK – Flugplatz Speck</h2>
+    <div class="cam-grid">
 
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://knieskinderzoo.roundshot.com/" target="_blank">Rapperswil</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container scale-hack">
-        <iframe src="https://knieskinderzoo.roundshot.com/" loading="lazy"></iframe>
-      </div>
-    </div>
-
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://feed.yellow.camera/niederurner-taeli" target="_blank">Walensee</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container">
-        <iframe src="https://feed.yellow.camera/niederurner-taeli" loading="lazy"></iframe>
-      </div>
-    </div>
-
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://chaeserrugg.roundshot.com/" target="_blank">Chäserugg</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container scale-hack">
-        <iframe src="https://chaeserrugg.roundshot.com/" loading="lazy"></iframe>
-      </div>
-    </div>
-
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank">Flugplatz Mollis Nord</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container">
-        <img src="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg" alt="Mollis Nord">
-      </div>
-    </div>
-
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://decoral.ch/Kameratoedi.jpg" target="_blank">Richtung Tödi</a>
-        <span class="status-dot"></span>
-      </div>
-      <div class="media-container">
-        <img src="https://decoral.ch/Kameratoedi.jpg" alt="Tödi">
-      </div>
-    </div>
-
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://feed.yellow.camera/7M8XY9W2G?hot=true&ui=true" target="_blank">Elm Weissenberge</a>
+          <a href="https://fgzo.ch/#galerie-2" target="_blank" rel="noopener">Speck</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container scale-hack">
+          <iframe src="https://fgzo.ch/#galerie-2" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://cams.lspv.dyndns.info/cams" target="_blank" rel="noopener">Wangen-Lachen</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://eichi.ch/cam/webcam/eichi.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Webcam Uznach">
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank" rel="noopener">Flugplatz Mollis Nord</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://webcams.glaronia.ch/flugplatz_mollis_nord.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Mollis Nord">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== Umgebung ===== -->
+    <h2 class="section-title">Umgebung</h2>
+    <div class="cam-grid">
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://bachtel.it-wms.com/" target="_blank" rel="noopener">Bachtel</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container scale-hack">
+          <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://knieskinderzoo.roundshot.com/" target="_blank" rel="noopener">Rapperswil</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container scale-hack">
+          <iframe src="https://knieskinderzoo.roundshot.com/" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://feed.yellow.camera/niederurner-taeli" target="_blank" rel="noopener">Walensee</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <iframe src="https://feed.yellow.camera/niederurner-taeli" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://chaeserrugg.roundshot.com/" target="_blank" rel="noopener">Chäserugg</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container scale-hack">
+          <iframe src="https://chaeserrugg.roundshot.com/" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://decoral.ch/Kameratoedi.jpg" target="_blank" rel="noopener">Richtung Tödi</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://decoral.ch/Kameratoedi.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Tödi">
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://feed.yellow.camera/7M8XY9W2G?hot=true&ui=true" target="_blank" rel="noopener">Elm Weissenberge</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
           <iframe src="https://feed.yellow.camera/7M8XY9W2G?hot=true&ui=true" loading="lazy"></iframe>
         </div>
-    </div>
-
-    <div class="cam-card">
-      <div class="cam-header">
-        <a href="https://webcam.hotel-klausenpass.ch/panorama.jpg" target="_blank">Klausenpass</a>
-        <span class="status-dot"></span>
       </div>
-      <div class="media-container">
-        <img src="https://webcam.hotel-klausenpass.ch/panorama.jpg" alt="Klausenpass">
-      </div>
-    </div>
 
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://rotenfluebahn.roundshot.com/rotenflue/#/" target="_blank">Mythen</a>
+          <a href="https://webcam.hotel-klausenpass.ch/panorama.jpg" target="_blank" rel="noopener">Klausenpass</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://webcam.hotel-klausenpass.ch/panorama.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Klausenpass">
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://rotenfluebahn.roundshot.com/rotenflue/#/" target="_blank" rel="noopener">Mythen</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container scale-hack">
@@ -278,76 +547,544 @@
         </div>
       </div>
 
-    <div class="cam-card">
+    </div>
+
+    <!-- ===== Weitere Flugplätze ===== -->
+    <h2 class="section-title">Weitere Flugplätze &amp; Pässe</h2>
+    <div class="cam-grid">
+
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://webcam.skiarena.ch/oberalppass/image.jpg" target="_blank">Oberalppass</a>
+          <a href="https://webcam.skiarena.ch/oberalppass/image.jpg" target="_blank" rel="noopener">Oberalppass</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img src="https://webcam.skiarena.ch/oberalppass/image.jpg" alt="Oberalppass">
+          <img class="live-cam" data-src="https://webcam.skiarena.ch/oberalppass/image.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Oberalppass">
         </div>
-    </div>
+      </div>
 
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://laax.roundshot.com/crap-sogn-gion-plaun/" target="_blank">Laax Crap Sogn Gion</a>
+          <a href="https://laax.roundshot.com/crap-sogn-gion-plaun/" target="_blank" rel="noopener">Laax Crap Sogn Gion</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container scale-hack">
           <iframe src="https://laax.roundshot.com/crap-sogn-gion-plaun/" loading="lazy"></iframe>
         </div>
-    </div>
+      </div>
 
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" target="_blank">Andermatt Gurschen</a>
+          <a href="https://www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" target="_blank" rel="noopener">Andermatt Gurschen</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img src="https://www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" alt="Andermatt">
+          <img class="live-cam" data-src="https://www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Andermatt">
         </div>
-    </div>
+      </div>
 
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" target="_blank">Gotthardpass</a>
+          <a href="https://webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" target="_blank" rel="noopener">Gotthardpass</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img src="https://webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" alt="Gotthard">
+          <img class="live-cam" data-src="https://webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Gotthard">
         </div>
-    </div>
-    
-    <div class="cam-card">
+      </div>
+
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://hotel-grimselpass.ch/webcam/" target="_blank">Grimsel Passhöhe</a>
+          <a href="https://hotel-grimselpass.ch/webcam/" target="_blank" rel="noopener">Grimsel Passhöhe</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container crop-header">
           <iframe src="https://hotel-grimselpass.ch/webcam" loading="lazy" scrolling="no"></iframe>
         </div>
-    </div>
-    
-    <div class="cam-card">
+      </div>
+
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://www.tarnolgio.ch/webcam00.jpg" target="_blank">Ambri Tarnolgio</a>
+          <a href="https://www.tarnolgio.ch/webcam00.jpg" target="_blank" rel="noopener">Ambri Tarnolgio</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img src="https://www.tarnolgio.ch/webcam00.jpg" alt="Ambri">
+          <img class="live-cam" data-src="https://www.tarnolgio.ch/webcam00.jpg"
+               src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               width="640" height="360" alt="Ambri">
         </div>
-    </div>
+      </div>
 
-    <div class="cam-card">
+      <div class="cam-card">
         <div class="cam-header">
-          <a href="https://ascona-locarno.roundshot.com/bellavistahotel/" target="_blank">Ascona / Locarno</a>
+          <a href="https://ascona-locarno.roundshot.com/bellavistahotel/" target="_blank" rel="noopener">Ascona / Locarno</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container scale-hack">
           <iframe src="https://ascona-locarno.roundshot.com/bellavistahotel/" loading="lazy"></iframe>
         </div>
+      </div>
+
     </div>
+  </main>
 
-  </div> </body>
+  <footer>
+    <p>Letzter Refresh: <span id="last-refresh">–</span> &middot; Aktualisierung alle 90 Sekunden</p>
+  </footer>
+
+  <script>
+  (function () {
+    /* ── Kamera-Refresh ─────────────────────────────────────── */
+    var REFRESH_MS = 90000;
+    var lastEl = document.getElementById('last-refresh');
+
+    function pad(n) { return ('0' + n).slice(-2); }
+    function nowStr() {
+      var d = new Date();
+      return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    }
+    function bust(url, ts) {
+      return url + (url.includes('?') ? '&' : '?') + 't=' + ts;
+    }
+    function loadImg(img, ts) {
+      var base = img.getAttribute('data-src');
+      if (!base) return;
+      img.classList.remove('loaded');
+      var fresh = new Image();
+      fresh.onload = function () { img.src = fresh.src; img.classList.add('loaded'); };
+      fresh.src = bust(base, ts);
+    }
+
+    var visible = new Set();
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      });
+    }, { rootMargin: '200px' });
+
+    var imgs = document.querySelectorAll('img.live-cam');
+    var ts0 = Date.now();
+    imgs.forEach(function (img) { io.observe(img); loadImg(img, ts0); });
+
+    setInterval(function () {
+      var ts = Date.now();
+      visible.forEach(function (img) { loadImg(img, ts); });
+      if (lastEl) lastEl.textContent = nowStr();
+    }, REFRESH_MS);
+    if (lastEl) lastEl.textContent = nowStr();
+
+    /* Sonnenzeiten sofort beim Laden anzeigen */
+    (function() {
+      var bar = document.getElementById('sunrise-bar');
+      if (!bar) return;
+      var s = calcSunTimes(47.37557, 8.76169);
+      bar.textContent = '☀ Aufgang ' + s.rise + '  ·  Untergang ' + s.set + ' (MEZ)';
+    })();
+
+    /* ── Wetter-Panel Toggle ────────────────────────────────── */
+    var wxLoaded = false;
+
+    window.toggleWx = function () {
+      var panel = document.getElementById('wx-panel');
+      var btn   = document.getElementById('wx-toggle');
+      var open  = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      if (open && !wxLoaded) { wxLoaded = true; loadWetter(); }
+    };
+
+    /* ── Wetterdaten aus index.html scrapen ─────────────────────
+       gauge-data.txt ist per Proxy nicht erreichbar (HTTP+CORS).
+       Die index.html enthält alle Werte als fertigen HTML-Text
+       und ist über corsproxy.io abrufbar.                        */
+    function loadWetter() {
+      var el  = document.getElementById('wx-content');
+      // gauge-data.txt liegt im gleichen Repository auf GitHub Pages
+      // → kein Proxy, kein CORS-Problem, direkt HTTPS
+      var url = 'gauge-data.txt?t=' + Date.now();
+
+      el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">Lade Wetterdaten…</div>';
+
+      fetch(url, { cache: 'no-store' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(d) { renderWetter(el, d); })
+        .catch(function()  { renderFallback(el); });
+    }
+
+    function renderWetter(el, d) {
+      function f(v, dez) {
+        if (v === undefined || v === null || v === '') return '–';
+        // gauge-data.txt liefert Dezimalzahlen mit Komma ("3,6") → für parseFloat in Punkt umwandeln
+        var n = parseFloat(String(v).replace(',', '.'));
+        if (isNaN(n)) return String(v);
+        return n.toFixed(dez !== undefined ? dez : 1).replace('.', ',');
+      }
+
+      var bearing = d.bearing !== undefined ? parseFloat(d.bearing) : 0;
+      var wspeed  = d.wspeed  !== undefined ? parseFloat(d.wspeed)  : 0;
+      var wgust   = d.wgust   !== undefined ? parseFloat(d.wgust)   : 0;
+
+      // Datum von "2026.04.12 00:55" → "12.04.2026 00:55" umformatieren
+      var rawDate = d.date || '–';
+      var zeit = rawDate.replace(/^(\d{4})\.(\d{2})\.(\d{2})(.*)$/, '$3.$2.$1$4');
+      var windDir = (d.bearingTxt && d.bearingTxt !== '---') ? d.bearingTxt : (d.bearing ? d.bearing + '°' : '');
+      var windKt  = Math.round(wspeed / 1.852);
+      var guestKt = Math.round(wgust  / 1.852);
+      var wind    = f(d.wspeed, 0) + ' km/h / ' + windKt + ' kt' + (windDir ? ' aus ' + windDir : '');
+      var boeen   = f(d.wgust,  0) + ' km/h / ' + guestKt + ' kt';
+      var cbFt = d.cloudbasevalue ? Math.round(parseFloat(d.cloudbasevalue)) : null;
+      var cbM  = cbFt ? Math.round(cbFt / 3.28084) : null;
+      var cbHtml = cbFt
+        ? '<div class="wx-stat"><div class="wx-stat-label">Wolkenbasis (MSL)</div>' +
+          '<div class="wx-stat-value">' + cbFt + ' ft</div>' +
+          '<div class="wx-stat-value">' + cbM  + ' m</div></div>'
+        : '';
+
+      // Sonnenauf-/-untergang für LSZK (47.37557°N, 8.76169°E) berechnen
+      var sunTimes = calcSunTimes(47.37557, 8.76169);
+      var sunBar = document.getElementById('sunrise-bar');
+      if (sunBar) {
+        sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (MEZ)';
+      }
+      var regen   = f(d.rfall, 1) + ' mm';
+      var trend   = d.presstrend != null
+        ? 'Trend: ' + (parseFloat(d.presstrend) >= 0 ? '+' : '') + f(d.presstrend, 1) + ' hPa/h'
+        : '';
+
+      function stat(label, val, sub) {
+        if (!val || val === '–') return '';
+        return '<div class="wx-stat">' +
+          '<div class="wx-stat-label">' + label + '</div>' +
+          '<div class="wx-stat-value">' + val + '</div>' +
+          (sub ? '<div class="wx-stat-sub">' + sub + '</div>' : '') +
+          '</div>';
+      }
+
+      el.innerHTML =
+        '<div class="wx-layout">' +
+
+          /* ── Pisten-Winddiagramm ── */
+          buildRunwayDiagram(bearing, wspeed, wgust) +
+
+          /* ── Werte-Kacheln ── */
+          '<div class="wx-stats">' +
+            stat('Temperatur',   f(d.temp, 1) + ' °C',
+                 'Min ' + f(d.tempTL,1) + ' / Max ' + f(d.tempTH,1) + ' °C') +
+            stat('Taupunkt',     f(d.dew,  1) + ' °C') +
+            stat('Feuchte',      f(d.hum,  0) + ' %') +
+            stat('QNH',          f(d.press,1) + ' hPa', trend) +
+            stat('Wind',         wind) +
+            stat('Böen',         boeen) +
+            cbHtml +
+            stat('Niederschlag', regen) +
+          '</div>' +
+
+        '</div>' +
+        '<div class="wx-updated">' +
+          'Stand: ' + zeit +
+          '<br class="wx-updated-br">' +
+          ' · <a href="https://www.lszk.ch/wetter" target="_blank" rel="noopener" ' +
+          'style="color:var(--accent);">Wetterdaten Flugplatz Speck ↗</a>' +
+        '</div>';
+    }
+
+    /* ── Pisten-Winddiagramm LSZK (Piste 12/30 = 120°/300°) ─── */
+    function buildRunwayDiagram(bearing, wspeed, wgust) {
+      var RWY = 120; // Piste 12 in Grad true
+
+      // Windkomponenten relativ zur Piste 12 (Anflugrichtung 120°)
+      // Winkel zwischen Windrichtung und Pistenrichtung
+      var diff    = (bearing - RWY + 360) % 360;
+      var diffRad = diff * Math.PI / 180;
+      // Gegenwind: positiv = Gegenwind auf Piste 12, negativ = Rückenwind
+      var head  = Math.round(wspeed * Math.cos(diffRad));
+      // Seitenwind: positiv = von rechts (Steuerbord), negativ = von links
+      var cross = Math.round(wspeed * Math.sin(diffRad));
+
+      // Farbe nach |Seitenwind|
+      var absX  = Math.abs(cross);
+      var color = absX <= 5  ? '#10b981' :
+                  absX <= 10 ? '#f59e0b' :
+                               '#ef4444';
+
+      // SVG-Dimensionen
+      var W = 180, H = 250, cx = W/2, cy = 108;
+      var rwyHalf = 68;
+      var rwyW    = 20;
+      var rwyAngleDeg = RWY - 90; // SVG-Rotationswinkel (0°=oben=Norden)
+
+      // SVG-Koordinatensystem: 0° = oben = Norden
+      // Piste 12 zeigt nach 120° → SVG-Winkel = 120° (Uhrzeigersinn von oben)
+      // Pistenvektor in SVG: sin(120°) nach rechts, -cos(120°) nach unten
+      var rwyRad = RWY * Math.PI / 180;
+      var rx = Math.sin(rwyRad); // x-Komponente der Pistenrichtung
+      var ry = -Math.cos(rwyRad); // y-Komponente (negativ weil Y in SVG nach unten)
+
+      // Piste 12-Ende (in Richtung 120°)
+      var p11x = cx + rwyHalf * rx;
+      var p11y = cy + rwyHalf * ry;
+      // Piste 30-Ende (in Richtung 300°)
+      var p29x = cx - rwyHalf * rx;
+      var p29y = cy - rwyHalf * ry;
+
+      // Gegenwindkomponente: immer grün, Warnung nur ab 40 km/h
+      var headColor = '#10b981';
+      var headWarn  = Math.abs(head) > 40 ? ' ⚠' : '';
+
+      return '<div style="flex-shrink:0;padding:4px 0;">' +
+        '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" ' +
+             'xmlns="http://www.w3.org/2000/svg" style="display:block;">' +
+
+          /* Hintergrund */
+          '<rect width="' + W + '" height="' + H + '" rx="10" fill="rgba(0,0,0,0.3)"/>' +
+
+          /* Kompasskreis */
+          '<circle cx="' + cx + '" cy="' + cy + '" r="72" fill="none" stroke="#1e3a5f" stroke-width="1.5"/>' +
+          '<circle cx="' + cx + '" cy="' + cy + '" r="72" fill="none" stroke="#334155" stroke-width="0.5" stroke-dasharray="2 6"/>' +
+
+          /* Himmelsrichtungen */
+          '<text x="' + cx + '" y="14" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">N</text>' +
+          '<text x="' + cx + '" y="' + (cy*2-4) + '" text-anchor="middle" font-size="10" font-weight="bold" fill="#475569">S</text>' +
+          '<text x="8" y="' + (cy+4) + '" text-anchor="start" font-size="10" font-weight="bold" fill="#475569">W</text>' +
+          '<text x="' + (W-8) + '" y="' + (cy+4) + '" text-anchor="end" font-size="10" font-weight="bold" fill="#475569">O</text>' +
+
+          /* Piste – Rechteck entlang der Pistenlinie */
+          /* Berechne 4 Ecken des Pistenrechtecks */
+          (function() {
+            // Senkrecht zur Piste
+            var nx = ry, ny = -rx; // 90° gedreht
+            var hw = rwyW / 2;
+            var corners = [
+              [p11x + hw*nx, p11y + hw*ny],
+              [p11x - hw*nx, p11y - hw*ny],
+              [p29x - hw*nx, p29y - hw*ny],
+              [p29x + hw*nx, p29y + hw*ny]
+            ];
+            var pts = corners.map(function(c){ return c[0].toFixed(1)+','+c[1].toFixed(1); }).join(' ');
+            return '<polygon points="' + pts + '" fill="#2d3f55" stroke="#64748b" stroke-width="1.5"/>';
+          })() +
+
+          /* Mittellinie gestrichelt */
+          '<line x1="' + p11x.toFixed(1) + '" y1="' + p11y.toFixed(1) + '" ' +
+               'x2="' + p29x.toFixed(1) + '" y2="' + p29y.toFixed(1) + '" ' +
+            'stroke="#94a3b8" stroke-width="1" stroke-dasharray="5 4"/>' +
+
+          /* Pistenbezeichnungen ausserhalb der Pistenenden, beide aufrecht lesbar */
+          (function() {
+            var offset = rwyHalf + 10; // px ausserhalb des Pistenendes
+            // "12" ausserhalb des 300°-Endes, Pilot fliegt Richtung 120° → Text normal
+            var t11x = (cx - offset * rx).toFixed(1);
+            var t11y = (cy - offset * ry).toFixed(1);
+            // "30" ausserhalb des 120°-Endes, Pilot fliegt Richtung 300° → Text normal
+            var t29x = (cx + offset * rx).toFixed(1);
+            var t29y = (cy + offset * ry).toFixed(1);
+            return (
+              '<text x="' + t11x + '" y="' + t11y + '" ' +
+                'text-anchor="middle" dominant-baseline="middle" ' +
+                'font-size="12" font-weight="bold" fill="#e2e8f0" ' +
+                'transform="rotate(' + rwyAngleDeg + ',' + t11x + ',' + t11y + ')">12</text>' +
+              '<text x="' + t29x + '" y="' + t29y + '" ' +
+                'text-anchor="middle" dominant-baseline="middle" ' +
+                'font-size="12" font-weight="bold" fill="#e2e8f0" ' +
+                'transform="rotate(' + rwyAngleDeg + ',' + t29x + ',' + t29y + ')">30</text>'
+            );
+          })() +
+
+          /* ── Offizieller meteorologischer Windpfeil ──────────────
+             Schaft: zeigt woher Wind kommt → Spitze zeigt wohin er weht
+             Befiederung am Schaft-Ende (Ursprung des Windes):
+               Dreieck  = 50 kt
+               Lang     = 10 kt
+               Kurz     =  5 kt                                        */
+          (function() {
+            var kt = Math.round(wspeed / 1.852); // km/h → Knoten
+
+            if (kt < 2) {
+              // Calm: Kreis in der Mitte
+              return '<circle cx="' + cx + '" cy="' + cy + '" r="8" fill="none" ' +
+                'stroke="' + color + '" stroke-width="2.5"/>';
+            }
+
+            // Schaft: von Windursprung (außen) zur Pistenmitte (Spitze)
+            var windRad = bearing * Math.PI / 180;
+            var shaftLen = 58;
+            // Ursprungspunkt (woher Wind kommt)
+            var ox = cx + shaftLen * Math.sin(windRad);
+            var oy = cy - shaftLen * Math.cos(windRad);
+            // Spitze (wohin Wind weht = Pistenmitte)
+            var tx = cx;
+            var ty = cy;
+
+            // Pfeilspitze an der Spitze
+            var svg = '<defs><marker id="whead" markerWidth="8" markerHeight="8" ' +
+              'refX="4" refY="4" orient="auto">' +
+              '<path d="M0,0 L8,4 L0,8 Z" fill="' + color + '"/>' +
+              '</marker></defs>';
+
+            // Schaft
+            svg += '<line x1="' + ox.toFixed(1) + '" y1="' + oy.toFixed(1) + '" ' +
+              'x2="' + tx + '" y2="' + ty + '" ' +
+              'stroke="' + color + '" stroke-width="2.5" marker-end="url(#whead)"/>';
+
+            // Befiederung am Ursprungspunkt (senkrecht zum Schaft, nach rechts)
+            // Richtungsvektor des Schafts (von Ursprung zur Spitze)
+            var dx = tx - ox, dy = ty - oy;
+            var len = Math.sqrt(dx*dx + dy*dy);
+            var ux = dx/len, uy = dy/len; // Einheitsvektor Schaft
+            var px = -uy, py = ux;        // Senkrecht nach rechts (Befiederungsseite)
+
+            var remaining = kt;
+            var bPos = 0; // Abstand vom Ursprung entlang Schaft
+            var bSpacing = 8; // Abstand zwischen Strichen
+
+            // Dreiecke (50 kt)
+            while (remaining >= 50) {
+              var bx = ox + bPos * ux;
+              var by = oy + bPos * uy;
+              var ex = bx + bSpacing * ux;
+              var ey = by + bSpacing * uy;
+              var tx2 = bx + 16 * px;
+              var ty2 = by + 16 * py;
+              svg += '<polygon points="' +
+                bx.toFixed(1)+','+by.toFixed(1)+' '+
+                ex.toFixed(1)+','+ey.toFixed(1)+' '+
+                tx2.toFixed(1)+','+ty2.toFixed(1) +
+                '" fill="' + color + '"/>';
+              remaining -= 50;
+              bPos += bSpacing + 2;
+            }
+            // Lange Striche (10 kt)
+            while (remaining >= 10) {
+              var bx = ox + bPos * ux;
+              var by = oy + bPos * uy;
+              svg += '<line x1="' + bx.toFixed(1) + '" y1="' + by.toFixed(1) + '" ' +
+                'x2="' + (bx + 14*px).toFixed(1) + '" y2="' + (by + 14*py).toFixed(1) + '" ' +
+                'stroke="' + color + '" stroke-width="2.5"/>';
+              remaining -= 10;
+              bPos += bSpacing;
+            }
+            // Kurze Striche (5 kt)
+            while (remaining >= 5) {
+              var bx = ox + bPos * ux;
+              var by = oy + bPos * uy;
+              svg += '<line x1="' + bx.toFixed(1) + '" y1="' + by.toFixed(1) + '" ' +
+                'x2="' + (bx + 8*px).toFixed(1) + '" y2="' + (by + 8*py).toFixed(1) + '" ' +
+                'stroke="' + color + '" stroke-width="2"/>';
+              remaining -= 5;
+              bPos += bSpacing;
+            }
+
+            return svg;
+          })() +
+
+          /* Windkomponenten-Anzeige unten */
+          '<rect x="4" y="' + (H-62) + '" width="' + (W-8) + '" height="58" rx="6" fill="rgba(0,0,0,0.35)"/>' +
+
+          '<text x="' + cx + '" y="' + (H-48) + '" text-anchor="middle" font-size="10" fill="#94a3b8">Gegenwindkomponente</text>' +
+          '<text x="' + cx + '" y="' + (H-34) + '" text-anchor="middle" font-size="12" font-weight="bold" ' +
+            'fill="' + headColor + '">' + Math.abs(head) + ' km/h / ' + Math.round(Math.abs(head)/1.852) + ' kt' + headWarn + '</text>' +
+
+          '<text x="' + cx + '" y="' + (H-20) + '" text-anchor="middle" font-size="10" fill="#94a3b8">Seitenwindkomponente</text>' +
+          '<text x="' + cx + '" y="' + (H-6) + '" text-anchor="middle" font-size="12" font-weight="bold" ' +
+            'fill="' + color + '">' + Math.abs(cross) + ' km/h / ' + Math.round(Math.abs(cross)/1.852) + ' kt</text>' +
+
+        '</svg>' +
+      '</div>';
+    }
+
+    /* ── Sonnenauf-/-untergang berechnen ────────────────────────
+       Algorithmus nach NOAA Solar Calculator, Genauigkeit ±1 min  */
+    function calcSunTimes(lat, lon) {
+      var now     = new Date();
+      var JD      = now.getTime() / 86400000 + 2440587.5;
+      var n       = Math.floor(JD - 2451545.0 + 0.5);
+
+      var M    = (357.5291 + 0.98560028 * n) % 360;
+      var Mrad = M * Math.PI / 180;
+      var C    = 1.9148 * Math.sin(Mrad) + 0.02 * Math.sin(2*Mrad);
+      var lam  = (M + C + 180 + 102.9372) % 360;
+      var lamR = lam * Math.PI / 180;
+
+      // Deklination
+      var sinD = Math.sin(lamR) * Math.sin(23.4393 * Math.PI / 180);
+      var decl = Math.asin(sinD);
+
+      // Gleichung der Zeit (in Tagen)
+      var EoT = 0.0053 * Math.sin(Mrad) - 0.0069 * Math.sin(2 * lamR);
+
+      // Stundenwinkel
+      var cosH = (Math.sin(-0.8333 * Math.PI / 180) -
+                  Math.sin(lat * Math.PI / 180) * sinD) /
+                 (Math.cos(lat * Math.PI / 180) * Math.cos(decl));
+
+      if (Math.abs(cosH) > 1) return { rise: '--:--', set: '--:--' };
+      var H = Math.acos(cosH); // in Radian
+
+      // Auf-/Untergang als Julianisches Datum
+      var Jrise = 2451545.0 + n + (0.0009 - lon/360 - EoT) - H / (2*Math.PI);
+      var Jset  = 2451545.0 + n + (0.0009 - lon/360 - EoT) + H / (2*Math.PI);
+
+      // Umrechnung in Uhrzeit: JD → Unix ms → MEZ (UTC+1) bzw. MESZ (UTC+2)
+      function jdToTime(jd) {
+        var ms   = (jd - 2440587.5) * 86400000;
+        var d2   = new Date(ms);
+        // Offset bestimmen: MESZ (März letzter So bis Oktober letzter So) = UTC+2, sonst UTC+1
+        var year = d2.getUTCFullYear();
+        function lastSunday(month) {
+          var d3 = new Date(Date.UTC(year, month, 31));
+          d3.setUTCDate(31 - (d3.getUTCDay() || 7) % 7);
+          return d3;
+        }
+        var mezStart = lastSunday(2); // letzter Sonntag März
+        var mezEnd   = lastSunday(9); // letzter Sonntag Oktober
+        var offset   = (d2 >= mezStart && d2 < mezEnd) ? 2 : 1; // MESZ=+2, MEZ=+1
+        var totalMin = Math.round(ms / 60000) + offset * 60;
+        var h = Math.floor(totalMin / 60) % 24;
+        var m = totalMin % 60;
+        return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+      }
+
+      return { rise: jdToTime(Jrise), set: jdToTime(Jset) };
+    }
+
+    function renderFallback(el) {
+      el.innerHTML =
+        '<div class="wx-error">Wetterdaten konnten nicht geladen werden.</div>' +
+        '<a href="https://www.lszk.ch/wetter" target="_blank" rel="noopener" ' +
+           'class="top-btn" style="display:inline-flex;font-size:0.85rem;padding:9px 16px;margin-top:10px;">' +
+          'Wetterdaten LSZK direkt öffnen ↗' +
+        '</a>';
+    }
+
+    /* ── Kamera-Links: Cache-Buster beim Klick ──────────────── */
+    document.querySelectorAll('.cam-card').forEach(function(card) {
+      var a    = card.querySelector('.cam-header a');
+      var img  = card.querySelector('img.live-cam');
+      if (!a || !img) return;
+      var base = a.getAttribute('href');
+      if (!base || base.indexOf('.jpg') === -1) return;
+
+      function openFresh(e) {
+        e.preventDefault();
+        var sep = base.indexOf('?') === -1 ? '?' : '&';
+        window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
+      }
+
+      a.addEventListener('click', openFresh);
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', openFresh);
+    });
+
+  })();
+  </script>
+
+</body>
 </html>
-
