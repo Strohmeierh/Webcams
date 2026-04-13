@@ -17,7 +17,10 @@ jobs:
 
       - name: METAR LSZK herunterladen
         run: |
-          curl -s -o metar-lszk.json \
+          curl -s \
+            -A "LSZK-Dashboard/1.0 (github-actions; hubert@lszk.ch)" \
+            -H "Accept: application/json" \
+            -o metar-lszk.json \
             "https://aviationweather.gov/api/data/metar?ids=LSZK&format=json"
 
       - name: Prüfen ob Datei gültig ist
