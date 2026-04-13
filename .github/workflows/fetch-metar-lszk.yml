@@ -2,8 +2,8 @@ name: METAR LSZK aktualisieren
 
 on:
   schedule:
-    - cron: '5 * * * *'   # jede Stunde um :05 (METAR wird stündlich aktualisiert)
-  workflow_dispatch:        # auch manuell auslösbar
+    - cron: '5 * * * *'   # jede Stunde um :05
+  workflow_dispatch:
 
 jobs:
   fetch-metar:
@@ -13,23 +13,41 @@ jobs:
 
     steps:
       - name: Repository auschecken
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: METAR LSZK herunterladen
         run: |
-          curl -s \
-            -A "LSZK-Dashboard/1.0 (github-actions; hubert@lszk.ch)" \
+          # Mehrere Quellen versuchen
+          STATUS=0
+
+          # Quelle 1: aviationweather.gov mit User-Agent
+          curl -s --max-time 15 \
+            -A "Mozilla/5.0 (compatible; LSZK-Dashboard/1.0)" \
             -H "Accept: application/json" \
             -o metar-lszk.json \
-            "https://aviationweather.gov/api/data/metar?ids=LSZK&format=json"
+            "https://aviationweather.gov/api/data/metar?ids=LSZK&format=json" || STATUS=$?
 
-      - name: Prüfen ob Datei gültig ist
-        run: |
-          if [ ! -s metar-lszk.json ]; then
-            echo "Fehler: metar-lszk.json ist leer"
-            exit 1
+          # Prüfen ob Inhalt gültig (nicht leer, enthält LSZK)
+          if [ -s metar-lszk.json ] && grep -q "LSZK" metar-lszk.json; then
+            echo "Quelle 1 (aviationweather.gov) erfolgreich"
+          else
+            echo "Quelle 1 fehlgeschlagen, versuche Quelle 2..."
+            # Quelle 2: NOAA text METAR → in JSON umwandeln
+            RAW=$(curl -s --max-time 15 \
+              "https://tgftp.nws.noaa.gov/data/observations/metar/stations/LSZK.TXT")
+            if [ -n "$RAW" ]; then
+              # Rohen METAR-Text als JSON verpacken
+              METAR=$(echo "$RAW" | tail -1)
+              DATE=$(echo "$RAW" | head -1)
+              echo "[{\"rawOb\":\"$METAR\",\"reportTime\":\"$DATE\"}]" > metar-lszk.json
+              echo "Quelle 2 (NOAA text) erfolgreich: $METAR"
+            else
+              echo "Beide Quellen fehlgeschlagen"
+              exit 1
+            fi
           fi
-          echo "Datei OK, Inhalt:"
+
+          echo "Finaler Inhalt:"
           cat metar-lszk.json
 
       - name: Commit und Push
