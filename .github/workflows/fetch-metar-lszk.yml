@@ -2,7 +2,7 @@ name: METAR LSZK aktualisieren
 
 on:
   schedule:
-    - cron: '5 * * * *'   # jede Stunde um :05
+    - cron: '11,31,51 * * * *'   # 1 Minute nach LSMD-Update (:10, :30, :50)
   workflow_dispatch:
 
 jobs:
