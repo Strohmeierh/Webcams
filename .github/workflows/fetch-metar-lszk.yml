@@ -1,0 +1,39 @@
+name: METAR LSZK aktualisieren
+
+on:
+  schedule:
+    - cron: '5 * * * *'   # jede Stunde um :05 (METAR wird stündlich aktualisiert)
+  workflow_dispatch:        # auch manuell auslösbar
+
+jobs:
+  fetch-metar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: METAR LSZK herunterladen
+        run: |
+          curl -s -o metar-lszk.json \
+            "https://aviationweather.gov/api/data/metar?ids=LSZK&format=json"
+
+      - name: Prüfen ob Datei gültig ist
+        run: |
+          if [ ! -s metar-lszk.json ]; then
+            echo "Fehler: metar-lszk.json ist leer"
+            exit 1
+          fi
+          echo "Datei OK, Inhalt:"
+          cat metar-lszk.json
+
+      - name: Commit und Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add metar-lszk.json
+          git diff --staged --quiet && echo "Keine Änderung" || \
+            git commit -m "METAR LSZK: $(date -u '+%Y-%m-%d %H:%M') UTC"
+          git push
