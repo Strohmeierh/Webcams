@@ -484,7 +484,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" target="_blank" rel="noopener">Bachtel</a>
+          <a href="https://bachtel.it-wms.com/" target="_blank" rel="noopener">Bachtel</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -1202,12 +1202,16 @@
       var img  = card.querySelector('img.live-cam');
       if (!a || !img) return;
       var base = a.getAttribute('href');
-      if (!base || base.indexOf('.jpg') === -1) return;
+      if (!base) return;
 
       function openFresh(e) {
         e.preventDefault();
-        var sep = base.indexOf('?') === -1 ? '?' : '&';
-        window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
+        if (base.indexOf('.jpg') > -1 || base.indexOf('wsrv.nl') > -1) {
+          var sep = base.indexOf('?') === -1 ? '?' : '&';
+          window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
+        } else {
+          window.open(base, '_blank', 'noopener');
+        }
       }
 
       a.addEventListener('click', openFresh);
