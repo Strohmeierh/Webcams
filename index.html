@@ -817,6 +817,7 @@
                      '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + wgstKt + '&nbsp;kt</div></div>';
       }
 
+      // Temperatur & Spread
       var tempVal = fc(m.temp, 1) + '&nbsp;°C';
       var dewpVal = fc(m.dewp, 1) + '&nbsp;°C';
       var spreadStr = '';
@@ -825,6 +826,7 @@
          spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
       }
 
+      // Sicht exakt aus METAR
       var sichtVal = '–';
       if (rawParts.includes('CAVOK')) {
         sichtVal = '≥&nbsp;10&nbsp;km';
@@ -839,6 +841,7 @@
         }
       }
 
+      // Wolken übersetzen und formatieren
       var coverText = { FEW: 'Leicht bewölkt', SCT: 'Aufgelockert', BKN: 'Stark bewölkt', OVC: 'Bedeckt', SKC: 'Wolkenlos', NSC: 'Keine sig. Wolken', CAVOK: 'CAVOK' };
       var wolkenHtml = '';
       if (m.clouds && m.clouds.length) {
@@ -854,6 +857,7 @@
           '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.75rem; white-space: normal; line-height: 1.25;">' + txt + '</div></div>';
       }
 
+      // Dichtehöhe berechnen
       var daHtml = '';
       if (m.temp !== undefined && m.altim !== undefined) {
         var elevFt  = 1758;                          
@@ -867,6 +871,7 @@
           '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
       }
 
+      // Wetter übersetzen
       var wxMap = {
         'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
         'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
@@ -886,6 +891,7 @@
       }
       var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein Niederschlag';
       
+      // Trend
       var trendStr = '';
       if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span><br><span style="white-space: nowrap;">(Keine Änderung)</span>';
       else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span><br><span style="white-space: nowrap;">(Änderung erwartet)</span>';
@@ -895,6 +901,7 @@
         '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
         (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
 
+      // Flugregeln (Flight Category)
       var cat = m.fltCat || 'VFR';
       if (rawParts.includes('CAVOK')) cat = 'VFR';
       var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
@@ -914,9 +921,14 @@
           '</div>';
       }
 
+      // Bei Variabel: Wind auf 0 setzen für Grafik
+      var isVariable = (bearing === 0 && wspdKt > 0) || varMatch !== null || rawParts.includes('VRB');
+      var diagWspd = isVariable ? 0 : wspdKt * 1.852;
+      var diagWgst = isVariable ? 0 : wgstKt * 1.852;
+
       el.innerHTML =
         '<div class="wx-layout">' +
-          buildRunwayDiagram(bearing, wspdKt * 1.852, wgstKt * 1.852) +
+          buildRunwayDiagram(bearing, diagWspd, diagWgst) +
           '<div class="wx-stats">' +
             catHtml +
             stat('Sicht', sichtVal) +
