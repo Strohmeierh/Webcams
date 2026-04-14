@@ -328,6 +328,11 @@
       position: absolute; top: -250px; left: 0;
       width: 100%; height: calc(100% + 250px); border: none;
     }
+    .crop-wangen iframe {
+      /* Zoomt in das iframe hinein und verschiebt es leicht nach oben, um Header/Ränder abzuschneiden */
+      transform: scale(1.35) translateY(-8%);
+      transform-origin: center center;
+    }
 
     /* === Modale Fenster (Radar & Lightbox) === */
     .modal-overlay {
@@ -488,7 +493,7 @@
           <a href="https://cams.lspv.dyndns.info/cams" data-lightbox="true">Wangen-Lachen</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
+        <div class="media-container loaded crop-wangen" onclick="openLightbox(event, this)">
           <div class="iframe-overlay"></div>
           <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
         </div>
@@ -522,11 +527,12 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" data-lightbox="true">Bachtel</a>
+          <a href="https://bachtel.it-wms.com/" data-lightbox="true">Bachtel</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
-          <img class="live-cam" data-src="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Bachtel">
+        <div class="media-container loaded" onclick="openLightbox(event, this)">
+          <div class="iframe-overlay"></div>
+          <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
         </div>
       </div>
 
