@@ -296,6 +296,15 @@
       border: none; display: block;
     }
 
+    /* Neu: Unsichtbares Overlay für iframes, die nicht gescrollt werden sollen */
+    .iframe-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 10;
+      cursor: pointer;
+    }
+
     .media-container img {
       width: 100%;
       height: 100%;
@@ -409,6 +418,7 @@
     <div class="sunrise-bar" id="sunrise-bar"></div>
   </header>
 
+  <!-- ===== WETTER-PANEL ===== -->
   <div class="wx-panel" id="wx-panel">
     <div class="wx-card">
       <div class="wx-card-title">
@@ -424,6 +434,7 @@
   </div>
 
   <main>
+    <!-- ===== LSZK ===== -->
     <h2 class="section-title">LSZK – Flugplatz Speck</h2>
     <div class="cam-grid">
 
@@ -433,6 +444,8 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container loaded">
+          <!-- Overlay verhindert das versehentliche Scrollen im iframe auf Mobile -->
+          <div class="iframe-overlay"></div>
           <iframe src="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" loading="lazy"></iframe>
         </div>
       </div>
@@ -443,32 +456,14 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container loaded">
+          <div class="iframe-overlay"></div>
           <iframe src="https://fgzo.ch/#galerie-2" loading="lazy"></iframe>
-        </div>
-      </div>
-
-      <div class="cam-card">
-        <div class="cam-header">
-          <a href="https://cams.lspv.dyndns.info/cams" target="_blank" rel="noopener">Wangen-Lachen</a>
-          <span class="status-dot"></span>
-        </div>
-        <div class="media-container loaded">
-          <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
-        </div>
-      </div>
-
-      <div class="cam-card">
-        <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank" rel="noopener">Flugplatz Mollis Nord</a>
-          <span class="status-dot"></span>
-        </div>
-        <div class="media-container">
-          <img class="live-cam" data-src="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Mollis Nord" style="object-position: center top;">
         </div>
       </div>
 
     </div>
 
+    <!-- ===== Alpen & Umgebung ===== -->
     <h2 class="section-title">Alpen &amp; Umgebung</h2>
     <div class="cam-grid">
 
@@ -1208,8 +1203,9 @@
 
     /* ── Kamera-Links: Klick öffnet neues Fenster ───────────── */
     document.querySelectorAll('.cam-card').forEach(function(card) {
-      var a    = card.querySelector('.cam-header a');
-      var img  = card.querySelector('img.live-cam');
+      var a       = card.querySelector('.cam-header a');
+      var img     = card.querySelector('img.live-cam');
+      var overlay = card.querySelector('.iframe-overlay');
       if (!a) return;
       var base = a.getAttribute('href');
 
@@ -1229,6 +1225,9 @@
       if (img) {
         img.style.cursor = 'pointer';
         img.addEventListener('click', openFresh);
+      }
+      if (overlay) {
+        overlay.addEventListener('click', openFresh);
       }
     });
 
