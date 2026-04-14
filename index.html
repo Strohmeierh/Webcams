@@ -328,11 +328,6 @@
       position: absolute; top: -250px; left: 0;
       width: 100%; height: calc(100% + 250px); border: none;
     }
-    .crop-wangen iframe {
-      /* Zoomt in das iframe hinein und verschiebt es leicht nach oben, um Header/Ränder abzuschneiden */
-      transform: scale(1.35) translateY(-8%);
-      transform-origin: center center;
-    }
 
     /* === Modale Fenster (Radar & Lightbox) === */
     .modal-overlay {
@@ -493,7 +488,7 @@
           <a href="https://cams.lspv.dyndns.info/cams" data-lightbox="true">Wangen-Lachen</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded crop-wangen" onclick="openLightbox(event, this)">
+        <div class="media-container loaded" onclick="openLightbox(event, this)">
           <div class="iframe-overlay"></div>
           <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
         </div>
@@ -530,8 +525,7 @@
           <a href="https://bachtel.it-wms.com/" data-lightbox="true">Bachtel</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
         </div>
       </div>
@@ -730,7 +724,7 @@
       var modal = document.getElementById('radar-modal');
       var iframe = document.getElementById('radar-iframe');
       if(!iframe.src) {
-        iframe.src = 'https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=kt&zoom=10&overlay=radar&product=radar&level=surface&lat=' + lat + '&lon=' + lon;
+        iframe.src = 'https://embed.windy.com/embed2.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=kt&zoom=10&overlay=radar&product=radar&level=surface&lat=' + lat + '&lon=' + lon;
       }
       modal.style.display = 'flex';
       document.getElementById("tools-menu").parentElement.classList.remove("show");
