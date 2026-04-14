@@ -11,14 +11,7 @@
   <link rel="icon" type="image/png" href="icon-lszk.png">
   <link rel="shortcut icon" href="icon-lszk.png">
 
-  <!-- Preconnects für schnellere DNS-Auflösung -->
   <link rel="preconnect" href="https://wsrv.nl">
-  <link rel="preconnect" href="https://www.fgzo.ch">
-  <link rel="dns-prefetch" href="https://knieskinderzoo.roundshot.com">
-  <link rel="dns-prefetch" href="https://feed.yellow.camera">
-  <link rel="dns-prefetch" href="https://chaeserrugg.roundshot.com">
-  <link rel="dns-prefetch" href="https://rotenfluebahn.roundshot.com">
-  <link rel="dns-prefetch" href="https://laax.roundshot.com">
 
   <style>
     :root {
@@ -273,10 +266,6 @@
       100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
     }
 
-    /* Animationen nur für sichtbare Elemente */
-    .cam-card { content-visibility: auto; }
-    .cam-card:not(.in-view) .status-dot { animation: none; }
-
     .media-container {
       position: relative;
       width: 100%;
@@ -349,33 +338,6 @@
 
     .wx-updated-br { display: none; }
 
-    /* === Warn-Banner === */
-    .wx-warnings {
-      margin-bottom: 14px;
-    }
-    .wx-warn-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      line-height: 1.35;
-      margin-bottom: 6px;
-    }
-    .wx-warn-item:last-child { margin-bottom: 0; }
-    .wx-warn-red {
-      background: rgba(239,68,68,0.15);
-      border: 1px solid rgba(239,68,68,0.4);
-      color: #fca5a5;
-    }
-    .wx-warn-amber {
-      background: rgba(245,158,11,0.15);
-      border: 1px solid rgba(245,158,11,0.4);
-      color: #fcd34d;
-    }
-
     .wx-layout {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -389,13 +351,16 @@
       h1 { font-size: 1.1rem; letter-spacing: 1px; }
       .wx-layout { grid-template-columns: 1fr; }
       
+      /* Zentrierung Diagramm & Textbox Piste darunter */
       .wx-layout > div:first-child { display: flex; flex-direction: column; align-items: center; justify-content: center; }
       .wx-updated-br { display: inline; }
       
+      /* Buttons nebeneinander auf Mobile */
       .header-links { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
       .header-links > button, .header-links > .dropdown { flex: 1; }
       .header-links .top-btn { width: 100%; justify-content: center; padding: 10px 4px; font-size: 0.85rem; }
       
+      /* Dropdown-Menü Full-Width auf Mobile */
       .dropdown { position: static; }
       .dropdown-content { width: 100%; left: 0; transform: none; top: calc(100% + 4px); }
     }
@@ -500,7 +465,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Mollis Nord" style="object-position: center top;">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Mollis Nord" style="object-position: center top;">
         </div>
       </div>
 
@@ -516,7 +481,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Webcam Uznach">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Webcam Uznach">
         </div>
       </div>
 
@@ -526,7 +491,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Bachtel">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Bachtel">
         </div>
       </div>
 
@@ -566,7 +531,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Tödi">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Tödi">
         </div>
       </div>
 
@@ -586,7 +551,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Klausenpass">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Klausenpass">
         </div>
       </div>
 
@@ -606,7 +571,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Oberalppass">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Oberalppass">
         </div>
       </div>
 
@@ -626,7 +591,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Andermatt">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Andermatt">
         </div>
       </div>
 
@@ -636,7 +601,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Gotthard">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Gotthard">
         </div>
       </div>
 
@@ -656,7 +621,7 @@
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" loading="lazy" data-src="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Ambri">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Ambri">
         </div>
       </div>
 
@@ -750,14 +715,6 @@
         e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
       });
     }, { rootMargin: '200px' });
-
-    /* Pulse-Animation nur für sichtbare Karten */
-    var cardIo = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        e.target.classList.toggle('in-view', e.isIntersecting);
-      });
-    }, { rootMargin: '50px' });
-    document.querySelectorAll('.cam-card').forEach(function(c) { cardIo.observe(c); });
 
     var imgs = document.querySelectorAll('img.live-cam');
     var ts0 = Date.now();
@@ -905,7 +862,6 @@
 
       // Dichtehöhe berechnen
       var daHtml = '';
-      var densAlt;
       if (m.temp !== undefined && m.altim !== undefined) {
         var elevFt  = 1758;                          
         var isaTemp = 15 - (elevFt / 1000 * 2);     
@@ -968,68 +924,12 @@
           '</div>';
       }
 
-      // Bei Variabel: Wind auf 0 setzen für Grafik
-      var isVariable = (bearing === 0 && wspdKt > 0) || varMatch !== null || rawParts.includes('VRB');
-      var diagWspd = isVariable ? 0 : wspdKt * 1.852;
-      var diagWgst = isVariable ? 0 : wgstKt * 1.852;
-
-      // === Warnungen berechnen ===
-      var warnings = [];
-      // Seitenwind prüfen (Piste 12/30 = 120°)
-      if (bearing > 0 && wspdKt >= 2) {
-        var rwyDiff = (bearing - 120 + 360) % 360;
-        var crossKt = Math.abs(Math.round(wspdKt * Math.sin(rwyDiff * Math.PI / 180)));
-        if (crossKt >= 15) {
-          warnings.push({ level: 'red', text: '⚠ Seitenwind ' + crossKt + ' kt – über Limit für viele Flugzeugtypen!' });
-        } else if (crossKt >= 10) {
-          warnings.push({ level: 'amber', text: '⚡ Seitenwind ' + crossKt + ' kt – erhöhte Aufmerksamkeit erforderlich' });
-        }
-      }
-      // Böen prüfen
-      if (wgstKt >= 25) {
-        warnings.push({ level: 'red', text: '⚠ Starke Böen ' + wgstKt + ' kt!' });
-      } else if (wgstKt >= 15) {
-        warnings.push({ level: 'amber', text: '⚡ Böen ' + wgstKt + ' kt' });
-      }
-      // Dichtehöhe prüfen
-      if (m.temp !== undefined && m.altim !== undefined && densAlt !== undefined) {
-        if (densAlt > 5000) {
-          warnings.push({ level: 'red', text: '⚠ Dichtehöhe ' + densAlt + ' ft – deutlich reduzierte Flugleistung!' });
-        } else if (densAlt > 4000) {
-          warnings.push({ level: 'amber', text: '⚡ Dichtehöhe ' + densAlt + ' ft – Flugleistung beachten' });
-        }
-      }
-      // Sicht prüfen
-      if (sichtVal !== '–' && sichtVal.indexOf('≥') === -1) {
-        var sichtM = parseInt(sichtVal);
-        if (!isNaN(sichtM) && sichtM < 1500) {
-          warnings.push({ level: 'red', text: '⚠ Sicht ' + sichtM + ' m – unter VFR-Minimum!' });
-        } else if (!isNaN(sichtM) && sichtM < 5000) {
-          warnings.push({ level: 'amber', text: '⚡ Sicht ' + sichtM + ' m – eingeschränkte Sichtbedingungen' });
-        }
-      }
-      // Spread prüfen (Nebelgefahr)
-      if (m.temp !== undefined && m.dewp !== undefined && (m.temp - m.dewp) <= 3) {
-        warnings.push({ level: 'amber', text: '⚡ Spread nur ' + (m.temp - m.dewp).toFixed(1).replace('.', ',') + ' °C – Nebel-/Wolkenbildung möglich' });
-      }
-      // Flugregeln prüfen
-      if (cat === 'IFR' || cat === 'LIFR') {
-        warnings.push({ level: 'red', text: '⚠ Flugregeln: ' + cat + ' – VFR-Flug nicht möglich!' });
-      } else if (cat === 'MVFR') {
-        warnings.push({ level: 'amber', text: '⚡ Flugregeln: MVFR – marginale VFR-Bedingungen' });
-      }
-
-      var warnHtml = '';
-      if (warnings.length) {
-        warnHtml = '<div class="wx-warnings">';
-        for (var wi = 0; wi < warnings.length; wi++) {
-          warnHtml += '<div class="wx-warn-item wx-warn-' + warnings[wi].level + '">' + warnings[wi].text + '</div>';
-        }
-        warnHtml += '</div>';
-      }
+      // Bei rein variablem Wind ohne Hauptrichtung: Wind für Grafik auf 0 setzen
+      var isStrictlyVariable = (bearing === 0 && wspdKt > 0);
+      var diagWspd = isStrictlyVariable ? 0 : wspdKt * 1.852;
+      var diagWgst = isStrictlyVariable ? 0 : wgstKt * 1.852;
 
       el.innerHTML =
-        warnHtml +
         '<div class="wx-layout">' +
           buildRunwayDiagram(bearing, diagWspd, diagWgst) +
           '<div class="wx-stats">' +
