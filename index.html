@@ -851,7 +851,7 @@
       var bar = document.getElementById('sunrise-bar');
       if (!bar) return;
       var s = calcSunTimes(47.37557, 8.76169);
-      bar.textContent = '☀ Aufgang ' + s.rise + '  ·  Untergang ' + s.set + ' (MEZ)';
+      bar.textContent = '☀ Aufgang ' + s.rise + '  ·  Untergang ' + s.set + ' (Lokal)';
     })();
 
     /* ── Wetter-Panel Toggle & Auto-Refresh ─────────────────── */
@@ -913,7 +913,7 @@
         var pad = function(n) { return ('0'+n).slice(-2); };
         zeit = pad(loc.getUTCDate()) + '.' + pad(loc.getUTCMonth()+1) + '.' +
                loc.getUTCFullYear() + ' ' +
-               pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' MEZ';
+               pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' Lokal';
       }
 
       // Wind parsen
@@ -1041,7 +1041,7 @@
 
       var sunTimes = calcSunTimes(47.37557, 8.76169);
       var sunBar = document.getElementById('sunrise-bar');
-      if (sunBar) sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (MEZ)';
+      if (sunBar) sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (Lokal)';
 
       function stat(label, val, sub) {
         if (!val || val === '–') return '';
