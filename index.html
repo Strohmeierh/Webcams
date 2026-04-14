@@ -351,16 +351,13 @@
       h1 { font-size: 1.1rem; letter-spacing: 1px; }
       .wx-layout { grid-template-columns: 1fr; }
       
-      /* Zentrierung Diagramm & Textbox Piste darunter */
       .wx-layout > div:first-child { display: flex; flex-direction: column; align-items: center; justify-content: center; }
       .wx-updated-br { display: inline; }
       
-      /* Buttons nebeneinander auf Mobile */
       .header-links { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
       .header-links > button, .header-links > .dropdown { flex: 1; }
       .header-links .top-btn { width: 100%; justify-content: center; padding: 10px 4px; font-size: 0.85rem; }
       
-      /* Dropdown-Menü Full-Width auf Mobile */
       .dropdown { position: static; }
       .dropdown-content { width: 100%; left: 0; transform: none; top: calc(100% + 4px); }
     }
@@ -647,12 +644,11 @@
 
   <script>
   (function () {
-    /* ── Dropdown Menü & LocalStorage ───────────────────────── */
+    /* ── Dropdown Menü ───────────────────────── */
     window.toggleMenu = function(e) {
       e.stopPropagation();
       var dropdown = document.getElementById("tools-menu").parentElement;
-      var isOpen = dropdown.classList.toggle("show");
-      localStorage.setItem("lszk_linksMenuOpen", isOpen);
+      dropdown.classList.toggle("show");
     };
 
     window.onclick = function(event) {
@@ -661,7 +657,6 @@
         for (var i = 0; i < dropdowns.length; i++) {
           if (dropdowns[i].classList.contains('show')) {
             dropdowns[i].classList.remove('show');
-            localStorage.setItem("lszk_linksMenuOpen", "false");
           }
         }
       }
@@ -669,13 +664,9 @@
 
     document.querySelectorAll('.dropdown-content a').forEach(function(link) {
       link.addEventListener('click', function(e) {
-        e.stopPropagation();
+        e.stopPropagation(); // Menü bleibt beim Klicken auf einen Link offen
       });
     });
-
-    if (localStorage.getItem("lszk_linksMenuOpen") === "true") {
-      document.getElementById("tools-menu").parentElement.classList.add("show");
-    }
 
     /* ── Kamera-Refresh ─────────────────────────────────────── */
     var REFRESH_MS = 90000;
@@ -747,16 +738,8 @@
       var btn   = document.getElementById('wx-toggle');
       var open  = panel.classList.toggle('open');
       btn.setAttribute('aria-expanded', open);
-      localStorage.setItem('lszk_wxPanelOpen', open);
       if (open && !wxLoaded) { wxLoaded = true; loadWetter(); }
     };
-
-    if (localStorage.getItem('lszk_wxPanelOpen') === 'true') {
-      document.getElementById('wx-panel').classList.add('open');
-      document.getElementById('wx-toggle').setAttribute('aria-expanded', 'true');
-      wxLoaded = true;
-      loadWetter();
-    }
 
     setInterval(function() {
       if(document.getElementById('wx-panel').classList.contains('open')) {
@@ -834,7 +817,6 @@
                      '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + wgstKt + '&nbsp;kt</div></div>';
       }
 
-      // Temperatur & Spread
       var tempVal = fc(m.temp, 1) + '&nbsp;°C';
       var dewpVal = fc(m.dewp, 1) + '&nbsp;°C';
       var spreadStr = '';
@@ -843,7 +825,6 @@
          spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
       }
 
-      // Sicht exakt aus METAR
       var sichtVal = '–';
       if (rawParts.includes('CAVOK')) {
         sichtVal = '≥&nbsp;10&nbsp;km';
@@ -858,7 +839,6 @@
         }
       }
 
-      // Wolken übersetzen und formatieren
       var coverText = { FEW: 'Leicht bewölkt', SCT: 'Aufgelockert', BKN: 'Stark bewölkt', OVC: 'Bedeckt', SKC: 'Wolkenlos', NSC: 'Keine sig. Wolken', CAVOK: 'CAVOK' };
       var wolkenHtml = '';
       if (m.clouds && m.clouds.length) {
@@ -874,7 +854,6 @@
           '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.75rem; white-space: normal; line-height: 1.25;">' + txt + '</div></div>';
       }
 
-      // Dichtehöhe berechnen
       var daHtml = '';
       if (m.temp !== undefined && m.altim !== undefined) {
         var elevFt  = 1758;                          
@@ -888,7 +867,6 @@
           '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
       }
 
-      // Wetter übersetzen
       var wxMap = {
         'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
         'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
@@ -908,7 +886,6 @@
       }
       var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein Niederschlag';
       
-      // Trend
       var trendStr = '';
       if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span><br><span style="white-space: nowrap;">(Keine Änderung)</span>';
       else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span><br><span style="white-space: nowrap;">(Änderung erwartet)</span>';
@@ -918,7 +895,6 @@
         '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
         (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
 
-      // Flugregeln (Flight Category)
       var cat = m.fltCat || 'VFR';
       if (rawParts.includes('CAVOK')) cat = 'VFR';
       var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
