@@ -351,8 +351,15 @@
       .wx-layout { grid-template-columns: 1fr; }
       .wx-layout > div:first-child { display: flex; justify-content: center; }
       .wx-updated-br { display: inline; }
-      .header-links { flex-direction: column; align-items: stretch; }
-      .dropdown-content { width: 100%; }
+      
+      /* Buttons nebeneinander auf Mobile */
+      .header-links { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
+      .header-links > button, .header-links > .dropdown { flex: 1; }
+      .header-links .top-btn { width: 100%; justify-content: center; padding: 10px 4px; font-size: 0.85rem; }
+      
+      /* Dropdown-Menü Full-Width auf Mobile */
+      .dropdown { position: static; }
+      .dropdown-content { width: 100%; left: 0; transform: none; top: calc(100% + 4px); }
     }
   </style>
 </head>
@@ -640,17 +647,34 @@
     /* ── Dropdown Menü ──────────────────────────────────────── */
     window.toggleMenu = function(e) {
       e.stopPropagation();
-      document.getElementById("tools-menu").parentElement.classList.toggle("show");
+      var dropdown = document.getElementById("tools-menu").parentElement;
+      var isOpen = dropdown.classList.toggle("show");
+      localStorage.setItem("lszk_linksMenuOpen", isOpen);
     };
 
     window.onclick = function(event) {
       if (!event.target.closest('.dropdown')) {
         var dropdowns = document.getElementsByClassName("dropdown");
         for (var i = 0; i < dropdowns.length; i++) {
-          dropdowns[i].classList.remove('show');
+          if (dropdowns[i].classList.contains('show')) {
+            dropdowns[i].classList.remove('show');
+            localStorage.setItem("lszk_linksMenuOpen", "false");
+          }
         }
       }
     };
+
+    // Klicks auf Links im Menü sollen das Menü offen halten (für die Rückkehr)
+    document.querySelectorAll('.dropdown-content a').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+
+    // State beim Laden wiederherstellen (Links-Menü)
+    if (localStorage.getItem("lszk_linksMenuOpen") === "true") {
+      document.getElementById("tools-menu").parentElement.classList.add("show");
+    }
 
     /* ── Kamera-Refresh ─────────────────────────────────────── */
     var REFRESH_MS = 90000;
@@ -722,8 +746,17 @@
       var btn   = document.getElementById('wx-toggle');
       var open  = panel.classList.toggle('open');
       btn.setAttribute('aria-expanded', open);
+      localStorage.setItem('lszk_wxPanelOpen', open);
       if (open && !wxLoaded) { wxLoaded = true; loadWetter(); }
     };
+
+    // State beim Laden wiederherstellen (Wetter-Panel)
+    if (localStorage.getItem('lszk_wxPanelOpen') === 'true') {
+      document.getElementById('wx-panel').classList.add('open');
+      document.getElementById('wx-toggle').setAttribute('aria-expanded', 'true');
+      wxLoaded = true;
+      loadWetter();
+    }
 
     setInterval(function() {
       if(document.getElementById('wx-panel').classList.contains('open')) {
@@ -786,41 +819,42 @@
       var windColor = wspdKt >= 15 ? '#ef4444' : 'var(--accent)';
       var windDirStr = bearing > 0 ? bearing + '°' : 'variabel';
       
-      var windVal = '<span style="color:' + windColor + ';">' + wspdKt + ' kt</span>';
-      var windSub = 'aus ' + windDirStr;
+      var windVal = '<span style="color:' + windColor + '; white-space: nowrap;">' + wspdKt + '&nbsp;kt</span>';
+      var windSub = '<span style="white-space: nowrap;">aus ' + windDirStr + '</span>';
       
       var varMatch = rawParts.match(/\b(\d{3})V(\d{3})\b/);
       if (varMatch) {
-         windSub += '<br>Variabel: ' + varMatch[1] + '° – ' + varMatch[2] + '°';
+         windSub += '<br><span style="white-space: nowrap;">Variabel: ' + varMatch[1] + '° – ' + varMatch[2] + '°</span>';
       }
       
       var boeenHtml = '';
       if (wgstKt > 0) {
          var gustColor = wgstKt >= 15 ? '#ef4444' : 'var(--accent)';
          boeenHtml = '<div class="wx-stat"><div class="wx-stat-label">Böen</div>' +
-                     '<div class="wx-stat-value" style="color:' + gustColor + ';">' + wgstKt + ' kt</div></div>';
+                     '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + wgstKt + '&nbsp;kt</div></div>';
       }
 
-      // Temperatur & Spread
-      var tempVal = fc(m.temp, 1) + ' °C';
-      var tempSub = '';
+      // Temperatur & Spread & Taupunkt in 2 Kacheln
+      var tempVal = fc(m.temp, 1) + '&nbsp;°C';
+      var dewpVal = fc(m.dewp, 1) + '&nbsp;°C';
+      var spreadStr = '';
       if (m.temp !== undefined && m.dewp !== undefined) {
          var spread = (m.temp - m.dewp).toFixed(1);
-         tempSub = 'Taupunkt: ' + fc(m.dewp, 1) + ' °C<br>Spread: ' + spread.replace('.', ',') + ' °C';
+         spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
       }
 
       // Sicht exakt aus METAR-String holen
       var sichtVal = '–';
       if (rawParts.includes('CAVOK')) {
-        sichtVal = '≥ 10 km';
+        sichtVal = '≥&nbsp;10&nbsp;km';
       } else {
         var visMatch = rawParts.match(/\b(\d{4})\b/);
         if (visMatch) {
           var visM = parseInt(visMatch[1]);
-          sichtVal = visM >= 9999 ? '≥ 10 km' : visM + ' m';
+          sichtVal = visM >= 9999 ? '≥&nbsp;10&nbsp;km' : visM + '&nbsp;m';
         } else if (m.visib) {
           var visSm = parseFloat(m.visib);
-          sichtVal = visSm >= 6 ? '≥ 10 km' : Math.round(visSm * 1.609 * 1000) + ' m';
+          sichtVal = visSm >= 6 ? '≥&nbsp;10&nbsp;km' : Math.round(visSm * 1.609 * 1000) + '&nbsp;m';
         }
       }
 
@@ -830,14 +864,14 @@
       if (m.clouds && m.clouds.length) {
         var wolkenLines = m.clouds.map(function(cl) {
           var txt = coverText[cl.cover] || cl.cover;
-          return txt + (cl.base ? ' bei ' + cl.base + ' ft' : '');
+          return '<span style="white-space: nowrap;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft' : '') + '</span>';
         });
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
           '<div class="wx-stat-sub" style="margin-top:0;">' + wolkenLines.join('<br>') + '</div></div>';
       } else if (m.cover) {
         var txt = coverText[m.cover] || m.cover;
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
-          '<div class="wx-stat-sub" style="margin-top:0;">' + txt + '</div></div>';
+          '<div class="wx-stat-sub" style="margin-top:0; white-space: nowrap;">' + txt + '</div></div>';
       }
 
       // Dichtehöhe berechnen
@@ -850,8 +884,8 @@
         var densAlt  = Math.round(pressAlt + 118.8 * tempDev);
         var daColor  = densAlt > 5000 ? '#ef4444' : densAlt > 3000 ? '#f59e0b' : '#10b981';
         daHtml = '<div class="wx-stat"><div class="wx-stat-label">Dichtehöhe</div>' +
-          '<div class="wx-stat-value" style="color:' + daColor + ';">' + densAlt + ' ft</div>' +
-          '<div class="wx-stat-sub">' + Math.round(densAlt / 3.28084) + ' m (MSL)</div></div>';
+          '<div class="wx-stat-value" style="color:' + daColor + '; white-space: nowrap;">' + densAlt + '&nbsp;ft</div>' +
+          '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m (MSL)</div></div>';
       }
 
       // Wetter übersetzen
@@ -876,20 +910,20 @@
       
       // Trend Vorhersage aus METAR
       var trendStr = '';
-      if (rawParts.match(/\bNOSIG\b/)) trendStr = '<br>Trend: NOSIG (Keine Änderung)';
-      else if (rawParts.match(/\bBECMG\b/)) trendStr = '<br>Trend: BECMG (Änderung erwartet)';
-      else if (rawParts.match(/\bTEMPO\b/)) trendStr = '<br>Trend: TEMPO (Zeitweise)';
+      if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span><br><span style="white-space: nowrap;">(Keine Änderung)</span>';
+      else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span><br><span style="white-space: nowrap;">(Änderung erwartet)</span>';
+      else if (rawParts.match(/\bTEMPO\b/)) trendStr = '<span style="white-space: nowrap;">Trend: TEMPO</span><br><span style="white-space: nowrap;">(Zeitweise)</span>';
 
       var wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetter</div>' +
-        '<div class="wx-stat-value" style="font-size:1rem;">' + wxText + '</div>' +
-        (trendStr ? '<div class="wx-stat-sub">' + trendStr + '</div>' : '') + '</div>';
+        '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
+        (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
 
       // Flugregeln (Flight Category)
       var cat = m.fltCat || 'VFR';
       if (rawParts.includes('CAVOK')) cat = 'VFR';
       var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
       var catHtml = '<div class="wx-stat"><div class="wx-stat-label">Flugregeln</div>' +
-        '<div class="wx-stat-value" style="color:' + catColor + ';">' + cat + '</div></div>';
+        '<div class="wx-stat-value" style="color:' + catColor + '; white-space: nowrap;">' + cat + '</div></div>';
 
       var sunTimes = calcSunTimes(47.37557, 8.76169);
       var sunBar = document.getElementById('sunrise-bar');
@@ -900,7 +934,7 @@
         return '<div class="wx-stat">' +
           '<div class="wx-stat-label">' + label + '</div>' +
           '<div class="wx-stat-value">' + val + '</div>' +
-          (sub ? '<div class="wx-stat-sub">' + sub + '</div>' : '') +
+          (sub ? '<div class="wx-stat-sub" style="margin-top: 6px;">' + sub + '</div>' : '') +
           '</div>';
       }
 
@@ -910,8 +944,9 @@
           '<div class="wx-stats">' +
             catHtml +
             stat('Sicht', sichtVal) +
-            stat('Temperatur', tempVal, tempSub) +
-            stat('QNH', m.altim ? Math.round(m.altim) + ' hPa' : '–') +
+            stat('Temperatur', tempVal) +
+            stat('Taupunkt', dewpVal, spreadStr) +
+            stat('QNH', m.altim ? Math.round(m.altim) + '&nbsp;hPa' : '–') +
             stat('Wind', windVal, windSub) +
             boeenHtml +
             wolkenHtml +
