@@ -329,45 +329,6 @@
       width: 100%; height: calc(100% + 250px); border: none;
     }
 
-    /* === Modale Fenster (Radar & Lightbox) === */
-    .modal-overlay {
-      display: none; position: fixed; z-index: 2000; left: 0; top: 0;
-      width: 100%; height: 100%; background-color: rgba(0,0,0,0.85);
-      backdrop-filter: blur(4px); align-items: center; justify-content: center;
-    }
-    .modal-content {
-      position: relative; width: 95%; height: 85%; max-width: 1400px;
-      background: var(--card-bg); border-radius: var(--radius);
-      border: 1px solid var(--accent); box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      overflow: hidden;
-    }
-    .close-btn {
-      position: absolute; right: 15px; top: 15px; width: 36px; height: 36px;
-      background: rgba(0,0,0,0.6); color: #fff; font-size: 24px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; cursor: pointer; z-index: 100; border: 1px solid var(--card-border);
-      transition: background 0.2s, color 0.2s;
-    }
-    .close-btn:hover { background: var(--accent); color: #000; }
-
-    /* Lightbox spezifisch */
-    .lightbox {
-      display: none; position: fixed; z-index: 3000; left: 0; top: 0;
-      width: 100%; height: 100%; background-color: rgba(0,0,0,0.92);
-      backdrop-filter: blur(5px); align-items: center; justify-content: center;
-      flex-direction: column;
-    }
-    .lightbox img, .lightbox iframe {
-      max-width: 95%; max-height: 90%; border-radius: 8px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.8);
-      object-fit: contain;
-    }
-    .lightbox iframe { width: 90%; height: 85%; border: none; background: #000; }
-    .lightbox-spinner {
-      position: absolute; width: 50px; height: 50px; border: 4px solid var(--card-border);
-      border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite;
-    }
-
     footer {
       text-align: center;
       margin-top: 40px;
@@ -425,7 +386,7 @@
           Links ▼
         </button>
         <div class="dropdown-content" id="tools-menu">
-          <a href="#" onclick="openRadar(event, 47.375, 8.761)">☔ Regenradar (LSZK)</a>
+          <a href="https://www.windy.com/-Weather-radar-radar?radar,47.375,8.761,10" target="_blank" rel="noopener">☔ Regenradar (LSZK)</a>
           <a href="https://www.skybriefing.com/de/dabs" target="_blank" rel="noopener">🗺 DABS (Schweiz)</a>
           <a href="https://notaminfo.com/switzerlandmap" target="_blank" rel="noopener">✈ NOTAM Info (Schweiz)</a>
           <a href="https://notaminfo.com/germanymap" target="_blank" rel="noopener">✈ NOTAM Info (Deutschland)</a>
@@ -460,46 +421,42 @@
     <h2 class="section-title">LSZK – Flugplatz Speck</h2>
     <div class="cam-grid">
 
-      <!-- Iframes belassen, aber Overlay für Vollbild Klick hinzufügen -->
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" data-lightbox="true">Speck – Kamera 1</a>
+          <a href="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" target="_blank" rel="noopener">Speck – Kamera 1</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://www.fgzo.ch/informationen-fuer-piloten.php#galerie-1" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://fgzo.ch/#galerie-2" data-lightbox="true">Speck – Kamera 2</a>
+          <a href="https://fgzo.ch/#galerie-2" target="_blank" rel="noopener">Speck – Kamera 2</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://fgzo.ch/#galerie-2" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://cams.lspv.dyndns.info/cams" data-lightbox="true">Wangen-Lachen</a>
+          <a href="https://cams.lspv.dyndns.info/cams" target="_blank" rel="noopener">Wangen-Lachen</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" data-lightbox="true">Flugplatz Mollis Nord</a>
+          <a href="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank" rel="noopener">Flugplatz Mollis Nord</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Mollis Nord" style="object-position: center top;">
         </div>
       </div>
@@ -512,168 +469,160 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" data-lightbox="true">Uznach</a>
+          <a href="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Webcam Uznach">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://bachtel.it-wms.com/" data-lightbox="true">Bachtel</a>
+          <a href="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" target="_blank" rel="noopener">Bachtel</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded">
-          <iframe src="https://bachtel.it-wms.com/" loading="lazy"></iframe>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=bachtel.it-wms.com/panorama1_raw.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Bachtel">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://knieskinderzoo.roundshot.com/" data-lightbox="true">Rapperswil</a>
+          <a href="https://knieskinderzoo.roundshot.com/" target="_blank" rel="noopener">Rapperswil</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://knieskinderzoo.roundshot.com/" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://feed.yellow.camera/niederurner-taeli" data-lightbox="true">Walensee</a>
+          <a href="https://feed.yellow.camera/niederurner-taeli" target="_blank" rel="noopener">Walensee</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://feed.yellow.camera/niederurner-taeli" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://chaeserrugg.roundshot.com/" data-lightbox="true">Chäserugg</a>
+          <a href="https://chaeserrugg.roundshot.com/" target="_blank" rel="noopener">Chäserugg</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://chaeserrugg.roundshot.com/" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" data-lightbox="true">Richtung Tödi</a>
+          <a href="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" target="_blank" rel="noopener">Richtung Tödi</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Tödi">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://feed.yellow.camera/7M8XY9W2G?hot=true&amp;ui=true" data-lightbox="true">Elm Weissenberge</a>
+          <a href="https://feed.yellow.camera/7M8XY9W2G?hot=true&amp;ui=true" target="_blank" rel="noopener">Elm Weissenberge</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://feed.yellow.camera/7M8XY9W2G?hot=true&amp;ui=true" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" data-lightbox="true">Klausenpass</a>
+          <a href="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" target="_blank" rel="noopener">Klausenpass</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Klausenpass">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://rotenfluebahn.roundshot.com/rotenflue/#/" data-lightbox="true">Mythen</a>
+          <a href="https://rotenfluebahn.roundshot.com/rotenflue/#/" target="_blank" rel="noopener">Mythen</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://rotenfluebahn.roundshot.com/rotenflue/#/" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" data-lightbox="true">Oberalppass</a>
+          <a href="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" target="_blank" rel="noopener">Oberalppass</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Oberalppass">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://laax.roundshot.com/crap-sogn-gion-plaun/" data-lightbox="true">Laax Crap Sogn Gion</a>
+          <a href="https://laax.roundshot.com/crap-sogn-gion-plaun/" target="_blank" rel="noopener">Laax Crap Sogn Gion</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://laax.roundshot.com/crap-sogn-gion-plaun/" loading="lazy"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" data-lightbox="true">Andermatt Gurschen</a>
+          <a href="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" target="_blank" rel="noopener">Andermatt Gurschen</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Andermatt">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" data-lightbox="true">Gotthardpass</a>
+          <a href="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" target="_blank" rel="noopener">Gotthardpass</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Gotthard">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://hotel-grimselpass.ch/webcam/" data-lightbox="true">Grimsel Passhöhe</a>
+          <a href="https://hotel-grimselpass.ch/webcam/" target="_blank" rel="noopener">Grimsel Passhöhe</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container crop-header loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container crop-header loaded">
           <iframe src="https://hotel-grimselpass.ch/webcam" loading="lazy" scrolling="no"></iframe>
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" data-lightbox="true">Ambri Tarnolgio</a>
+          <a href="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" target="_blank" rel="noopener">Ambri Tarnolgio</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container" onclick="openLightbox(event, this)">
+        <div class="media-container">
           <img class="live-cam" data-src="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Ambri">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://ascona-locarno.roundshot.com/bellavistahotel/" data-lightbox="true">Ascona / Locarno</a>
+          <a href="https://ascona-locarno.roundshot.com/bellavistahotel/" target="_blank" rel="noopener">Ascona / Locarno</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded" onclick="openLightbox(event, this)">
-          <div class="iframe-overlay"></div>
+        <div class="media-container loaded">
           <iframe src="https://ascona-locarno.roundshot.com/bellavistahotel/" loading="lazy"></iframe>
         </div>
       </div>
@@ -716,59 +665,6 @@
           dropdowns[i].classList.remove('show');
         }
       }
-    };
-
-    /* ── Regenradar Modal ───────────────────────────────────── */
-    window.openRadar = function(e, lat, lon) {
-      e.preventDefault();
-      var modal = document.getElementById('radar-modal');
-      var iframe = document.getElementById('radar-iframe');
-      if(!iframe.src) {
-        iframe.src = 'https://embed.windy.com/embed2.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=kt&zoom=10&overlay=radar&product=radar&level=surface&lat=' + lat + '&lon=' + lon;
-      }
-      modal.style.display = 'flex';
-      document.getElementById("tools-menu").parentElement.classList.remove("show");
-    };
-
-    window.closeRadar = function(e) {
-      if(e) e.stopPropagation();
-      document.getElementById('radar-modal').style.display = 'none';
-    };
-
-    /* ── Kamera Lightbox ────────────────────────────────────── */
-    window.openLightbox = function(e, el) {
-      e.preventDefault();
-      var lightbox = document.getElementById('lightbox');
-      var lbImg = document.getElementById('lightbox-img');
-      var lbIframe = document.getElementById('lightbox-iframe');
-      var spinner = document.getElementById('lightbox-spinner');
-
-      lbImg.style.display = 'none';
-      lbIframe.style.display = 'none';
-      spinner.style.display = 'block';
-      lightbox.style.display = 'flex';
-
-      // URL aus Link holen
-      var card = el.closest('.cam-card');
-      var url = card.querySelector('.cam-header a').getAttribute('href');
-
-      if (url && (url.indexOf('.jpg') > -1 || url.indexOf('wsrv.nl') > -1)) {
-         var sep = url.indexOf('?') === -1 ? '?' : '&';
-         lbImg.src = url + sep + 't=' + Date.now();
-         lbImg.onload = function() { spinner.style.display = 'none'; lbImg.style.display = 'block'; };
-         lbImg.onerror = function() { spinner.style.display = 'none'; };
-      } else {
-         lbIframe.src = url;
-         lbIframe.onload = function() { spinner.style.display = 'none'; lbIframe.style.display = 'block'; };
-         lbIframe.style.display = 'block';
-      }
-    };
-
-    window.closeLightbox = function() {
-      var lightbox = document.getElementById('lightbox');
-      lightbox.style.display = 'none';
-      document.getElementById('lightbox-img').src = '';
-      document.getElementById('lightbox-iframe').src = '';
     };
 
     /* ── Kamera-Refresh ─────────────────────────────────────── */
@@ -1241,11 +1137,30 @@
         '</a>';
     }
 
-    /* Klick auf Link in Card öffnet auch Lightbox */
-    document.querySelectorAll('.cam-card .cam-header a').forEach(function(a) {
-      a.addEventListener('click', function(e) {
-        openLightbox(e, this);
-      });
+    /* ── Kamera-Links: Klick öffnet neues Fenster ───────────── */
+    document.querySelectorAll('.cam-card').forEach(function(card) {
+      var a    = card.querySelector('.cam-header a');
+      var img  = card.querySelector('img.live-cam');
+      if (!a) return;
+      var base = a.getAttribute('href');
+
+      function openFresh(e) {
+        if (!base) return;
+        if (base.indexOf('.jpg') > -1 || base.indexOf('wsrv.nl') > -1) {
+          e.preventDefault();
+          var sep = base.indexOf('?') === -1 ? '?' : '&';
+          window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
+        } else if (e.target.tagName.toLowerCase() === 'img') {
+          e.preventDefault();
+          window.open(base, '_blank', 'noopener');
+        }
+      }
+
+      a.addEventListener('click', openFresh);
+      if (img) {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', openFresh);
+      }
     });
 
   })();
