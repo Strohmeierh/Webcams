@@ -409,7 +409,6 @@
     <div class="sunrise-bar" id="sunrise-bar"></div>
   </header>
 
-  <!-- ===== WETTER-PANEL ===== -->
   <div class="wx-panel" id="wx-panel">
     <div class="wx-card">
       <div class="wx-card-title">
@@ -425,7 +424,6 @@
   </div>
 
   <main>
-    <!-- ===== LSZK ===== -->
     <h2 class="section-title">LSZK – Flugplatz Speck</h2>
     <div class="cam-grid">
 
@@ -471,7 +469,6 @@
 
     </div>
 
-    <!-- ===== Alpen & Umgebung ===== -->
     <h2 class="section-title">Alpen &amp; Umgebung</h2>
     <div class="cam-grid">
 
@@ -800,10 +797,18 @@
       var rawParts = m.rawOb ? m.rawOb.split('RMK')[0] : '';
       var wspdKt  = m.wspd  !== undefined ? Math.round(parseFloat(m.wspd))  : 0;
       var wgstKt  = m.wgst  !== undefined ? Math.round(parseFloat(m.wgst))  : 0;
-      var bearing = m.wdir  !== undefined ? parseFloat(m.wdir)  : 0;
+      
+      var bearing = 0;
+      var isVRB = false;
+      if (m.wdir === 'VRB') {
+          isVRB = true;
+      } else if (m.wdir !== undefined) {
+          bearing = parseFloat(m.wdir);
+          if (isNaN(bearing)) bearing = 0;
+      }
       
       var windColor = wspdKt >= 15 ? '#ef4444' : 'var(--accent)';
-      var windDirStr = bearing > 0 ? bearing + '°' : 'variabel';
+      var windDirStr = isVRB ? 'variabel' : bearing + '°';
       
       var windVal = '<span style="color:' + windColor + '; white-space: nowrap;">' + wspdKt + '&nbsp;kt</span>';
       var windSub = '<span style="white-space: nowrap;">aus ' + windDirStr + '</span>';
@@ -924,8 +929,8 @@
           '</div>';
       }
 
-      // Bei rein variablem Wind ohne Hauptrichtung: Wind für Grafik auf 0 setzen
-      var isStrictlyVariable = (bearing === 0 && wspdKt > 0);
+      // Diagramm: Wind auf 0 setzen, WENN rein variabel ohne Hauptrichtung
+      var isStrictlyVariable = isVRB || (rawParts.includes('VRB') && bearing === 0 && wspdKt > 0);
       var diagWspd = isStrictlyVariable ? 0 : wspdKt * 1.852;
       var diagWgst = isStrictlyVariable ? 0 : wgstKt * 1.852;
 
