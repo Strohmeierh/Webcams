@@ -1,8 +1,7 @@
 name: METAR LSZK aktualisieren
 
 on:
-  schedule:
-  workflow_dispatch:
+  workflow_dispatch:          # auch manuell auslösbar
 
 jobs:
   fetch-metar:
