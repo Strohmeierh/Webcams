@@ -208,7 +208,8 @@
 
     .cam-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      /* auto-fill anstelle von auto-fit sorgt dafür, dass die Kameras immer exakt gleich gross bleiben */
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 18px;
     }
 
@@ -649,11 +650,11 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.grimselstrom.ch/media/cams/4052-cam.jpg" target="_blank" rel="noopener">Grimselsee (Hospiz)</a>
+          <a href="https://wsrv.nl/?url=www.hotel-grimselpass.ch/webcams/grimsel.jpg" target="_blank" rel="noopener">Grimsel Passhöhe</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
-          <img class="live-cam" data-src="https://wsrv.nl/?url=www.grimselstrom.ch/media/cams/4052-cam.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Grimselsee">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=www.hotel-grimselpass.ch/webcams/grimsel.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Grimsel Passhöhe">
         </div>
       </div>
 
@@ -752,10 +753,30 @@
     }
 
     /* ── LSPV Wangen-Lachen: Zeitstempel-basierte URLs ──── */
-    function lspvStamp(offsetMs) {
-      var d = new Date(Date.now() - (offsetMs || 0));
-      var yy = String(d.getFullYear()).slice(-2);
-      return yy + pad(d.getMonth() + 1) + pad(d.getDate()) + pad(d.getHours()) + pad(d.getMinutes());
+    
+    // Generiert exakte 5-Minuten-Intervalle (z.B. 18:05, 18:00, 17:55)
+    function get5MinIntervals() {
+      var intervals = [];
+      var d0 = new Date();
+      var bucketMin = Math.floor(d0.getMinutes() / 5) * 5;
+      var base = new Date(d0);
+      base.setMinutes(bucketMin, 0, 0);
+
+      // max 6 Versuche (30 Minuten rückwirkend) in 5-Minuten-Schritten prüfen
+      for (var i = 0; i < 6; i++) {
+        var d = new Date(base.getTime() - (i * 5 * 60000));
+        var yy = String(d.getFullYear()).slice(-2);
+        var mo = pad(d.getMonth() + 1);
+        var dd = pad(d.getDate());
+        var hh = pad(d.getHours());
+        var mm = pad(d.getMinutes());
+
+        intervals.push({
+           file: yy + mo + dd + hh + mm,
+           label: dd + '.' + mo + '. ' + hh + ':' + mm
+        });
+      }
+      return intervals;
     }
 
     function loadLspv(img) {
@@ -767,27 +788,37 @@
       img.classList.remove('loaded');
 
       var base = 'https://cams.lspv.dyndns.info/storage/' + camName + '/';
+      var intervals = get5MinIntervals();
       var attempt = 0;
-      var maxAttempts = 30; // max 30 Minuten zurück
 
       function tryNext() {
-        if (attempt >= maxAttempts) {
+        if (attempt >= intervals.length) {
           img.src = fallbackSvg;
           img.style.objectFit = 'contain';
           img.classList.add('loaded');
           container.classList.add('loaded');
           return;
         }
-        var url = base + lspvStamp(attempt * 60000) + '.jpg';
+
+        var current = intervals[attempt];
+        var url = base + current.file + '.jpg';
+        
         var test = new Image();
         test.onload = function () {
           img.src = test.src;
           img.classList.add('loaded');
           container.classList.add('loaded');
+
+          // Datum/Uhrzeit in den Titel des Headers schreiben
+          var aTag = img.closest('.cam-card').querySelector('.cam-header a');
+          if (!aTag.dataset.origText) {
+            aTag.dataset.origText = aTag.textContent; // Originalnamen merken
+          }
+          aTag.textContent = aTag.dataset.origText + ' (' + current.label + ')';
         };
         test.onerror = function () {
           attempt++;
-          tryNext();
+          tryNext(); // Versucht automatisch das nächste 5-Minuten-Intervall
         };
         test.src = url;
       }
@@ -970,7 +1001,7 @@
       var daHtml = '';
       if (m.temp !== undefined && m.altim !== undefined) {
         var elevFt  = 1758;                          
-        var isaTemp = 15 - (elevFt / 1000 * 2);     
+        var isaTemp = 15 - (elevFt / 1000 * 2);      
         var tempDev = parseFloat(m.temp) - isaTemp;  
         var pressAlt = elevFt + (1013.25 - parseFloat(m.altim)) * 27;
         var densAlt  = Math.round(pressAlt + 118.8 * tempDev);
