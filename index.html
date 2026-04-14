@@ -13,7 +13,6 @@
 
   <!-- Preconnects für schnellere DNS-Auflösung -->
   <link rel="preconnect" href="https://wsrv.nl">
-  <link rel="preconnect" href="https://embed.windy.com">
 
   <style>
     :root {
@@ -279,7 +278,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
     }
 
     /* Lade-Spinner (CSS-Kreis) */
@@ -301,12 +299,6 @@
     .media-container iframe {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       border: none; display: block;
-    }
-
-    /* Overlay für Iframes (zum Abfangen von Klicks) */
-    .iframe-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 10; cursor: pointer;
     }
 
     .media-container img {
@@ -334,6 +326,20 @@
       margin-top: 40px;
       font-size: 0.78rem;
       color: var(--text-muted);
+    }
+    
+    .disclaimer {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+      background: rgba(0,0,0,0.2);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
     }
 
     .wx-updated-br { display: none; }
@@ -632,23 +638,10 @@
 
   <footer>
     <p>Letzter Refresh: <span id="last-refresh">–</span> &middot; Aktualisierung alle 90 Sekunden</p>
-  </footer>
-
-  <!-- Regenradar Modal -->
-  <div id="radar-modal" class="modal-overlay" style="display:none;" onclick="closeRadar(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <span class="close-btn" onclick="closeRadar(event)">&times;</span>
-      <iframe id="radar-iframe" src="" width="100%" height="100%" frameborder="0" style="border:none; border-radius: var(--radius);"></iframe>
+    <div class="disclaimer">
+      ⚠️ <strong>Wichtiger Hinweis:</strong> Dieses Dashboard dient ausschließlich zur groben Orientierung und ersetzt in keinem Fall das Einholen offizieller Flugwetter- und NOTAM-Informationen für die Flugvorbereitung. Alle Angaben, Berechnungen und Bilder sind ohne Gewähr.
     </div>
-  </div>
-
-  <!-- Vollbild Lightbox -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <span class="lightbox-close">&times;</span>
-    <div class="lightbox-spinner" id="lightbox-spinner"></div>
-    <img id="lightbox-img" src="" alt="Live Cam">
-    <iframe id="lightbox-iframe" src=""></iframe>
-  </div>
+  </footer>
 
   <script>
   (function () {
@@ -815,7 +808,7 @@
         }
       }
 
-      var coverText = { FEW: 'Few', SCT: 'Scattered', BKN: 'Broken', OVC: 'Overcast', SKC: 'Clear', NSC: 'No sig. clouds', CAVOK: 'CAVOK' };
+      var coverText = { FEW: 'Leicht bewölkt', SCT: 'Aufgelockert', BKN: 'Stark bewölkt', OVC: 'Bedeckt', SKC: 'Wolkenlos', NSC: 'Keine sig. Wolken', CAVOK: 'CAVOK' };
       var wolkenHtml = '';
       if (m.clouds && m.clouds.length) {
         var wolkenLines = m.clouds.map(function(cl) {
@@ -853,19 +846,23 @@
         'FG': 'Nebel', 'BR': 'Dunst', 'HZ': 'Dunst',
         'FZRA': 'Gefrierender Regen', 'FZDZ': 'Gefr. Sprühregen',
         'GR': 'Hagel', 'GS': 'Graupel', 'SG': 'Schneegriesel',
-        'RASN': 'Regen und Schnee', 'NSW': 'Kein sig. Wetter'
+        'RASN': 'Regen und Schnee', 'NSW': 'Kein sig. Wetter',
+        'VCSH': 'Schauer in der Nähe', 'SHRA': 'Regenschauer'
       };
       var wetterHtml = '';
       var wxRaw = m.wxString || '';
       if (!wxRaw && m.rawOb) {
-        var wxM = m.rawOb.match(/\b([-+]?(?:TS|FZ)?(?:RA|SN|DZ|GR|GS|SG|PL|IC)(?:RA|SN)?|FG|BR|HZ|NSW)\b/);
+        var wxM = m.rawOb.match(/\b([-+]?(?:TS|FZ|SH|VC)?(?:RA|SN|DZ|GR|GS|SG|PL|IC)(?:RA|SN)?|FG|BR|HZ|NSW)\b/);
         if (wxM) wxRaw = wxM[1];
       }
+      
+      var wxText = 'Kein Niederschlag';
       if (wxRaw) {
-        var wxText = wxMap[wxRaw] || wxRaw;
-        wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetter</div>' +
-          '<div class="wx-stat-value" style="font-size:0.95rem;">' + wxText + '</div></div>';
+        wxText = wxMap[wxRaw] || wxRaw;
       }
+      
+      wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetter</div>' +
+        '<div class="wx-stat-value" style="font-size:0.95rem;">' + wxText + '</div></div>';
 
       var sunTimes = calcSunTimes(47.37557, 8.76169);
       var sunBar = document.getElementById('sunrise-bar');
@@ -1137,30 +1134,23 @@
         '</a>';
     }
 
-    /* ── Kamera-Links: Klick öffnet neues Fenster ───────────── */
+    /* ── Kamera-Links: Cache-Buster beim Klick ──────────────── */
     document.querySelectorAll('.cam-card').forEach(function(card) {
       var a    = card.querySelector('.cam-header a');
       var img  = card.querySelector('img.live-cam');
-      if (!a) return;
+      if (!a || !img) return;
       var base = a.getAttribute('href');
+      if (!base || base.indexOf('.jpg') === -1) return;
 
       function openFresh(e) {
-        if (!base) return;
-        if (base.indexOf('.jpg') > -1 || base.indexOf('wsrv.nl') > -1) {
-          e.preventDefault();
-          var sep = base.indexOf('?') === -1 ? '?' : '&';
-          window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
-        } else if (e.target.tagName.toLowerCase() === 'img') {
-          e.preventDefault();
-          window.open(base, '_blank', 'noopener');
-        }
+        e.preventDefault();
+        var sep = base.indexOf('?') === -1 ? '?' : '&';
+        window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
       }
 
       a.addEventListener('click', openFresh);
-      if (img) {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', openFresh);
-      }
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', openFresh);
     });
 
   })();
