@@ -171,7 +171,7 @@
       line-height: 1.3;
     }
 
-    /* DEUTLICH GRÖSSER & HELLER FÜR ZWEITE ZEILE */
+    /* Größere Sub-Zeile */
     .wx-stat-sub {
       font-size: 0.85rem;
       color: #cbd5e1;
@@ -350,7 +350,9 @@
       .cam-grid { grid-template-columns: 1fr; }
       h1 { font-size: 1.1rem; letter-spacing: 1px; }
       .wx-layout { grid-template-columns: 1fr; }
-      .wx-layout > div:first-child { display: flex; justify-content: center; }
+      
+      /* Zentrierung Diagramm & Textbox Piste darunter */
+      .wx-layout > div:first-child { display: flex; flex-direction: column; align-items: center; justify-content: center; }
       .wx-updated-br { display: inline; }
       
       /* Buttons nebeneinander auf Mobile */
@@ -407,6 +409,7 @@
     <div class="sunrise-bar" id="sunrise-bar"></div>
   </header>
 
+  <!-- ===== WETTER-PANEL ===== -->
   <div class="wx-panel" id="wx-panel">
     <div class="wx-card">
       <div class="wx-card-title">
@@ -422,6 +425,7 @@
   </div>
 
   <main>
+    <!-- ===== LSZK ===== -->
     <h2 class="section-title">LSZK – Flugplatz Speck</h2>
     <div class="cam-grid">
 
@@ -447,26 +451,27 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://cams.lspv.dyndns.info/cams" target="_blank" rel="noopener">Wangen-Lachen</a>
+          <a href="https://www.schaenis-soaring.ch/webcams/" target="_blank" rel="noopener">Flugplatz Schänis</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container loaded">
-          <iframe src="https://cams.lspv.dyndns.info/cams" loading="lazy"></iframe>
+        <div class="media-container">
+          <img class="live-cam" data-src="https://wsrv.nl/?url=flugplatz-schaenis.ch/cam_schaenis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Flugplatz Schänis">
         </div>
       </div>
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" target="_blank" rel="noopener">Flugplatz Mollis Nord</a>
+          <a href="https://pizol.roundshot.com/bad-ragaz/" target="_blank" rel="noopener">Flugplatz Bad Ragaz</a>
           <span class="status-dot"></span>
         </div>
-        <div class="media-container">
-          <img class="live-cam" data-src="https://wsrv.nl/?url=webcams.glaronia.ch/flugplatz_mollis_nord.jpg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="640" height="360" alt="Mollis Nord" style="object-position: center top;">
+        <div class="media-container loaded">
+          <iframe src="https://pizol.roundshot.com/bad-ragaz/" loading="lazy"></iframe>
         </div>
       </div>
 
     </div>
 
+    <!-- ===== Alpen & Umgebung ===== -->
     <h2 class="section-title">Alpen &amp; Umgebung</h2>
     <div class="cam-grid">
 
@@ -642,7 +647,7 @@
 
   <script>
   (function () {
-    /* ── Dropdown Menü ──────────────────────────────────────── */
+    /* ── Dropdown Menü & LocalStorage ───────────────────────── */
     window.toggleMenu = function(e) {
       e.stopPropagation();
       var dropdown = document.getElementById("tools-menu").parentElement;
@@ -805,6 +810,7 @@
                pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' MEZ';
       }
 
+      // Wind parsen
       var rawParts = m.rawOb ? m.rawOb.split('RMK')[0] : '';
       var wspdKt  = m.wspd  !== undefined ? Math.round(parseFloat(m.wspd))  : 0;
       var wgstKt  = m.wgst  !== undefined ? Math.round(parseFloat(m.wgst))  : 0;
@@ -828,6 +834,7 @@
                      '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + wgstKt + '&nbsp;kt</div></div>';
       }
 
+      // Temperatur & Spread
       var tempVal = fc(m.temp, 1) + '&nbsp;°C';
       var dewpVal = fc(m.dewp, 1) + '&nbsp;°C';
       var spreadStr = '';
@@ -836,6 +843,7 @@
          spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
       }
 
+      // Sicht exakt aus METAR
       var sichtVal = '–';
       if (rawParts.includes('CAVOK')) {
         sichtVal = '≥&nbsp;10&nbsp;km';
@@ -850,21 +858,23 @@
         }
       }
 
+      // Wolken übersetzen und formatieren
       var coverText = { FEW: 'Leicht bewölkt', SCT: 'Aufgelockert', BKN: 'Stark bewölkt', OVC: 'Bedeckt', SKC: 'Wolkenlos', NSC: 'Keine sig. Wolken', CAVOK: 'CAVOK' };
       var wolkenHtml = '';
       if (m.clouds && m.clouds.length) {
         var wolkenLines = m.clouds.map(function(cl) {
           var txt = coverText[cl.cover] || cl.cover;
-          return '<span style="white-space: nowrap;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft (MSL)' : '') + '</span>';
+          return '<span style="font-size: 0.75rem; white-space: normal; display: block; line-height: 1.25; margin-bottom: 2px;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft (MSL)' : '') + '</span>';
         });
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
-          '<div class="wx-stat-sub" style="margin-top:0;">' + wolkenLines.join('<br>') + '</div></div>';
+          '<div class="wx-stat-sub" style="margin-top:0;">' + wolkenLines.join('') + '</div></div>';
       } else if (m.cover) {
         var txt = coverText[m.cover] || m.cover;
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
-          '<div class="wx-stat-sub" style="margin-top:0; white-space: nowrap;">' + txt + '</div></div>';
+          '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.75rem; white-space: normal; line-height: 1.25;">' + txt + '</div></div>';
       }
 
+      // Dichtehöhe berechnen
       var daHtml = '';
       if (m.temp !== undefined && m.altim !== undefined) {
         var elevFt  = 1758;                          
@@ -878,6 +888,7 @@
           '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
       }
 
+      // Wetter übersetzen
       var wxMap = {
         'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
         'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
@@ -897,6 +908,7 @@
       }
       var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein Niederschlag';
       
+      // Trend
       var trendStr = '';
       if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span><br><span style="white-space: nowrap;">(Keine Änderung)</span>';
       else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span><br><span style="white-space: nowrap;">(Änderung erwartet)</span>';
@@ -906,6 +918,7 @@
         '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
         (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
 
+      // Flugregeln (Flight Category)
       var cat = m.fltCat || 'VFR';
       if (rawParts.includes('CAVOK')) cat = 'VFR';
       var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
@@ -1210,7 +1223,7 @@
           e.preventDefault();
           var sep = base.indexOf('?') === -1 ? '?' : '&';
           window.open(base + sep + 't=' + Date.now(), '_blank', 'noopener');
-        } else if (e.target.tagName.toLowerCase() === 'img') {
+        } else if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'img') {
           e.preventDefault();
           window.open(base, '_blank', 'noopener');
         }
