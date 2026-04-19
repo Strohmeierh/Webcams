@@ -1,10 +1,7 @@
 name: Fetch LSZK Weather
 
 on:
-  schedule:
-    # Alle 15 Minuten (UTC). GitHub cron kann verzögert feuern.
-    - cron: '*/5 * * * *'
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 permissions:
   contents: write
