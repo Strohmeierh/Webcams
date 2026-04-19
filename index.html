@@ -188,6 +188,30 @@
       margin-top: 8px;
     }
 
+    .wx-subheader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      margin: 16px 0 12px;
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+    }
+    .wx-subheader:first-child { margin-top: 0; }
+    .wx-subheader .wx-subheader-text { color: var(--text); }
+    .wx-subheader .wx-subheader-text strong { color: var(--accent); font-weight: 600; }
+    .wx-subheader a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .wx-subheader a:hover { color: #fff; }
+
     .wx-error {
       color: #f87171;
       font-size: 0.82rem;
@@ -924,7 +948,7 @@
       var cur = (data && data.current) || {};
       var sum = (data && data.summary) || {};
       var cv  = sum.currConditionValues || [];
-      var agg = sum.aggregatedValues || [];
+      var hlv = sum.highLowValues || [];
 
       var stationZeit = '–';
       if (cur.lastReceived) {
@@ -938,23 +962,14 @@
 
       var temp     = sane(cur.temperature, -50, 60);
       var dewp     = sane(findValue(cv, 'Dew Point') && findValue(cv, 'Dew Point').value, -50, 40);
-      var hum      = sane(cur.humidity, 0, 100);
       var wspdKt   = sane(cur.wind, 0, 200);
-      var wgstKt   = sane(cur.gust, 0, 200);
       var wdir     = sane(cur.windDirection, 0, 360);
       var wavg10   = findValue(cv, '10 Min Avg Wind Speed');
       var whigh10  = findValue(cv, '10 Min High Wind Speed');
+      var highWindDir = findValue(hlv, 'High Wind Direction');
       var altim    = sane(cur.barometer, 900, 1100);
       var trend    = cur.barometerTrend || '–';
       var rainRate = sane(findValue(cv, 'Rain Rate') && findValue(cv, 'Rain Rate').value, 0, 500);
-      var rainDay  = null;
-      for (var i = 0; i < agg.length; i++) {
-        if (agg[i].sensorDataName === 'Rain' && agg[i].rawValues) {
-          rainDay = sane(agg[i].rawValues.DAY, 0, 500);
-        }
-      }
-
-      var gustFactor = (wspdKt !== null && wgstKt !== null) ? (wgstKt - wspdKt) : null;
 
       var spreadStr = '';
       if (temp !== null && dewp !== null) {
@@ -962,6 +977,7 @@
         spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
       }
 
+      // Wind
       var windColor = (wspdKt !== null && wspdKt >= 15) ? '#ef4444' : 'var(--accent)';
       var windVal = wspdKt !== null
         ? '<span style="color:' + windColor + '; white-space: nowrap;">' + Math.round(wspdKt) + '&nbsp;kt</span>'
@@ -976,22 +992,21 @@
         windSub += (windSub ? '<br>' : '') + '<span style="white-space: nowrap;">10-Min Ø: ' + wavg10.value + '&nbsp;kt</span>';
       }
 
+      // Böen = 10-Min High Wind Speed; Richtung aus High Wind Direction oder aktueller Windrichtung
       var boeenHtml = '';
-      if (wgstKt !== null && wgstKt > 0) {
-        var gustColor = wgstKt >= 15 ? '#ef4444' : 'var(--accent)';
-        var gustSub = '';
-        if (gustFactor !== null && gustFactor >= 10) {
-          gustSub = '<span style="color:#f59e0b; white-space: nowrap;">⚠ Böenfaktor ' + Math.round(gustFactor) + '&nbsp;kt</span>';
-        } else if (gustFactor !== null) {
-          gustSub = '<span style="white-space: nowrap;">Böenfaktor ' + Math.round(gustFactor) + '&nbsp;kt</span>';
+      if (whigh10 && whigh10.value !== null) {
+        var gKt = Math.round(whigh10.value);
+        if (gKt > 0) {
+          var gColor = gKt >= 15 ? '#ef4444' : 'var(--accent)';
+          var gDir = null;
+          if (highWindDir && highWindDir.value !== null) gDir = Math.round(highWindDir.value);
+          else if (wdir !== null) gDir = Math.round(wdir);
+          var gSub = gDir !== null ? '<span style="white-space: nowrap;">aus ' + gDir + '°</span>' : '';
+          boeenHtml = '<div class="wx-stat"><div class="wx-stat-label">Böen (10&nbsp;Min)</div>' +
+            '<div class="wx-stat-value" style="color:' + gColor + '; white-space: nowrap;">' + gKt + '&nbsp;kt</div>' +
+            (gSub ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + gSub + '</div>' : '') +
+            '</div>';
         }
-        if (whigh10 && whigh10.value !== null) {
-          gustSub += (gustSub ? '<br>' : '') + '<span style="white-space: nowrap;">10-Min Max: ' + whigh10.value + '&nbsp;kt</span>';
-        }
-        boeenHtml = '<div class="wx-stat"><div class="wx-stat-label">Böen</div>' +
-          '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + Math.round(wgstKt) + '&nbsp;kt</div>' +
-          (gustSub ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + gustSub + '</div>' : '') +
-          '</div>';
       }
 
       var tempVal = temp !== null ? temp.toFixed(1).replace('.',',') + '&nbsp;°C' : '–';
@@ -1001,27 +1016,19 @@
       var qnhVal = altim !== null ? Math.round(altim) + '&nbsp;hPa' : '–';
       var qnhSub = '<span style="white-space: nowrap;">Trend: ' + trend + trendArrow + '</span>';
 
-      var humVal = hum !== null ? Math.round(hum) + '&nbsp;%' : '–';
-
-      var rainNowHtml = '';
+      // Regenrate
+      var regenrateHtml = '';
       if (rainRate !== null) {
         var isRaining = rainRate > 0;
         var rainColor = isRaining ? '#38bdf8' : 'var(--accent)';
         var rainLabel = isRaining ? 'Es regnet' : 'Kein Regen';
-        rainNowHtml = '<div class="wx-stat"><div class="wx-stat-label">Regen jetzt</div>' +
+        regenrateHtml = '<div class="wx-stat"><div class="wx-stat-label">Regenrate</div>' +
           '<div class="wx-stat-value" style="color:' + rainColor + '; white-space: nowrap;">' +
           rainRate.toFixed(1).replace('.',',') + '&nbsp;mm/h</div>' +
           '<div class="wx-stat-sub" style="white-space: nowrap;">' + rainLabel + '</div></div>';
       }
 
-      var rainDayHtml = '';
-      if (rainDay !== null) {
-        rainDayHtml = '<div class="wx-stat"><div class="wx-stat-label">Regen heute</div>' +
-          '<div class="wx-stat-value" style="white-space: nowrap;">' +
-          rainDay.toFixed(1).replace('.',',') + '&nbsp;mm</div></div>';
-      }
-
-      // Dichtehöhe – aus Stationsdaten (Temp + QNH live von Fehraltorf)
+      // Dichtehöhe (Stationsdaten Temp + QNH)
       var daHtml = '';
       if (temp !== null && altim !== null) {
         var elevFt   = 1759;
@@ -1035,13 +1042,14 @@
           '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
       }
 
+      // Runway Diagram aus Stationsdaten
       var bearing = wdir !== null ? Math.round(wdir) : 0;
       var diagWspd = (wspdKt !== null ? wspdKt : 0) * 1.852;
-      var diagWgst = (wgstKt !== null ? wgstKt : 0) * 1.852;
+      var diagWgst = (whigh10 && whigh10.value !== null ? whigh10.value : 0) * 1.852;
 
-      // ─── METAR-Daten (Sicht, Wolken, Flugregeln, Wetter) ─────
+      // ─── METAR-Daten (Sicht, Wolken, Flugregeln) ─────
       var metarZeit = null;
-      var catHtml = '', sichtHtml = '', wolkenHtml = '', wetterHtml = '';
+      var catHtml = '', sichtHtml = '', wolkenHtml = '';
       var metarAvailable = !!m;
 
       if (metarAvailable) {
@@ -1067,15 +1075,14 @@
         var cat = m.fltCat || 'VFR';
         if (rawParts.includes('CAVOK')) cat = 'VFR';
         var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
-        catHtml = '<div class="wx-stat"><div class="wx-stat-label">Flugregeln (METAR)</div>' +
+        catHtml = '<div class="wx-stat"><div class="wx-stat-label">Flugregeln</div>' +
           '<div class="wx-stat-value" style="color:' + catColor + '; white-space: nowrap;">' + cat + '</div></div>';
 
-        // Sicht – mehrstufiger Fallback: CAVOK → API-Feld visib → rawOb 4-digit
-        var sichtVal = '–';
+        // Sicht – METAR-Regel: wenn keine Angabe → ≥ 10 km; sonst Wert aus METAR
+        var sichtVal = '≥&nbsp;10&nbsp;km'; // Default bei fehlender Angabe
         if (rawParts.includes('CAVOK')) {
-          sichtVal = '≥&nbsp;10&nbsp;km';
-        }
-        if (sichtVal === '–' && m.visib !== undefined && m.visib !== null && m.visib !== '') {
+          sichtVal = '≥&nbsp;10&nbsp;km (CAVOK)';
+        } else if (m.visib !== undefined && m.visib !== null && m.visib !== '') {
           var vs = String(m.visib).trim();
           if (vs.indexOf('+') !== -1) {
             sichtVal = '≥&nbsp;10&nbsp;km';
@@ -1085,15 +1092,14 @@
               sichtVal = visSm >= 6 ? '≥&nbsp;10&nbsp;km' : Math.round(visSm * 1609) + '&nbsp;m';
             }
           }
-        }
-        if (sichtVal === '–' && rawParts) {
+        } else if (rawParts) {
           var visMatch = rawParts.match(/\b(\d{4})\b/);
           if (visMatch) {
             var visM = parseInt(visMatch[1]);
             sichtVal = visM >= 9999 ? '≥&nbsp;10&nbsp;km' : visM + '&nbsp;m';
           }
         }
-        sichtHtml = '<div class="wx-stat"><div class="wx-stat-label">Sicht (METAR)</div>' +
+        sichtHtml = '<div class="wx-stat"><div class="wx-stat-label">Sicht</div>' +
           '<div class="wx-stat-value" style="white-space: nowrap;">' + sichtVal + '</div></div>';
 
         // Wolken
@@ -1103,43 +1109,16 @@
             var txt = coverText[cl.cover] || cl.cover;
             return '<span style="font-size: 0.78rem; white-space: normal; display: block; line-height: 1.3; margin-bottom: 2px;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft (MSL)' : '') + '</span>';
           });
-          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken (METAR)</div>' +
+          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
             '<div class="wx-stat-sub" style="margin-top:0;">' + wolkenLines.join('') + '</div></div>';
         } else if (rawParts.includes('CAVOK')) {
-          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken (METAR)</div>' +
+          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
             '<div class="wx-stat-value" style="font-size: 0.95rem;">CAVOK</div></div>';
         } else if (m.cover) {
           var txt = coverText[m.cover] || m.cover;
-          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken (METAR)</div>' +
+          wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
             '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.78rem;">' + txt + '</div></div>';
         }
-
-        // Wetterphänomene
-        var wxMap = {
-          'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
-          'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
-          'DZ': 'Sprühregen', '-DZ': 'Leichter Sprühregen',
-          'TSRA': 'Gewitter mit Regen', 'TS': 'Gewitter',
-          'FG': 'Nebel', 'BR': 'Dunst', 'HZ': 'Dunst',
-          'FZRA': 'Gefrierender Regen', 'FZDZ': 'Gefr. Sprühregen',
-          'GR': 'Hagel', 'GS': 'Graupel', 'SG': 'Schneegriesel',
-          'RASN': 'Regen und Schnee', 'NSW': 'Kein sig. Wetter',
-          'VCSH': 'Schauer in der Nähe', 'SHRA': 'Regenschauer'
-        };
-        var wxRaw = m.wxString || '';
-        if (!wxRaw && m.rawOb) {
-          var wxM = m.rawOb.match(/\b([-+]?(?:TS|FZ|SH|VC)?(?:RA|SN|DZ|GR|GS|SG|PL|IC)(?:RA|SN)?|FG|BR|HZ|NSW)\b/);
-          if (wxM) wxRaw = wxM[1];
-        }
-        var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein sig. Wetter';
-        var trendStr = '';
-        if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span>';
-        else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span>';
-        else if (rawParts.match(/\bTEMPO\b/)) trendStr = '<span style="white-space: nowrap;">Trend: TEMPO</span>';
-
-        wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetterphänomen (METAR)</div>' +
-          '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
-          (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
       }
 
       function stat(label, val, sub) {
@@ -1151,39 +1130,43 @@
           '</div>';
       }
 
-      // ─── Finale Ausgabe ───
-      var metarNotice = metarAvailable
-        ? '<span style="color:var(--text-muted);">Sicht / Wolken / Flugregeln / Wetterphänomen stammen vom <strong style="color:var(--accent);">METAR LSMD Dübendorf</strong> (8.6&nbsp;km) · Stand: ' + (metarZeit || '–') + '</span>'
-        : '<span style="color:#f87171;">METAR LSMD konnte nicht geladen werden.</span>';
+      // ─── Sub-Header Station + METAR ───
+      var stationHeader =
+        '<div class="wx-subheader">' +
+          '<span class="wx-subheader-text"><strong>Station:</strong> ' + stationZeit + '</span>' +
+          '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener">Station öffnen ↗</a>' +
+        '</div>';
 
+      var metarHeader = metarAvailable
+        ? '<div class="wx-subheader">' +
+            '<span class="wx-subheader-text"><strong>METAR LSMD Dübendorf</strong> · Stand: ' + (metarZeit || '–') + '</span>' +
+            '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">METAR öffnen ↗</a>' +
+          '</div>'
+        : '<div class="wx-subheader">' +
+            '<span class="wx-subheader-text" style="color:#f87171;"><strong>METAR LSMD Dübendorf</strong> · nicht verfügbar</span>' +
+            '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">METAR öffnen ↗</a>' +
+          '</div>';
+
+      // ─── Finale Ausgabe ───
       el.innerHTML =
+        stationHeader +
         '<div class="wx-layout">' +
           buildRunwayDiagram(bearing, diagWspd, diagWgst) +
-          '<div class="wx-stats">' +
+          '<div class="wx-stats" style="margin-bottom:0;">' +
             stat('Wind', windVal, windSub) +
             boeenHtml +
             stat('Temperatur', tempVal) +
             stat('Taupunkt', dewpVal, spreadStr) +
-            stat('Feuchte', humVal) +
             stat('QNH', qnhVal, qnhSub) +
-            rainNowHtml +
-            rainDayHtml +
+            regenrateHtml +
             daHtml +
-            catHtml +
-            sichtHtml +
-            wolkenHtml +
-            wetterHtml +
           '</div>' +
         '</div>' +
-        '<div style="margin-top:12px;padding:10px 12px;background:rgba(56,189,248,0.08);border:1px solid var(--card-border);border-radius:8px;font-size:0.78rem;line-height:1.45;">' +
-          metarNotice +
-        '</div>' +
-        '<div class="wx-updated">' +
-          'Station: ' + stationZeit +
-          '<br class="wx-updated-br">' +
-          ' · <a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" ' +
-          'target="_blank" rel="noopener" style="color:var(--accent);">Station öffnen ↗</a>' +
-          ' · <a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener" style="color:var(--accent);">METAR öffnen ↗</a>' +
+        metarHeader +
+        '<div class="wx-stats" style="margin-bottom:0;">' +
+          catHtml +
+          sichtHtml +
+          wolkenHtml +
         '</div>';
     }
 
