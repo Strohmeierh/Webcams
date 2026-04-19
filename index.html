@@ -124,7 +124,9 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 18px 20px;
+      margin-bottom: 16px;
     }
+    .wx-card:last-child { margin-bottom: 0; }
 
     .wx-card-title {
       font-size: 0.72rem;
@@ -331,7 +333,7 @@
       font-size: 0.78rem;
       color: var(--text-muted);
     }
-    
+
     .disclaimer {
       font-size: 0.72rem;
       color: #94a3b8;
@@ -360,16 +362,16 @@
       .cam-grid { grid-template-columns: 1fr; }
       h1 { font-size: 1.1rem; letter-spacing: 1px; }
       .wx-layout { grid-template-columns: 1fr; }
-      
+
       /* Zentrierung Diagramm & Textbox Piste darunter */
       .wx-layout > div:first-child { display: flex; flex-direction: column; align-items: center; justify-content: center; }
       .wx-updated-br { display: inline; }
-      
+
       /* Buttons nebeneinander auf Mobile */
       .header-links { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
       .header-links > button, .header-links > .dropdown { flex: 1; }
       .header-links .top-btn { width: 100%; justify-content: center; padding: 10px 4px; font-size: 0.85rem; }
-      
+
       /* Dropdown-Menü Full-Width auf Mobile */
       .dropdown { position: static; }
       .dropdown-content { width: 100%; left: 0; transform: none; top: calc(100% + 4px); }
@@ -421,17 +423,33 @@
 
   <!-- ===== WETTER-PANEL ===== -->
   <div class="wx-panel" id="wx-panel">
+
+    <!-- Wetterstation LSZK (Fehraltorf) -->
     <div class="wx-card">
       <div class="wx-card-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M17 18a5 5 0 0 0-1.89-9.55 5 5 0 0 0-9 2.5 5 5 0 0 0 0 8.5h9z"/><line x1="8" y1="18" x2="8" y2="22"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="16" y1="18" x2="16" y2="22"/>
         </svg>
-        LSZK – Flugplatz Speck · 536 m (1'759 ft)
+        Wetterstation LSZK – Flugplatz Speck · 536 m (1'759 ft)
       </div>
-      <div id="wx-content">
-        <div style="color:var(--text-muted);font-size:0.85rem;padding:10px 0;">Lade Wetterdaten…</div>
+      <div id="wx-station-content">
+        <div style="color:var(--text-muted);font-size:0.85rem;padding:10px 0;">Lade Stationsdaten…</div>
       </div>
     </div>
+
+    <!-- METAR LSMD (Dübendorf) -->
+    <div class="wx-card">
+      <div class="wx-card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+        </svg>
+        METAR LSMD – Dübendorf (Sicht, Wolken, Flugregeln)
+      </div>
+      <div id="wx-metar-content">
+        <div style="color:var(--text-muted);font-size:0.85rem;padding:10px 0;">Lade METAR…</div>
+      </div>
+    </div>
+
   </div>
 
   <main>
@@ -729,8 +747,8 @@
       img.classList.remove('loaded');
 
       var fresh = new Image();
-      fresh.onload = function () { 
-        img.src = fresh.src; 
+      fresh.onload = function () {
+        img.src = fresh.src;
         img.classList.add('loaded');
         container.classList.add('loaded');
       };
@@ -744,7 +762,7 @@
     }
 
     /* ── LSPV Wangen-Lachen: Zeitstempel-basierte URLs ──── */
-    
+
     // Generiert exakte 5-Minuten-Intervalle (z.B. 18:05, 18:00, 17:55)
     function get5MinIntervals() {
       var intervals = [];
@@ -793,7 +811,7 @@
 
         var current = intervals[attempt];
         var url = base + current.file + '.jpg';
-        
+
         var test = new Image();
         test.onload = function () {
           img.src = test.src;
@@ -870,12 +888,230 @@
       }
     }, 600000);
 
-    /* ── Wetterdaten LSZK ─────────────────────────── */
+    /* ── Wetterdaten laden (Station + METAR) ─────────────── */
     function loadWetter() {
-      var el  = document.getElementById('wx-content');
-      var url = 'metar-lszk.json?t=' + Date.now();
+      loadStation();
+      loadMetar();
+    }
 
-      el.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;">Lade Wetterdaten…</div>';
+    /* ── Wetterstation LSZK (Davis/WeatherLink) ──────────── */
+    function loadStation() {
+      var el = document.getElementById('wx-station-content');
+      var url = 'data/lszk_latest.json?t=' + Date.now();
+
+      fetch(url, { cache: 'no-store' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(data) {
+          renderStation(el, data);
+        })
+        .catch(function(err) {
+          el.innerHTML = '<div class="wx-error">Stationsdaten konnten nicht geladen werden.</div>' +
+            '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener" ' +
+            'class="top-btn" style="display:inline-flex;font-size:0.85rem;padding:9px 16px;margin-top:10px;">Wetterstation direkt öffnen ↗</a>';
+        });
+    }
+
+    function findValue(arr, name) {
+      if (!arr) return null;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].sensorDataName === name) return arr[i];
+      }
+      return null;
+    }
+
+    // Sensor-Fehlerwerte filtern (z.B. -68°C bei Davis = "no data")
+    function sane(v, min, max) {
+      if (v === null || v === undefined) return null;
+      var n = parseFloat(v);
+      if (isNaN(n)) return null;
+      if (min !== undefined && n < min) return null;
+      if (max !== undefined && n > max) return null;
+      return n;
+    }
+
+    function renderStation(el, data) {
+      var cur = data.current || {};
+      var sum = data.summary || {};
+      var cv  = sum.currConditionValues || [];
+      var agg = sum.aggregatedValues || [];
+
+      // Zeitstempel (CH-Zeit)
+      var zeit = '–';
+      if (cur.lastReceived) {
+        var d = new Date(cur.lastReceived);
+        zeit = d.toLocaleString('de-CH', {
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit',
+          timeZone: 'Europe/Zurich'
+        }) + ' Lokal';
+      }
+
+      // Werte extrahieren
+      var temp     = sane(cur.temperature, -50, 60);
+      var dewp     = sane(findValue(cv, 'Dew Point') && findValue(cv, 'Dew Point').value, -50, 40);
+      var hum      = sane(cur.humidity, 0, 100);
+      var wspdKt   = sane(cur.wind, 0, 200);
+      var wgstKt   = sane(cur.gust, 0, 200);
+      var wdir     = sane(cur.windDirection, 0, 360);
+      var wavg10   = findValue(cv, '10 Min Avg Wind Speed');
+      var whigh10  = findValue(cv, '10 Min High Wind Speed');
+      var altim    = sane(cur.barometer, 900, 1100);
+      var trend    = cur.barometerTrend || '–';
+      var rainRate = sane(findValue(cv, 'Rain Rate') && findValue(cv, 'Rain Rate').value, 0, 500);
+      var rainDay  = null;
+      for (var i = 0; i < agg.length; i++) {
+        if (agg[i].sensorDataName === 'Rain' && agg[i].rawValues) {
+          rainDay = sane(agg[i].rawValues.DAY, 0, 500);
+        }
+      }
+
+      // Böen-Faktor
+      var gustFactor = (wspdKt !== null && wgstKt !== null) ? (wgstKt - wspdKt) : null;
+
+      // Spread
+      var spreadStr = '';
+      if (temp !== null && dewp !== null) {
+        var spread = (temp - dewp).toFixed(1);
+        spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
+      }
+
+      // Wind HTML
+      var windColor = (wspdKt !== null && wspdKt >= 15) ? '#ef4444' : 'var(--accent)';
+      var windVal = wspdKt !== null
+        ? '<span style="color:' + windColor + '; white-space: nowrap;">' + Math.round(wspdKt) + '&nbsp;kt</span>'
+        : '–';
+      var windSub = '';
+      if (wdir !== null && wspdKt !== null && wspdKt > 0) {
+        windSub = '<span style="white-space: nowrap;">aus ' + Math.round(wdir) + '°</span>';
+      } else if (wspdKt === 0) {
+        windSub = '<span style="white-space: nowrap;">windstill</span>';
+      }
+      if (wavg10 && wavg10.value !== null) {
+        windSub += (windSub ? '<br>' : '') + '<span style="white-space: nowrap;">10-Min Ø: ' + wavg10.value + '&nbsp;kt</span>';
+      }
+
+      // Böen
+      var boeenHtml = '';
+      if (wgstKt !== null && wgstKt > 0) {
+        var gustColor = wgstKt >= 15 ? '#ef4444' : 'var(--accent)';
+        var gustSub = '';
+        if (gustFactor !== null && gustFactor >= 10) {
+          gustSub = '<span style="color:#f59e0b; white-space: nowrap;">⚠ Böenfaktor ' + Math.round(gustFactor) + '&nbsp;kt</span>';
+        } else if (gustFactor !== null) {
+          gustSub = '<span style="white-space: nowrap;">Böenfaktor ' + Math.round(gustFactor) + '&nbsp;kt</span>';
+        }
+        if (whigh10 && whigh10.value !== null) {
+          gustSub += (gustSub ? '<br>' : '') + '<span style="white-space: nowrap;">10-Min Max: ' + whigh10.value + '&nbsp;kt</span>';
+        }
+        boeenHtml = '<div class="wx-stat"><div class="wx-stat-label">Böen</div>' +
+          '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + Math.round(wgstKt) + '&nbsp;kt</div>' +
+          (gustSub ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + gustSub + '</div>' : '') +
+          '</div>';
+      }
+
+      // Temperatur
+      var tempVal = temp !== null ? temp.toFixed(1).replace('.',',') + '&nbsp;°C' : '–';
+      var dewpVal = dewp !== null ? dewp.toFixed(1).replace('.',',') + '&nbsp;°C' : '–';
+
+      // QNH + Trend
+      var trendArrow = { 'Rising': ' ↑', 'Falling': ' ↓', 'Steady': ' →' }[trend] || '';
+      var qnhVal = altim !== null ? Math.round(altim) + '&nbsp;hPa' : '–';
+      var qnhSub = '<span style="white-space: nowrap;">Trend: ' + trend + trendArrow + '</span>';
+
+      // Feuchte
+      var humVal = hum !== null ? Math.round(hum) + '&nbsp;%' : '–';
+
+      // Regen jetzt
+      var rainNowHtml = '';
+      if (rainRate !== null) {
+        var isRaining = rainRate > 0;
+        var rainColor = isRaining ? '#38bdf8' : 'var(--accent)';
+        var rainLabel = isRaining ? 'Es regnet' : 'Kein Regen';
+        rainNowHtml = '<div class="wx-stat"><div class="wx-stat-label">Regen jetzt</div>' +
+          '<div class="wx-stat-value" style="color:' + rainColor + '; white-space: nowrap;">' +
+          rainRate.toFixed(1).replace('.',',') + '&nbsp;mm/h</div>' +
+          '<div class="wx-stat-sub" style="white-space: nowrap;">' + rainLabel + '</div></div>';
+      }
+
+      // Regen heute
+      var rainDayHtml = '';
+      if (rainDay !== null) {
+        rainDayHtml = '<div class="wx-stat"><div class="wx-stat-label">Regen heute</div>' +
+          '<div class="wx-stat-value" style="white-space: nowrap;">' +
+          rainDay.toFixed(1).replace('.',',') + '&nbsp;mm</div></div>';
+      }
+
+      // Dichtehöhe
+      var daHtml = '';
+      if (temp !== null && altim !== null) {
+        var elevFt   = 1759;
+        var pressAlt = elevFt + (1013.25 - altim) * 28;
+        var isaTemp  = 15 - (pressAlt / 1000 * 2);
+        var tempDev  = temp - isaTemp;
+        var densAlt  = Math.round(pressAlt + 118.8 * tempDev);
+        var daColor  = densAlt > 5000 ? '#ef4444' : densAlt > 3000 ? '#f59e0b' : '#10b981';
+        daHtml = '<div class="wx-stat"><div class="wx-stat-label">Dichtehöhe</div>' +
+          '<div class="wx-stat-value" style="color:' + daColor + '; white-space: nowrap;">' + densAlt + '&nbsp;ft</div>' +
+          '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
+      }
+
+      // Geschätzte Wolkenbasis (Espy)
+      var cbHtml = '';
+      if (temp !== null && dewp !== null) {
+        var cbFt = Math.round((temp - dewp) * 400);
+        if (cbFt > 0) {
+          cbHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolkenbasis (geschätzt)</div>' +
+            '<div class="wx-stat-value" style="white-space: nowrap;">~' + cbFt + '&nbsp;ft AGL</div>' +
+            '<div class="wx-stat-sub" style="white-space: nowrap;">Espy-Formel (T-Td)·400</div></div>';
+        }
+      }
+
+      // Runway Diagram (Station-Wind)
+      var bearing = wdir !== null ? Math.round(wdir) : 0;
+      var diagWspd = (wspdKt !== null ? wspdKt : 0) * 1.852;
+      var diagWgst = (wgstKt !== null ? wgstKt : 0) * 1.852;
+
+      function stat(label, val, sub) {
+        if (!val || val === '–') return '';
+        return '<div class="wx-stat">' +
+          '<div class="wx-stat-label">' + label + '</div>' +
+          '<div class="wx-stat-value">' + val + '</div>' +
+          (sub ? '<div class="wx-stat-sub" style="margin-top: 6px;">' + sub + '</div>' : '') +
+          '</div>';
+      }
+
+      el.innerHTML =
+        '<div class="wx-layout">' +
+          buildRunwayDiagram(bearing, diagWspd, diagWgst) +
+          '<div class="wx-stats">' +
+            stat('Wind', windVal, windSub) +
+            boeenHtml +
+            stat('Temperatur', tempVal) +
+            stat('Taupunkt', dewpVal, spreadStr) +
+            stat('Feuchte', humVal) +
+            stat('QNH', qnhVal, qnhSub) +
+            rainNowHtml +
+            rainDayHtml +
+            daHtml +
+            cbHtml +
+          '</div>' +
+        '</div>' +
+        '<div class="wx-updated">' +
+          'Stand: ' + zeit +
+          '<br class="wx-updated-br">' +
+          ' · <a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" ' +
+          'target="_blank" rel="noopener" style="color:var(--accent);">Station direkt öffnen ↗</a>' +
+          '<span style="color:var(--text-muted);font-size:0.68rem;"> · Davis WeatherLink, Fehraltorf</span>' +
+        '</div>';
+    }
+
+    /* ── METAR LSMD (Sicht, Wolken, Flugregeln) ──────────── */
+    function loadMetar() {
+      var el = document.getElementById('wx-metar-content');
+      var url = 'metar-lszk.json?t=' + Date.now();
 
       fetch(url, { cache: 'no-store' })
         .then(function(r) {
@@ -886,19 +1122,19 @@
           if (!data || !data.length) throw new Error('kein METAR');
           var m = data[0];
           if (!m.temp && m.rawOb) m = parsRawMetar(m);
-          renderWetter(el, m);
+          renderMetar(el, m);
         })
-        .catch(function() { renderFallback(el); });
+        .catch(function() {
+          el.innerHTML = '<div class="wx-error">METAR konnte nicht geladen werden.</div>' +
+            '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener" ' +
+            'class="top-btn" style="display:inline-flex;font-size:0.85rem;padding:9px 16px;margin-top:10px;">METAR LSMD direkt öffnen ↗</a>';
+        });
     }
 
-    function renderWetter(el, m) {
-      function fc(val, dez) {
-        if (val === undefined || val === null) return '–';
-        var n = parseFloat(val);
-        if (isNaN(n)) return '–';
-        return n.toFixed(dez !== undefined ? dez : 1).replace('.', ',');
-      }
+    function renderMetar(el, m) {
+      var rawParts = m.rawOb ? m.rawOb.split('RMK')[0] : '';
 
+      // Zeit
       var zeit = '–';
       if (m.reportTime) {
         var d = new Date(m.reportTime);
@@ -910,54 +1146,20 @@
         }
         var offset = (d >= lastSun(2) && d < lastSun(9)) ? 2 : 1;
         var loc = new Date(d.getTime() + offset * 3600000);
-        var pad = function(n) { return ('0'+n).slice(-2); };
-        zeit = pad(loc.getUTCDate()) + '.' + pad(loc.getUTCMonth()+1) + '.' +
+        var p = function(n) { return ('0'+n).slice(-2); };
+        zeit = p(loc.getUTCDate()) + '.' + p(loc.getUTCMonth()+1) + '.' +
                loc.getUTCFullYear() + ' ' +
-               pad(loc.getUTCHours()) + ':' + pad(loc.getUTCMinutes()) + ' Lokal';
+               p(loc.getUTCHours()) + ':' + p(loc.getUTCMinutes()) + ' Lokal';
       }
 
-      // Wind parsen
-      var rawParts = m.rawOb ? m.rawOb.split('RMK')[0] : '';
-      var wspdKt  = m.wspd  !== undefined ? Math.round(parseFloat(m.wspd))  : 0;
-      var wgstKt  = m.wgst  !== undefined ? Math.round(parseFloat(m.wgst))  : 0;
-      
-      var bearing = 0;
-      var isVRB = false;
-      if (m.wdir === 'VRB') {
-          isVRB = true;
-      } else if (m.wdir !== undefined) {
-          bearing = parseFloat(m.wdir);
-          if (isNaN(bearing)) bearing = 0;
-      }
-      
-      var windColor = wspdKt >= 15 ? '#ef4444' : 'var(--accent)';
-      var windDirStr = isVRB ? 'variabel' : bearing + '°';
-      
-      var windVal = '<span style="color:' + windColor + '; white-space: nowrap;">' + wspdKt + '&nbsp;kt</span>';
-      var windSub = '<span style="white-space: nowrap;">aus ' + windDirStr + '</span>';
-      
-      var varMatch = rawParts.match(/\b(\d{3})V(\d{3})\b/);
-      if (varMatch) {
-         windSub += '<br><span style="white-space: nowrap;">Variabel: ' + varMatch[1] + '° – ' + varMatch[2] + '°</span>';
-      }
-      
-      var boeenHtml = '';
-      if (wgstKt > 0) {
-         var gustColor = wgstKt >= 15 ? '#ef4444' : 'var(--accent)';
-         boeenHtml = '<div class="wx-stat"><div class="wx-stat-label">Böen</div>' +
-                     '<div class="wx-stat-value" style="color:' + gustColor + '; white-space: nowrap;">' + wgstKt + '&nbsp;kt</div></div>';
-      }
+      // Flugregeln
+      var cat = m.fltCat || 'VFR';
+      if (rawParts.includes('CAVOK')) cat = 'VFR';
+      var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
+      var catHtml = '<div class="wx-stat"><div class="wx-stat-label">Flugregeln</div>' +
+        '<div class="wx-stat-value" style="color:' + catColor + '; white-space: nowrap;">' + cat + '</div></div>';
 
-      // Temperatur & Spread
-      var tempVal = fc(m.temp, 1) + '&nbsp;°C';
-      var dewpVal = fc(m.dewp, 1) + '&nbsp;°C';
-      var spreadStr = '';
-      if (m.temp !== undefined && m.dewp !== undefined) {
-         var spread = (m.temp - m.dewp).toFixed(1);
-         spreadStr = '<span style="white-space: nowrap;">Spread: ' + spread.replace('.', ',') + '&nbsp;°C</span>';
-      }
-
-      // Sicht exakt aus METAR
+      // Sicht
       var sichtVal = '–';
       if (rawParts.includes('CAVOK')) {
         sichtVal = '≥&nbsp;10&nbsp;km';
@@ -972,42 +1174,26 @@
         }
       }
 
-      // Wolken übersetzen und formatieren
+      // Wolken
       var coverText = { FEW: 'Leicht bewölkt', SCT: 'Aufgelockert', BKN: 'Stark bewölkt', OVC: 'Bedeckt', SKC: 'Wolkenlos', NSC: 'Keine sig. Wolken', CAVOK: 'CAVOK' };
       var wolkenHtml = '';
       if (m.clouds && m.clouds.length) {
         var wolkenLines = m.clouds.map(function(cl) {
           var txt = coverText[cl.cover] || cl.cover;
-          return '<span style="font-size: 0.75rem; white-space: normal; display: block; line-height: 1.25; margin-bottom: 2px;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft (MSL)' : '') + '</span>';
+          return '<span style="font-size: 0.78rem; white-space: normal; display: block; line-height: 1.3; margin-bottom: 2px;">' + txt + (cl.base ? ' bei ' + cl.base + '&nbsp;ft (MSL)' : '') + '</span>';
         });
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
           '<div class="wx-stat-sub" style="margin-top:0;">' + wolkenLines.join('') + '</div></div>';
+      } else if (rawParts.includes('CAVOK')) {
+        wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
+          '<div class="wx-stat-value" style="font-size: 0.95rem;">CAVOK</div></div>';
       } else if (m.cover) {
         var txt = coverText[m.cover] || m.cover;
         wolkenHtml = '<div class="wx-stat"><div class="wx-stat-label">Wolken</div>' +
-          '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.75rem; white-space: normal; line-height: 1.25;">' + txt + '</div></div>';
+          '<div class="wx-stat-sub" style="margin-top:0; font-size: 0.78rem;">' + txt + '</div></div>';
       }
 
-      // Dichtehöhe berechnen
-      var daHtml = '';
-      if (m.temp !== undefined && m.altim !== undefined) {
-        var elevFt   = 1759;
-        // 1. Zuerst Pressure Altitude berechnen
-        var pressAlt = elevFt + (1013.25 - parseFloat(m.altim)) * 28;
-        // 2. ISA Temperatur auf Basis der Pressure Altitude berechnen (nicht mehr elevFt)
-        var isaTemp  = 15 - (pressAlt / 1000 * 2);
-        // 3. Temperaturabweichung (Deviation) berechnen
-        var tempDev  = parseFloat(m.temp) - isaTemp;
-        // 4. Dichtehöhe berechnen
-        var densAlt  = Math.round(pressAlt + 118.8 * tempDev);
-        
-        var daColor  = densAlt > 5000 ? '#ef4444' : densAlt > 3000 ? '#f59e0b' : '#10b981';
-        daHtml = '<div class="wx-stat"><div class="wx-stat-label">Dichtehöhe</div>' +
-          '<div class="wx-stat-value" style="color:' + daColor + '; white-space: nowrap;">' + densAlt + '&nbsp;ft</div>' +
-          '<div class="wx-stat-sub" style="white-space: nowrap;">' + Math.round(densAlt / 3.28084) + '&nbsp;m</div></div>';
-      }
-
-      // Wetter übersetzen
+      // Wetterphänomene
       var wxMap = {
         'RA': 'Regen', '-RA': 'Leichter Regen', '+RA': 'Starker Regen',
         'SN': 'Schnee', '-SN': 'Leichter Schnee', '+SN': 'Starker Schnee',
@@ -1019,71 +1205,34 @@
         'RASN': 'Regen und Schnee', 'NSW': 'Kein sig. Wetter',
         'VCSH': 'Schauer in der Nähe', 'SHRA': 'Regenschauer'
       };
-      
       var wxRaw = m.wxString || '';
       if (!wxRaw && m.rawOb) {
         var wxM = m.rawOb.match(/\b([-+]?(?:TS|FZ|SH|VC)?(?:RA|SN|DZ|GR|GS|SG|PL|IC)(?:RA|SN)?|FG|BR|HZ|NSW)\b/);
         if (wxM) wxRaw = wxM[1];
       }
-      var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein Niederschlag';
-      
-      // Trend
+      var wxText = wxRaw ? (wxMap[wxRaw] || wxRaw) : 'Kein sig. Wetter';
       var trendStr = '';
-      if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span><br><span style="white-space: nowrap;">(Keine Änderung)</span>';
-      else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span><br><span style="white-space: nowrap;">(Änderung erwartet)</span>';
-      else if (rawParts.match(/\bTEMPO\b/)) trendStr = '<span style="white-space: nowrap;">Trend: TEMPO</span><br><span style="white-space: nowrap;">(Zeitweise)</span>';
+      if (rawParts.match(/\bNOSIG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: NOSIG</span>';
+      else if (rawParts.match(/\bBECMG\b/)) trendStr = '<span style="white-space: nowrap;">Trend: BECMG</span>';
+      else if (rawParts.match(/\bTEMPO\b/)) trendStr = '<span style="white-space: nowrap;">Trend: TEMPO</span>';
 
-      var wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetter</div>' +
+      var wetterHtml = '<div class="wx-stat"><div class="wx-stat-label">Wetterphänomen</div>' +
         '<div class="wx-stat-value" style="font-size:1rem; line-height: 1.2;">' + wxText + '</div>' +
         (trendStr ? '<div class="wx-stat-sub" style="margin-top: 4px;">' + trendStr + '</div>' : '') + '</div>';
 
-      // Flugregeln (Flight Category)
-      var cat = m.fltCat || 'VFR';
-      if (rawParts.includes('CAVOK')) cat = 'VFR';
-      var catColor = cat === 'VFR' ? '#10b981' : (cat === 'MVFR' ? '#38bdf8' : '#ef4444');
-      var catHtml = '<div class="wx-stat"><div class="wx-stat-label">Flugregeln</div>' +
-        '<div class="wx-stat-value" style="color:' + catColor + '; white-space: nowrap;">' + cat + '</div></div>';
-
-      var sunTimes = calcSunTimes(47.37557, 8.76169);
-      var sunBar = document.getElementById('sunrise-bar');
-      if (sunBar) sunBar.innerHTML = '☀ Aufgang ' + sunTimes.rise + ' · Untergang ' + sunTimes.set + ' (Lokal)';
-
-      function stat(label, val, sub) {
-        if (!val || val === '–') return '';
-        return '<div class="wx-stat">' +
-          '<div class="wx-stat-label">' + label + '</div>' +
-          '<div class="wx-stat-value">' + val + '</div>' +
-          (sub ? '<div class="wx-stat-sub" style="margin-top: 6px;">' + sub + '</div>' : '') +
-          '</div>';
-      }
-
-      // Diagramm: Wind auf 0 setzen, WENN rein variabel ohne Hauptrichtung
-      var isStrictlyVariable = isVRB || (rawParts.includes('VRB') && bearing === 0 && wspdKt > 0);
-      var diagWspd = isStrictlyVariable ? 0 : wspdKt * 1.852;
-      var diagWgst = isStrictlyVariable ? 0 : wgstKt * 1.852;
-
       el.innerHTML =
-        '<div class="wx-layout">' +
-          buildRunwayDiagram(bearing, diagWspd, diagWgst) +
-          '<div class="wx-stats">' +
-            catHtml +
-            stat('Sicht', sichtVal) +
-            stat('Temperatur', tempVal) +
-            stat('Taupunkt', dewpVal, spreadStr) +
-            stat('QNH', m.altim ? Math.round(m.altim) + '&nbsp;hPa' : '–') +
-            stat('Wind', windVal, windSub) +
-            boeenHtml +
-            wolkenHtml +
-            wetterHtml +
-            daHtml +
-          '</div>' +
+        '<div class="wx-stats">' +
+          catHtml +
+          '<div class="wx-stat"><div class="wx-stat-label">Sicht</div>' +
+            '<div class="wx-stat-value" style="white-space: nowrap;">' + sichtVal + '</div></div>' +
+          wolkenHtml +
+          wetterHtml +
         '</div>' +
         '<div class="wx-updated">' +
           'Stand: ' + zeit +
           '<br class="wx-updated-br">' +
-          ' · <a href="https://metar-taf.com/de/metar/LSMD" ' +
-          'target="_blank" rel="noopener" style="color:var(--accent);">Wetterdaten LSZK direkt öffnen ↗</a>' +
-          '<span style="color:var(--text-muted);font-size:0.68rem;"> · METAR: LSMD Dübendorf (8.6 km)</span>' +
+          ' · <a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener" style="color:var(--accent);">METAR direkt öffnen ↗</a>' +
+          '<span style="color:var(--text-muted);font-size:0.68rem;"> · LSMD Dübendorf (8.6 km)</span>' +
         '</div>';
     }
 
@@ -1102,10 +1251,10 @@
       var W = 180, H = 250, cx = W/2, cy = 108;
       var rwyHalf = 68;
       var rwyW    = 20;
-      var rwyAngleDeg = RWY - 90; 
+      var rwyAngleDeg = RWY - 90;
       var rwyRad = RWY * Math.PI / 180;
-      var rx = Math.sin(rwyRad); 
-      var ry = -Math.cos(rwyRad); 
+      var rx = Math.sin(rwyRad);
+      var ry = -Math.cos(rwyRad);
 
       var p11x = cx + rwyHalf * rx;
       var p11y = cy + rwyHalf * ry;
@@ -1134,7 +1283,7 @@
           '<text x="8" y="' + (cy+4) + '" text-anchor="start" font-size="10" font-weight="bold" fill="#475569">W</text>' +
           '<text x="' + (W-8) + '" y="' + (cy+4) + '" text-anchor="end" font-size="10" font-weight="bold" fill="#475569">O</text>' +
           (function() {
-            var nx = ry, ny = -rx; 
+            var nx = ry, ny = -rx;
             var hw = rwyW / 2;
             var corners = [
               [p11x + hw*nx, p11y + hw*ny],
@@ -1149,7 +1298,7 @@
                'x2="' + p29x.toFixed(1) + '" y2="' + p29y.toFixed(1) + '" ' +
             'stroke="#94a3b8" stroke-width="1" stroke-dasharray="5 4"/>' +
           (function() {
-            var offset = rwyHalf + 10; 
+            var offset = rwyHalf + 10;
             var t11x = (cx - offset * rx).toFixed(1);
             var t11y = (cy - offset * ry).toFixed(1);
             var t29x = (cx + offset * rx).toFixed(1);
@@ -1179,7 +1328,7 @@
         var textDist = shaftLen + 15;
         var wx = cx + textDist * Math.sin(windRad);
         var wy = cy - textDist * Math.cos(windRad);
-        
+
         svg += '<text x="' + wx.toFixed(1) + '" y="' + (wy - 2).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="bold" fill="' + color + '">' + bearing + '°</text>';
         svg += '<text x="' + wx.toFixed(1) + '" y="' + (wy + 10).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="bold" fill="' + color + '">' + kt + ' kt</text>';
 
@@ -1194,12 +1343,12 @@
 
         var dx = tx - ox, dy = ty - oy;
         var len = Math.sqrt(dx*dx + dy*dy);
-        var ux = dx/len, uy = dy/len; 
-        var px = -uy, py = ux;        
+        var ux = dx/len, uy = dy/len;
+        var px = -uy, py = ux;
 
         var remaining = kt;
-        var bPos = 0; 
-        var bSpacing = 8; 
+        var bPos = 0;
+        var bSpacing = 8;
 
         while (remaining >= 50) {
           var bx = ox + bPos * ux;
@@ -1246,7 +1395,7 @@
       '</svg>' +
       '<div style="text-align:center; font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-top:12px; background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--card-border);">Bevorzugte Piste: <span style="color:var(--text);">' + prefRwy + '</span></div>' +
       '</div>';
-      
+
       return svg;
     }
 
@@ -1268,7 +1417,7 @@
                  (Math.cos(lat * Math.PI / 180) * Math.cos(decl));
 
       if (Math.abs(cosH) > 1) return { rise: '--:--', set: '--:--' };
-      var H = Math.acos(cosH); 
+      var H = Math.acos(cosH);
 
       var Jrise = 2451545.0 + n + (0.0009 - lon/360 - EoT) - H / (2*Math.PI);
       var Jset  = 2451545.0 + n + (0.0009 - lon/360 - EoT) + H / (2*Math.PI);
@@ -1282,7 +1431,7 @@
           d3.setUTCDate(31 - (d3.getUTCDay() || 7) % 7);
           return d3;
         }
-        var offset   = (d2 >= lastSunday(2) && d2 < lastSunday(9)) ? 2 : 1; 
+        var offset   = (d2 >= lastSunday(2) && d2 < lastSunday(9)) ? 2 : 1;
         var totalMin = Math.round(ms / 60000) + offset * 60;
         var h = Math.floor(totalMin / 60) % 24;
         var m = totalMin % 60;
@@ -1321,18 +1470,9 @@
       if (clouds.length) r.clouds = clouds;
 
       var vm = raw.match(/\b(\d{4})\b/);
-      if (vm) r.visib = (parseInt(vm[1]) / 1000).toFixed(1); 
+      if (vm) r.visib = (parseInt(vm[1]) / 1000).toFixed(1);
 
       return r;
-    }
-
-    function renderFallback(el) {
-      el.innerHTML =
-        '<div class="wx-error">Wetterdaten konnten nicht geladen werden.</div>' +
-        '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener" ' +
-           'class="top-btn" style="display:inline-flex;font-size:0.85rem;padding:9px 16px;margin-top:10px;">' +
-          'Wetterdaten LSZK direkt öffnen ↗' +
-        '</a>';
     }
 
     /* ── Kamera-Links: Klick öffnet neues Fenster ───────────── */
