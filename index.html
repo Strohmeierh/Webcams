@@ -204,6 +204,7 @@
     .wx-subheader:first-child { margin-top: 0; }
     .wx-subheader .wx-subheader-text { color: var(--text); }
     .wx-subheader .wx-subheader-text strong { color: var(--accent); font-weight: 600; }
+    .wx-subheader .wx-date { white-space: nowrap; }
     .wx-subheader a {
       color: var(--accent);
       text-decoration: none;
@@ -211,6 +212,13 @@
       white-space: nowrap;
     }
     .wx-subheader a:hover { color: #fff; }
+
+    @media (max-width: 600px) {
+      .wx-subheader .wx-date {
+        display: block;
+        margin-top: 3px;
+      }
+    }
 
     .wx-error {
       color: #f87171;
@@ -526,6 +534,17 @@
         <div class="media-container loaded">
           <div class="iframe-overlay"></div>
           <iframe src="https://mollisairport.roundshot.com/" loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <div class="cam-card">
+        <div class="cam-header">
+          <a href="https://birrfeld.roundshot.com/#/" target="_blank" rel="noopener">Birrfeld LSZF</a>
+          <span class="status-dot"></span>
+        </div>
+        <div class="media-container loaded">
+          <div class="iframe-overlay"></div>
+          <iframe src="https://birrfeld.roundshot.com/#/" loading="lazy"></iframe>
         </div>
       </div>
 
@@ -1067,7 +1086,7 @@
           var loc = new Date(d.getTime() + offset * 3600000);
           var p = function(n) { return ('0'+n).slice(-2); };
           metarZeit = p(loc.getUTCDate()) + '.' + p(loc.getUTCMonth()+1) + '.' +
-                 loc.getUTCFullYear() + ' ' +
+                 loc.getUTCFullYear() + ', ' +
                  p(loc.getUTCHours()) + ':' + p(loc.getUTCMinutes()) + ' Lokal';
         }
 
@@ -1133,13 +1152,13 @@
       // ─── Sub-Header Station + METAR ───
       var stationHeader =
         '<div class="wx-subheader">' +
-          '<span class="wx-subheader-text"><strong>Wetterstation LSZK:</strong> ' + stationZeit + '</span>' +
+          '<span class="wx-subheader-text"><strong>Wetterstation LSZK:</strong><span class="wx-date"> ' + stationZeit + '</span></span>' +
           '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener">Station öffnen ↗</a>' +
         '</div>';
 
       var metarHeader = metarAvailable
         ? '<div class="wx-subheader">' +
-            '<span class="wx-subheader-text"><strong>Metar LSMD Dübendorf:</strong> ' + (metarZeit || '–') + '</span>' +
+            '<span class="wx-subheader-text"><strong>Metar LSMD Dübendorf:</strong><span class="wx-date"> ' + (metarZeit || '–') + '</span></span>' +
             '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">METAR öffnen ↗</a>' +
           '</div>'
         : '<div class="wx-subheader">' +
