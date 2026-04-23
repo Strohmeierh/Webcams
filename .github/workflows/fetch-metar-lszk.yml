@@ -7,7 +7,7 @@ on:
 concurrency:
   group: "pages"
   cancel-in-progress: false
-  
+
 jobs:
   fetch-metar:
     runs-on: ubuntu-latest
