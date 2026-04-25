@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-04-25T01:51:12+00:00",
-  "station_last_received_utc": "2026-04-25T01:50:21+00:00",
+  "fetched_at_utc": "2026-04-25T02:01:11+00:00",
+  "station_last_received_utc": "2026-04-25T02:00:22+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 132,
@@ -11,7 +11,7 @@
           "weatherCode": 1,
           "weatherDesc": "Sunny",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Sunny.png",
-          "temp": 15,
+          "temp": 16,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
@@ -24,16 +24,16 @@
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 2,
-          "weatherDesc": "Mostly Clear",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
-          "temp": 11,
+          "weatherCode": 11,
+          "weatherDesc": "Broken Clouds",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
+          "temp": 12,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "night": {
-          "weatherCode": 14,
-          "weatherDesc": "Overcast",
+          "weatherCode": 11,
+          "weatherDesc": "Broken Clouds",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": 4,
           "chanceofrain": 0,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "4",
     "temperature": "4",
     "hiTemp": "7",
-    "hiTempDate": 1777068011908,
+    "hiTempDate": 1777068011291,
     "loTemp": "4",
-    "loTempDate": 1777081631908,
+    "loTempDate": 1777082351291,
     "wind": "0",
     "gust": "2",
-    "gustAt": 1777071491908,
-    "humidity": "78",
+    "gustAt": 1777071491291,
+    "humidity": "79",
     "rain": "0.0",
     "seasonalRain": "170.6",
     "barometer": "1015.8",
     "barometerTrend": "Steady",
-    "lastReceived": 1777081821000,
+    "lastReceived": 1777082422000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1777081821000,
+    "lastReceived": 1777082422000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -95,9 +95,9 @@
         "sensorDataTypeId": 14,
         "sensorDataName": "Hum",
         "displayName": "Hum",
-        "reportedValue": 78,
-        "value": 78,
-        "convertedValue": "78",
+        "reportedValue": 79,
+        "value": 79,
+        "convertedValue": "79",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -383,9 +383,9 @@
         "sensorDataTypeId": 156,
         "sensorDataName": "High Hum",
         "displayName": null,
-        "reportedValue": 78,
-        "value": 78,
-        "convertedValue": "78",
+        "reportedValue": 79,
+        "value": 79,
+        "convertedValue": "79",
         "depthLabel": null,
         "category": "high",
         "assocSensorDataTypeId": 14,
@@ -552,8 +552,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Temp Time",
         "displayName": null,
-        "reportedValue": 347,
-        "value": 347,
+        "reportedValue": 359,
+        "value": 359,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -565,8 +565,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "High Hum Time",
         "displayName": null,
-        "reportedValue": 342,
-        "value": 342,
+        "reportedValue": 354,
+        "value": 354,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -695,9 +695,9 @@
         "sensorDataTypeId": 217,
         "sensorDataName": "Low Wet Bulb",
         "displayName": null,
-        "reportedValue": 3,
-        "value": 3,
-        "convertedValue": "3",
+        "reportedValue": 2,
+        "value": 2,
+        "convertedValue": "2",
         "depthLabel": null,
         "category": "low",
         "assocSensorDataTypeId": 71,
@@ -708,8 +708,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Wet Bulb Time",
         "displayName": null,
-        "reportedValue": 1777084200,
-        "value": 1777084200,
+        "reportedValue": 1777089600,
+        "value": 1777089600,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -723,13 +723,13 @@
         "sensorDataName": "Rain",
         "rawValues": {
           "DAY": 0.0,
-          "MONTH": 13.6,
-          "YEAR": 170.6
+          "YEAR": 170.6,
+          "MONTH": 13.6
         },
         "convertedValues": {
           "DAY": "0.0",
-          "MONTH": "13.6",
-          "YEAR": "170.6"
+          "YEAR": "170.6",
+          "MONTH": "13.6"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -738,13 +738,13 @@
         "sensorDataName": "ET",
         "rawValues": {
           "DAY": 0.0,
-          "MONTH": 0.0,
-          "YEAR": 0.0
+          "YEAR": 0.0,
+          "MONTH": 0.0
         },
         "convertedValues": {
           "DAY": "0.0",
-          "MONTH": "0.0",
-          "YEAR": "0.0"
+          "YEAR": "0.0",
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
