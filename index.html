@@ -1152,18 +1152,15 @@
       // ─── Sub-Header Station + METAR ───
       var stationHeader =
         '<div class="wx-subheader">' +
-          '<span class="wx-subheader-text"><strong>Wetterstation LSZK:</strong><span class="wx-date"> ' + stationZeit + '</span></span>' +
-          '<a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener">Station öffnen ↗</a>' +
+          '<span class="wx-subheader-text"><strong><a href="https://www.weatherlink.com/embeddablePage/show/411b7945460c42848a14d053bb7c03c0/wide" target="_blank" rel="noopener">Wetterstation LSZK:</a></strong><span class="wx-date"> ' + stationZeit + '</span></span>' +
         '</div>';
 
       var metarHeader = metarAvailable
         ? '<div class="wx-subheader">' +
-            '<span class="wx-subheader-text"><strong>Metar LSMD Dübendorf:</strong><span class="wx-date"> ' + (metarZeit || '–') + '</span></span>' +
-            '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">METAR öffnen ↗</a>' +
+            '<span class="wx-subheader-text"><strong><a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">Metar LSMD Dübendorf:</a></strong><span class="wx-date"> ' + (metarZeit || '–') + '</span></span>' +
           '</div>'
         : '<div class="wx-subheader">' +
-            '<span class="wx-subheader-text" style="color:#f87171;"><strong>Metar LSMD Dübendorf</strong> · nicht verfügbar</span>' +
-            '<a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">METAR öffnen ↗</a>' +
+            '<span class="wx-subheader-text" style="color:#f87171;"><strong><a href="https://metar-taf.com/de/metar/LSMD" target="_blank" rel="noopener">Metar LSMD Dübendorf</a></strong> · nicht verfügbar</span>' +
           '</div>';
 
       // ─── Finale Ausgabe ───
