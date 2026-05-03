@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-05-03T20:51:12+00:00",
-  "station_last_received_utc": "2026-05-03T20:50:57+00:00",
+  "fetched_at_utc": "2026-05-03T21:01:14+00:00",
+  "station_last_received_utc": "2026-05-03T21:00:57+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 307,
@@ -11,7 +11,7 @@
           "weatherCode": 14,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -11,
+          "temp": -24,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
@@ -19,15 +19,15 @@
           "weatherCode": 14,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -11,
+          "temp": -24,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "evening": {
           "weatherCode": 14,
-          "weatherDesc": "Overcast",
+          "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": 13,
+          "temp": -24,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
@@ -50,20 +50,20 @@
     "rainUnits": "mm",
     "tempUnits": "&deg;C",
     "temperatureFeelLike": "12",
-    "temperature": "12",
+    "temperature": "13",
     "hiTemp": "24",
-    "hiTempDate": 1777817712709,
+    "hiTempDate": 1777817713867,
     "loTemp": "8",
-    "loTempDate": 1777781592709,
+    "loTempDate": 1777781593867,
     "wind": "0",
     "gust": "23",
-    "gustAt": 1777823532709,
+    "gustAt": 1777823533867,
     "humidity": "81",
     "rain": "0.0",
     "seasonalRain": "171.8",
     "barometer": "1012.6",
     "barometerTrend": "Rising Slowly",
-    "lastReceived": 1777841457000,
+    "lastReceived": 1777842057000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,15 +76,15 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1777841457000,
+    "lastReceived": 1777842057000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
         "sensorDataName": "Temp",
         "displayName": "Temp",
-        "reportedValue": 12,
-        "value": 12,
-        "convertedValue": "12",
+        "reportedValue": 13,
+        "value": 13,
+        "convertedValue": "13",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -723,13 +723,13 @@
         "sensorDataName": "Rain",
         "rawValues": {
           "DAY": 0.0,
-          "YEAR": 171.8,
-          "MONTH": 0.0
+          "MONTH": 0.0,
+          "YEAR": 171.8
         },
         "convertedValues": {
           "DAY": "0.0",
-          "YEAR": "171.8",
-          "MONTH": "0.0"
+          "MONTH": "0.0",
+          "YEAR": "171.8"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -738,13 +738,13 @@
         "sensorDataName": "ET",
         "rawValues": {
           "DAY": 0.0,
-          "YEAR": 0.0,
-          "MONTH": 0.0
+          "MONTH": 0.0,
+          "YEAR": 0.0
         },
         "convertedValues": {
           "DAY": "0.0",
-          "YEAR": "0.0",
-          "MONTH": "0.0"
+          "MONTH": "0.0",
+          "YEAR": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
