@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-05-05T07:51:18+00:00",
-  "station_last_received_utc": "2026-05-05T07:50:38+00:00",
+  "fetched_at_utc": "2026-05-05T08:01:13+00:00",
+  "station_last_received_utc": "2026-05-05T08:00:38+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 255,
+    "windDirection": 274,
     "forecastOverview": [
       {
         "date": "2026-05-05",
@@ -11,33 +11,33 @@
           "weatherCode": 14,
           "weatherDesc": "Overcast",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": 15,
-          "chanceofrain": 0,
+          "temp": 14,
+          "chanceofrain": 10,
           "rainInInches": 0.0
         },
         "afternoon": {
-          "weatherCode": 47,
-          "weatherDesc": "Isolated Thunderstorms",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
-          "temp": 15,
-          "chanceofrain": 19,
+          "weatherCode": 31,
+          "weatherDesc": "Drizzle",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "temp": 16,
+          "chanceofrain": 35,
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 47,
-          "weatherDesc": "Isolated Thunderstorms",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
-          "temp": 12,
-          "chanceofrain": 17,
-          "rainInInches": 0.0
+          "weatherCode": 31,
+          "weatherDesc": "Drizzle",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "temp": 11,
+          "chanceofrain": 30,
+          "rainInInches": 0.03
         },
         "night": {
-          "weatherCode": 14,
-          "weatherDesc": "Overcast",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
+          "weatherCode": 31,
+          "weatherDesc": "Drizzle",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": 9,
-          "chanceofrain": 10,
-          "rainInInches": 0.03
+          "chanceofrain": 28,
+          "rainInInches": 0.0
         }
       }
     ],
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "12",
     "temperature": "12",
     "hiTemp": "12",
-    "hiTempDate": 1777966518090,
+    "hiTempDate": 1777966513412,
     "loTemp": "6",
-    "loTempDate": 1777952478090,
+    "loTempDate": 1777952473412,
     "wind": "0",
     "gust": "2",
-    "gustAt": 1777965678090,
+    "gustAt": 1777965673412,
     "humidity": "88",
     "rain": "0.0",
     "seasonalRain": "171.8",
-    "barometer": "1006.9",
+    "barometer": "1006.8",
     "barometerTrend": "Steady",
-    "lastReceived": 1777967438000,
+    "lastReceived": 1777968038000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1777967438000,
+    "lastReceived": 1777968038000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 255,
-        "value": 255,
-        "convertedValue": "255",
+        "reportedValue": 274,
+        "value": 274,
+        "convertedValue": "274",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1006.9,
-        "value": 1006.9,
-        "convertedValue": "1006.9",
+        "reportedValue": 1006.8,
+        "value": 1006.8,
+        "convertedValue": "1006.8",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
