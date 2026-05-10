@@ -1,26 +1,26 @@
 {
-  "fetched_at_utc": "2026-05-10T18:51:12+00:00",
-  "station_last_received_utc": "2026-05-10T18:50:40+00:00",
+  "fetched_at_utc": "2026-05-10T19:01:12+00:00",
+  "station_last_received_utc": "2026-05-10T19:00:40+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 135,
+    "windDirection": 169,
     "forecastOverview": [
       {
         "date": "2026-05-10",
         "morning": {
-          "weatherCode": 34,
+          "weatherCode": 31,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": -11,
-          "chanceofrain": 57,
+          "chanceofrain": 46,
           "rainInInches": 0.0
         },
         "afternoon": {
-          "weatherCode": 34,
+          "weatherCode": 31,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": -11,
-          "chanceofrain": 57,
+          "chanceofrain": 46,
           "rainInInches": 0.0
         },
         "evening": {
@@ -29,7 +29,7 @@
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": 12,
           "chanceofrain": 21,
-          "rainInInches": 0.03
+          "rainInInches": 0.01
         },
         "night": {
           "weatherCode": 31,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "13",
     "temperature": "13",
     "hiTemp": "22",
-    "hiTempDate": 1778420052026,
+    "hiTempDate": 1778420052793,
     "loTemp": "7",
-    "loTempDate": 1778387172026,
+    "loTempDate": 1778387172793,
     "wind": "0",
     "gust": "21",
-    "gustAt": 1778429352026,
+    "gustAt": 1778429352793,
     "humidity": "96",
     "rain": "5.2",
     "seasonalRain": "189.6",
-    "barometer": "1005.6",
+    "barometer": "1005.7",
     "barometerTrend": "Steady",
-    "lastReceived": 1778439040000,
+    "lastReceived": 1778439640000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1778439040000,
+    "lastReceived": 1778439640000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 135,
-        "value": 135,
-        "convertedValue": "135",
+        "reportedValue": 169,
+        "value": 169,
+        "convertedValue": "169",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1005.6,
-        "value": 1005.6,
-        "convertedValue": "1005.6",
+        "reportedValue": 1005.7,
+        "value": 1005.7,
+        "convertedValue": "1005.7",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -723,13 +723,13 @@
         "sensorDataName": "Rain",
         "rawValues": {
           "DAY": 5.2,
-          "MONTH": 17.8,
-          "YEAR": 189.6
+          "YEAR": 189.6,
+          "MONTH": 17.8
         },
         "convertedValues": {
           "DAY": "5.2",
-          "MONTH": "17.8",
-          "YEAR": "189.6"
+          "YEAR": "189.6",
+          "MONTH": "17.8"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -738,13 +738,13 @@
         "sensorDataName": "ET",
         "rawValues": {
           "DAY": 0.0,
-          "MONTH": 0.0,
-          "YEAR": 0.0
+          "YEAR": 0.0,
+          "MONTH": 0.0
         },
         "convertedValues": {
           "DAY": "0.0",
-          "MONTH": "0.0",
-          "YEAR": "0.0"
+          "YEAR": "0.0",
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
