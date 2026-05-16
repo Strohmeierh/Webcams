@@ -258,11 +258,12 @@
 
     .cam-header {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       padding: 12px 14px;
       background: rgba(0,0,0,0.18);
-      gap: 8px;
+      gap: 4px 8px;
     }
 
     .cam-header a {
@@ -292,6 +293,37 @@
       0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.6); }
       70%  { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
       100% { box-shadow: 0 0 0 0   rgba(16,185,129,0); }
+    }
+    @keyframes pulse-yellow {
+      0%   { box-shadow: 0 0 0 0   rgba(234,179,8,0.6); }
+      70%  { box-shadow: 0 0 0 6px rgba(234,179,8,0); }
+      100% { box-shadow: 0 0 0 0   rgba(234,179,8,0); }
+    }
+    @keyframes pulse-red {
+      0%   { box-shadow: 0 0 0 0   rgba(239,68,68,0.6); }
+      70%  { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0   rgba(239,68,68,0); }
+    }
+
+    .status-dot.age-yellow {
+      background-color: #eab308;
+      animation-name: pulse-yellow;
+    }
+    .status-dot.age-red {
+      background-color: #ef4444;
+      animation-name: pulse-red;
+    }
+    .status-dot.age-unknown {
+      background-color: #64748b;
+      animation: none;
+    }
+
+    .cam-timestamp {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
     }
 
     .media-container {
@@ -470,7 +502,7 @@
       <!-- Speck -->
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=fgzo.ch/webcam/images/fgzo.jpg" target="_blank" rel="noopener">Speck – Runway 30</a>
+          <a href="https://fgzo.ch/webcam/images/fgzo.jpg" target="_blank" rel="noopener">Speck – Runway 30</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -480,7 +512,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=fgzo.ch/webcam/images/fgzo2.jpg" target="_blank" rel="noopener">Speck – Tankstelle</a>
+          <a href="https://fgzo.ch/webcam/images/fgzo2.jpg" target="_blank" rel="noopener">Speck – Tankstelle</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -512,7 +544,7 @@
       <!-- Weitere Flugplätze -->
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=flugplatz-schaenis.ch/images/webcam/cam_schaenis_high.jpg" target="_blank" rel="noopener">Schänis LSZX</a>
+          <a href="https://flugplatz-schaenis.ch/images/webcam/cam_schaenis_high.jpg" target="_blank" rel="noopener">Schänis LSZX</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -550,7 +582,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
+          <a href="https://eichi.ch/cam/webcam/eichi.jpg" target="_blank" rel="noopener">Uznach</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -600,7 +632,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=decoral.ch/Kameratoedi.jpg" target="_blank" rel="noopener">Richtung Tödi</a>
+          <a href="https://decoral.ch/Kameratoedi.jpg" target="_blank" rel="noopener">Richtung Tödi</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -620,7 +652,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.hotel-klausenpass.ch/panorama.jpg" target="_blank" rel="noopener">Klausenpass</a>
+          <a href="https://webcam.hotel-klausenpass.ch/panorama.jpg" target="_blank" rel="noopener">Klausenpass</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -640,7 +672,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.skiarena.ch/oberalppass/image.jpg" target="_blank" rel="noopener">Oberalppass</a>
+          <a href="https://webcam.skiarena.ch/oberalppass/image.jpg" target="_blank" rel="noopener">Oberalppass</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -660,7 +692,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" target="_blank" rel="noopener">Andermatt Gurschen</a>
+          <a href="https://www.sky-cam.ch/skiarena/gurschen_N/gurschen_N.jpg" target="_blank" rel="noopener">Andermatt Gurschen</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -670,7 +702,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" target="_blank" rel="noopener">Gotthardpass</a>
+          <a href="https://webcam.afbn.ch/H_OSG_017,200_S_KAM_001_Sued.jpg" target="_blank" rel="noopener">Gotthardpass</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -680,7 +712,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.hotel-grimselpass.ch/webcams/grimsel.jpg" target="_blank" rel="noopener">Grimsel Passhöhe</a>
+          <a href="https://www.hotel-grimselpass.ch/webcams/grimsel.jpg" target="_blank" rel="noopener">Grimsel Passhöhe</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -690,7 +722,7 @@
 
       <div class="cam-card">
         <div class="cam-header">
-          <a href="https://wsrv.nl/?url=www.tarnolgio.ch/webcam00.jpg" target="_blank" rel="noopener">Ambri Tarnolgio</a>
+          <a href="https://www.tarnolgio.ch/webcam00.jpg" target="_blank" rel="noopener">Ambri Tarnolgio</a>
           <span class="status-dot"></span>
         </div>
         <div class="media-container">
@@ -759,6 +791,48 @@
 
     var fallbackSvg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="background:%23000;padding:2rem;"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="18" y1="2" x2="22" y2="6"/><line x1="22" y1="2" x2="18" y2="6"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>';
 
+    var camStatus = {};
+
+    function refreshCamStatus(ts) {
+      return fetch('data/cam-status.json?t=' + ts, { cache: 'no-store' })
+        .then(function(r) { return r.ok ? r.json() : {}; })
+        .catch(function() { return {}; });
+    }
+
+    function applyAgeUI(tsEl, dot, lastChange) {
+      var ageMin = (Date.now() - lastChange) / 60000;
+      var d = new Date(lastChange);
+      var s = pad(d.getDate()) + '.' + pad(d.getMonth()+1) + '.' + d.getFullYear() +
+              ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      if (tsEl) {
+        tsEl.textContent = s;
+        tsEl.title = 'Letzter beobachteter Bildwechsel';
+      }
+      if (dot) {
+        dot.classList.remove('age-yellow', 'age-red', 'age-unknown');
+        if (ageMin >= 30)      dot.classList.add('age-red');
+        else if (ageMin >= 10) dot.classList.add('age-yellow');
+      }
+    }
+
+    function applyStatusToCam(img) {
+      var base = img.getAttribute('data-src');
+      if (!base) return;
+      var card = img.closest('.cam-card');
+      var tsEl = card ? card.querySelector('.cam-timestamp') : null;
+      var dot  = card ? card.querySelector('.status-dot')   : null;
+      var entry = camStatus[base];
+      if (entry && entry.lastChange) {
+        applyAgeUI(tsEl, dot, entry.lastChange);
+      } else {
+        if (tsEl) tsEl.textContent = '';
+        if (dot) {
+          dot.classList.remove('age-yellow', 'age-red');
+          dot.classList.add('age-unknown');
+        }
+      }
+    }
+
     function loadImg(img, ts) {
       var base = img.getAttribute('data-src');
       if (!base) return;
@@ -768,8 +842,9 @@
       img.classList.remove('loaded');
 
       var fresh = new Image();
-      fresh.onload = function () {
+      fresh.onload = function() {
         img.src = fresh.src;
+        img.style.objectFit = '';
         img.classList.add('loaded');
         container.classList.add('loaded');
       };
@@ -780,6 +855,8 @@
         container.classList.add('loaded');
       };
       fresh.src = bust(base, ts);
+
+      applyStatusToCam(img);
     }
 
     /* ── LSPV Wangen-Lachen: Zeitstempel-basierte URLs ──── */
@@ -803,7 +880,8 @@
 
         intervals.push({
            file: yy + mo + dd + hh + mm,
-           label: dd + '.' + mo + '. ' + hh + ':' + mm
+           label: dd + '.' + mo + '. ' + hh + ':' + mm,
+           date: new Date(d.getTime())
         });
       }
       return intervals;
@@ -814,6 +892,10 @@
       if (!camName) return;
 
       var container = img.closest('.media-container');
+      var card      = img.closest('.cam-card');
+      var tsEl      = card ? card.querySelector('.cam-timestamp') : null;
+      var dot       = card ? card.querySelector('.status-dot')   : null;
+
       container.classList.remove('loaded');
       img.classList.remove('loaded');
 
@@ -827,6 +909,11 @@
           img.style.objectFit = 'contain';
           img.classList.add('loaded');
           container.classList.add('loaded');
+          if (tsEl) tsEl.textContent = '';
+          if (dot) {
+            dot.classList.remove('age-yellow', 'age-red');
+            dot.classList.add('age-unknown');
+          }
           return;
         }
 
@@ -836,15 +923,10 @@
         var test = new Image();
         test.onload = function () {
           img.src = test.src;
+          img.style.objectFit = '';
           img.classList.add('loaded');
           container.classList.add('loaded');
-
-          // Datum/Uhrzeit in den Titel des Headers schreiben
-          var aTag = img.closest('.cam-card').querySelector('.cam-header a');
-          if (!aTag.dataset.origText) {
-            aTag.dataset.origText = aTag.textContent; // Originalnamen merken
-          }
-          aTag.textContent = aTag.dataset.origText + ' (' + current.label + ')';
+          applyAgeUI(tsEl, dot, current.date.getTime());
         };
         test.onerror = function () {
           attempt++;
@@ -862,6 +944,15 @@
       });
     }, { rootMargin: '200px' });
 
+    document.querySelectorAll('.cam-header').forEach(function(header) {
+      if (header.querySelector('.cam-timestamp')) return;
+      var dot = header.querySelector('.status-dot');
+      var span = document.createElement('span');
+      span.className = 'cam-timestamp';
+      if (dot) header.insertBefore(span, dot);
+      else header.appendChild(span);
+    });
+
     var imgs = document.querySelectorAll('img.live-cam');
     var ts0 = Date.now();
     imgs.forEach(function (img) {
@@ -873,16 +964,26 @@
       }
     });
 
+    refreshCamStatus(ts0).then(function(data) {
+      camStatus = data;
+      imgs.forEach(function (img) {
+        if (!img.classList.contains('lspv-cam')) applyStatusToCam(img);
+      });
+    });
+
     setInterval(function () {
       var ts = Date.now();
-      visible.forEach(function (img) {
-        if (img.classList.contains('lspv-cam')) {
-          loadLspv(img);
-        } else {
-          loadImg(img, ts);
-        }
+      refreshCamStatus(ts).then(function(data) {
+        camStatus = data;
+        visible.forEach(function (img) {
+          if (img.classList.contains('lspv-cam')) {
+            loadLspv(img);
+          } else {
+            loadImg(img, ts);
+          }
+        });
+        if (lastEl) lastEl.textContent = nowStr();
       });
-      if (lastEl) lastEl.textContent = nowStr();
     }, REFRESH_MS);
     if (lastEl) lastEl.textContent = nowStr();
 
