@@ -1,8 +1,6 @@
 name: Fetch LSZK Weather
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 permissions:
