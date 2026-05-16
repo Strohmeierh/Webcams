@@ -827,7 +827,7 @@
                 ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
       if (tsEl) {
         tsEl.textContent = formatRelativeAge(ageMs);
-        tsEl.title = 'Bildwechsel erkannt: ' + abs + ' (±10 min)';
+        tsEl.title = 'Letzter Bildwechsel: ' + abs;
       }
       applyDotAge(dot, ageMs / 60000);
     }
