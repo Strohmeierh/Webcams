@@ -799,20 +799,48 @@
         .catch(function() { return {}; });
     }
 
+    function formatRelativeAge(ms) {
+      var totalMin = Math.floor(ms / 60000);
+      if (totalMin < 1)  return 'gerade eben';
+      if (totalMin < 60) return 'vor ' + totalMin + ' min';
+      var hr  = Math.floor(totalMin / 60);
+      var rem = totalMin % 60;
+      if (hr < 24) {
+        return rem === 0 ? 'vor ' + hr + ' h'
+                         : 'vor ' + hr + ' h ' + rem + ' min';
+      }
+      var days = Math.floor(hr / 24);
+      return 'vor ' + days + (days === 1 ? ' Tag' : ' Tagen');
+    }
+
+    function applyDotAge(dot, ageMin) {
+      if (!dot) return;
+      dot.classList.remove('age-yellow', 'age-red', 'age-unknown');
+      if (ageMin >= 30)      dot.classList.add('age-red');
+      else if (ageMin >= 10) dot.classList.add('age-yellow');
+    }
+
     function applyAgeUI(tsEl, dot, lastChange) {
-      var ageMin = (Date.now() - lastChange) / 60000;
+      var ageMs = Date.now() - lastChange;
       var d = new Date(lastChange);
-      var s = pad(d.getDate()) + '.' + pad(d.getMonth()+1) + '.' + d.getFullYear() +
-              ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      var abs = pad(d.getDate()) + '.' + pad(d.getMonth()+1) + '.' + d.getFullYear() +
+                ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
       if (tsEl) {
-        tsEl.textContent = s;
-        tsEl.title = 'Letzter beobachteter Bildwechsel';
+        tsEl.textContent = formatRelativeAge(ageMs);
+        tsEl.title = 'Bildwechsel erkannt: ' + abs + ' (±10 min)';
       }
-      if (dot) {
-        dot.classList.remove('age-yellow', 'age-red', 'age-unknown');
-        if (ageMin >= 30)      dot.classList.add('age-red');
-        else if (ageMin >= 10) dot.classList.add('age-yellow');
+      applyDotAge(dot, ageMs / 60000);
+    }
+
+    function applyAgeUIAbsolute(tsEl, dot, lastChange) {
+      var ageMs = Date.now() - lastChange;
+      var d = new Date(lastChange);
+      if (tsEl) {
+        tsEl.textContent = pad(d.getDate()) + '.' + pad(d.getMonth()+1) + '.' + d.getFullYear() +
+                           ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+        tsEl.title = 'Bildzeitpunkt (5-Minuten-Raster)';
       }
+      applyDotAge(dot, ageMs / 60000);
     }
 
     function applyStatusToCam(img) {
@@ -926,7 +954,7 @@
           img.style.objectFit = '';
           img.classList.add('loaded');
           container.classList.add('loaded');
-          applyAgeUI(tsEl, dot, current.date.getTime());
+          applyAgeUIAbsolute(tsEl, dot, current.date.getTime());
         };
         test.onerror = function () {
           attempt++;
