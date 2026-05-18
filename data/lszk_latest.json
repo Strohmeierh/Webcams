@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-05-18T03:41:12+00:00",
-  "station_last_received_utc": "2026-05-18T03:40:39+00:00",
+  "fetched_at_utc": "2026-05-18T03:51:15+00:00",
+  "station_last_received_utc": "2026-05-18T03:50:40+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 236,
+    "windDirection": 235,
     "forecastOverview": [
       {
         "date": "2026-05-18",
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "4",
     "temperature": "4",
     "hiTemp": "7",
-    "hiTempDate": 1779062112230,
+    "hiTempDate": 1779062115453,
     "loTemp": "4",
-    "loTempDate": 1779075192230,
+    "loTempDate": 1779076155453,
     "wind": "0",
     "gust": "0",
-    "gustAt": 1779321312230,
+    "gustAt": 1779321315453,
     "humidity": "93",
     "rain": "0.0",
     "seasonalRain": "218.4",
-    "barometer": "1012.1",
+    "barometer": "1012.2",
     "barometerTrend": "Steady",
-    "lastReceived": 1779075639000,
+    "lastReceived": 1779076240000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1779075639000,
+    "lastReceived": 1779076240000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 236,
-        "value": 236,
-        "convertedValue": "236",
+        "reportedValue": 235,
+        "value": 235,
+        "convertedValue": "235",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1012.1,
-        "value": 1012.1,
-        "convertedValue": "1012.1",
+        "reportedValue": 1012.2,
+        "value": 1012.2,
+        "convertedValue": "1012.2",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -552,8 +552,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Temp Time",
         "displayName": null,
-        "reportedValue": 533,
-        "value": 533,
+        "reportedValue": 549,
+        "value": 549,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -604,8 +604,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Wind Chill Time",
         "displayName": null,
-        "reportedValue": 506,
-        "value": 506,
+        "reportedValue": 546,
+        "value": 546,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -708,8 +708,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Wet Bulb Time",
         "displayName": null,
-        "reportedValue": 1779078600,
-        "value": 1779078600,
+        "reportedValue": 1779082200,
+        "value": 1779082200,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "MONTH": 46.6,
           "DAY": 0.0,
-          "YEAR": 218.4
+          "YEAR": 218.4,
+          "MONTH": 46.6
         },
         "convertedValues": {
-          "MONTH": "46.6",
           "DAY": "0.0",
-          "YEAR": "218.4"
+          "YEAR": "218.4",
+          "MONTH": "46.6"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "MONTH": 0.0,
           "DAY": 0.0,
-          "YEAR": 0.0
+          "YEAR": 0.0,
+          "MONTH": 0.0
         },
         "convertedValues": {
-          "MONTH": "0.0",
           "DAY": "0.0",
-          "YEAR": "0.0"
+          "YEAR": "0.0",
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
