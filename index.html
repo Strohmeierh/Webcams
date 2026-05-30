@@ -2297,7 +2297,13 @@
       });
     }
 
-    /* ── Kamera-Klick: Bild-Kameras öffnen die Lightbox ─────── */
+    // Lightbox nur auf Laptop/Desktop (Maus + breiter Schirm); sonst wie vorher.
+    function isMobile() {
+      return window.matchMedia('(max-width: 768px)').matches ||
+             !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    }
+
+    /* ── Kamera-Klick: Laptop → Lightbox, Mobil → Bild direkt ─ */
     document.querySelectorAll('.cam-card').forEach(function(card) {
       var a       = card.querySelector('.cam-header a');
       var img     = card.querySelector('img.live-cam');
@@ -2307,8 +2313,8 @@
 
       function openFresh(e) {
         if (!base) return;
-        if (img) {
-          // Bild-Kamera (inkl. LSPV) → Lightbox
+        if (img && !isMobile()) {
+          // Laptop/Desktop: Bild-Kamera (inkl. LSPV) → Lightbox
           e.preventDefault();
           var title = a.textContent.trim();
           if (img.classList.contains('lspv-cam')) {
