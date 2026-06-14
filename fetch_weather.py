@@ -2,7 +2,6 @@
 """
 Fetch LSZK weather data from the public WeatherLink embed endpoints and write:
   - data/lszk_latest.json    (single pretty-printed snapshot, overwritten)
-  - data/lszk_history.jsonl  (one compact JSON per line, appended)
 
 The embed endpoints (used by weatherlink.com's /embeddablePage widget) do not
 require API-Key / Secret — just the device URL-token from the embed URL.
@@ -70,8 +69,6 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 (OUT_DIR / "lszk_latest.json").write_text(
     json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8"
 )
-with (OUT_DIR / "lszk_history.jsonl").open("a", encoding="utf-8") as f:
-    f.write(json.dumps(record, separators=(",", ":"), ensure_ascii=False) + "\n")
 
 temp = current.get("temperature")
 wind = current.get("wind")
