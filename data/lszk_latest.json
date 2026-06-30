@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-06-30T00:51:10+00:00",
-  "station_last_received_utc": "2026-06-30T00:50:58+00:00",
+  "fetched_at_utc": "2026-06-30T01:01:12+00:00",
+  "station_last_received_utc": "2026-06-30T01:00:59+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 128,
@@ -8,36 +8,36 @@
       {
         "date": "2026-06-30",
         "morning": {
-          "weatherCode": 36,
-          "weatherDesc": "Passing Showers",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "weatherCode": 14,
+          "weatherDesc": "Overcast",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": 23,
-          "chanceofrain": 21,
+          "chanceofrain": 10,
           "rainInInches": 0.0
         },
         "afternoon": {
-          "weatherCode": 47,
-          "weatherDesc": "Isolated Thunderstorms",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
+          "weatherCode": 2,
+          "weatherDesc": "Mostly Sunny",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Sunny.png",
           "temp": 30,
-          "chanceofrain": 11,
+          "chanceofrain": 10,
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 38,
-          "weatherDesc": "Rain Showers",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/ModerateRain.png",
-          "temp": 19,
-          "chanceofrain": 67,
-          "rainInInches": 0.4
+          "weatherCode": 48,
+          "weatherDesc": "A Few Thunderstorms",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
+          "temp": 21,
+          "chanceofrain": 70,
+          "rainInInches": 0.18
         },
         "night": {
-          "weatherCode": 34,
-          "weatherDesc": "A Few Showers",
+          "weatherCode": 35,
+          "weatherDesc": "Light Showers",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": 18,
           "chanceofrain": 48,
-          "rainInInches": 0.28
+          "rainInInches": 0.17
         }
       }
     ],
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "20",
     "temperature": "19",
     "hiTemp": "22",
-    "hiTempDate": 1782770410370,
+    "hiTempDate": 1782770412209,
     "loTemp": "19",
-    "loTempDate": 1782780430370,
+    "loTempDate": 1782780672209,
     "wind": "0",
     "gust": "0",
-    "gustAt": 1783036510370,
+    "gustAt": 1783036512209,
     "humidity": "82",
     "rain": "0.0",
     "seasonalRain": "309.0",
-    "barometer": "1017.9",
+    "barometer": "1017.8",
     "barometerTrend": "Steady",
-    "lastReceived": 1782780658000,
+    "lastReceived": 1782781259000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1782780658000,
+    "lastReceived": 1782781259000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1017.9,
-        "value": 1017.9,
-        "convertedValue": "1017.9",
+        "reportedValue": 1017.8,
+        "value": 1017.8,
+        "convertedValue": "1017.8",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -552,8 +552,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Temp Time",
         "displayName": null,
-        "reportedValue": 247,
-        "value": 247,
+        "reportedValue": 251,
+        "value": 251,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -695,9 +695,9 @@
         "sensorDataTypeId": 217,
         "sensorDataName": "Low Wet Bulb",
         "displayName": null,
-        "reportedValue": 18,
-        "value": 18,
-        "convertedValue": "18",
+        "reportedValue": 17,
+        "value": 17,
+        "convertedValue": "17",
         "depthLabel": null,
         "category": "low",
         "assocSensorDataTypeId": 71,
@@ -708,8 +708,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Wet Bulb Time",
         "displayName": null,
-        "reportedValue": 1782783000,
-        "value": 1782783000,
+        "reportedValue": 1782786600,
+        "value": 1782786600,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "DAY": 0.0,
+          "MONTH": 78.4,
           "YEAR": 309.0,
-          "MONTH": 78.4
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "MONTH": "78.4",
           "YEAR": "309.0",
-          "MONTH": "78.4"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "DAY": 0.0,
+          "MONTH": 0.0,
           "YEAR": 0.0,
-          "MONTH": 0.0
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "MONTH": "0.0",
           "YEAR": "0.0",
-          "MONTH": "0.0"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
