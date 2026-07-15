@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-07-15T04:51:11+00:00",
-  "station_last_received_utc": "2026-07-15T04:50:18+00:00",
+  "fetched_at_utc": "2026-07-15T05:01:12+00:00",
+  "station_last_received_utc": "2026-07-15T05:00:19+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 302,
@@ -13,7 +13,7 @@
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
           "temp": 24,
           "chanceofrain": 12,
-          "rainInInches": 0.02
+          "rainInInches": 0.01
         },
         "afternoon": {
           "weatherCode": 47,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "18",
     "temperature": "18",
     "hiTemp": "19",
-    "hiTempDate": 1784066410740,
+    "hiTempDate": 1784066412211,
     "loTemp": "16",
-    "loTempDate": 1784087470740,
+    "loTempDate": 1784087472211,
     "wind": "0",
     "gust": "0",
-    "gustAt": 1784332510740,
-    "humidity": "86",
+    "gustAt": 1784332512211,
+    "humidity": "83",
     "rain": "0.0",
     "seasonalRain": "367.2",
     "barometer": "1012.8",
     "barometerTrend": "Steady",
-    "lastReceived": 1784091018000,
+    "lastReceived": 1784091619000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1784091018000,
+    "lastReceived": 1784091619000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -95,9 +95,9 @@
         "sensorDataTypeId": 14,
         "sensorDataName": "Hum",
         "displayName": "Hum",
-        "reportedValue": 86,
-        "value": 86,
-        "convertedValue": "86",
+        "reportedValue": 83,
+        "value": 83,
+        "convertedValue": "83",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -212,9 +212,9 @@
         "sensorDataTypeId": 10,
         "sensorDataName": "Dew Point",
         "displayName": "Dew Point",
-        "reportedValue": 16,
-        "value": 16,
-        "convertedValue": "16",
+        "reportedValue": 15,
+        "value": 15,
+        "convertedValue": "15",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "DAY": 0.0,
+          "MONTH": 22.0,
           "YEAR": 367.2,
-          "MONTH": 22.0
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "MONTH": "22.0",
           "YEAR": "367.2",
-          "MONTH": "22.0"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "DAY": 0.0,
+          "MONTH": 0.0,
           "YEAR": 0.0,
-          "MONTH": 0.0
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "MONTH": "0.0",
           "YEAR": "0.0",
-          "MONTH": "0.0"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
