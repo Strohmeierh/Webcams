@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-07-16T04:51:13+00:00",
-  "station_last_received_utc": "2026-07-16T04:50:38+00:00",
+  "fetched_at_utc": "2026-07-16T05:01:11+00:00",
+  "station_last_received_utc": "2026-07-16T05:00:38+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 329,
@@ -13,7 +13,7 @@
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": 24,
           "chanceofrain": 27,
-          "rainInInches": 0.04
+          "rainInInches": 0.03
         },
         "afternoon": {
           "weatherCode": 14,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "17",
     "temperature": "17",
     "hiTemp": "19",
-    "hiTempDate": 1784156233595,
+    "hiTempDate": 1784156231506,
     "loTemp": "16",
-    "loTempDate": 1784175493595,
+    "loTempDate": 1784175491506,
     "wind": "0",
     "gust": "13",
-    "gustAt": 1784155033595,
-    "humidity": "95",
+    "gustAt": 1784155031506,
+    "humidity": "94",
     "rain": "0.2",
     "seasonalRain": "368.6",
-    "barometer": "1015.4",
-    "barometerTrend": "Falling Slowly",
-    "lastReceived": 1784177438000,
+    "barometer": "1015.3",
+    "barometerTrend": "Steady",
+    "lastReceived": 1784178038000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1784177438000,
+    "lastReceived": 1784178038000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -95,9 +95,9 @@
         "sensorDataTypeId": 14,
         "sensorDataName": "Hum",
         "displayName": "Hum",
-        "reportedValue": 95,
-        "value": 95,
-        "convertedValue": "95",
+        "reportedValue": 94,
+        "value": 94,
+        "convertedValue": "94",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1015.4,
-        "value": 1015.4,
-        "convertedValue": "1015.4",
+        "reportedValue": 1015.3,
+        "value": 1015.3,
+        "convertedValue": "1015.3",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -238,9 +238,9 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Bar Trend",
         "displayName": null,
-        "reportedValue": 236,
-        "value": 236,
-        "convertedValue": "Falling Slowly",
+        "reportedValue": 0,
+        "value": 0,
+        "convertedValue": "Steady",
         "depthLabel": null,
         "category": null,
         "assocSensorDataTypeId": null,
@@ -708,8 +708,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Wet Bulb Time",
         "displayName": null,
-        "reportedValue": 1784179800,
-        "value": 1784179800,
+        "reportedValue": 1784183400,
+        "value": 1784183400,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "MONTH": 23.4,
           "YEAR": 368.6,
-          "DAY": 0.2
+          "DAY": 0.2,
+          "MONTH": 23.4
         },
         "convertedValues": {
-          "MONTH": "23.4",
           "YEAR": "368.6",
-          "DAY": "0.2"
+          "DAY": "0.2",
+          "MONTH": "23.4"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "MONTH": 0.0,
           "YEAR": 0.0,
-          "DAY": 0.0
+          "DAY": 0.0,
+          "MONTH": 0.0
         },
         "convertedValues": {
-          "MONTH": "0.0",
           "YEAR": "0.0",
-          "DAY": "0.0"
+          "DAY": "0.0",
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
