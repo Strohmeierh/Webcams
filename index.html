@@ -1587,8 +1587,8 @@
         var dv = (briefing.foehnDp > 0 ? '+' : '') + briefing.foehnDp.toFixed(1).replace('.', ',');
         out.push({
           color: a < 2 ? G : (a < 4 ? Y : R),
-          chip:  'Föhn ' + dv + ' hPa',
-          title: 'Föhn-Index',
+          chip:  (briefing.foehnDp < 0 ? 'Bise ' : 'Föhn ') + dv + ' hPa',
+          title: 'Föhn-/Bise-Index',
           value: dv + ' hPa (QNH Lugano − Zürich)',
           text:  'Klassischer Föhn-Indikator: Druckdifferenz über den Alpenkamm. Grosse positive Werte = Südföhn auf der Alpennordseite – Turbulenz, Leewellen und kräftiger Höhenwind bis ins Zürcher Oberland. Negativ = Nord-/Bisenlage. Bis ±2&nbsp;hPa unauffällig, ab ±4&nbsp;hPa Föhnlage wahrscheinlich.'
         });
@@ -1849,7 +1849,7 @@
         if (fadp < 2)      { fCol = '#10b981'; fTxt = 'unauffällig'; }
         else if (fadp < 4) { fCol = '#f59e0b'; fTxt = fdp > 0 ? 'Südföhn-Tendenz' : 'Nord-/Bise-Tendenz'; }
         else               { fCol = '#ef4444'; fTxt = fdp > 0 ? 'Südföhn wahrscheinlich' : 'Nordstau / kräftige Bise'; }
-        foehnHtml = '<div class="wx-stat"><div class="wx-stat-label">Föhn-Index</div>' +
+        foehnHtml = '<div class="wx-stat"><div class="wx-stat-label">' + (fdp < 0 ? 'Bise-Index' : 'Föhn-Index') + '</div>' +
           '<div class="wx-stat-value" style="color:' + fCol + ';white-space:nowrap;">' + (fdp > 0 ? '+' : '') + fdp.toFixed(1).replace('.', ',') + '&nbsp;hPa</div>' +
           '<div class="wx-stat-sub" style="white-space:nowrap;">Lugano − Zürich<br>' + fTxt + '</div></div>';
       }
