@@ -2401,9 +2401,20 @@
       }
       if (!hours.length) { card.style.display = 'none'; return; }
 
+      // Auslösetemperatur, um 2000 m MSL zu erreichen (Profil vom Mittag) –
+      // markiert den realistischen Thermikbeginn.
+      var noon = hours[Math.min(12, hours.length - 1)];
+      var trigger = null, triggerAb = null;
+      var eZiel = envT(noon.pts, 2000);
+      if (eZiel !== null) trigger = eZiel + DALR * (2000 - elev) - EXC;
+
+      // nutzbar: Tagstunden, in denen die Auslösetemperatur erreicht ist
+      // (Thermik trägt bis zur Arbeitshöhe), wenig Bewölkung, kein Regen.
+      // Fallback ≥ 400 m AGL, falls keine Auslösetemperatur berechenbar ist.
       var nutzbar = hours.filter(function (x) {
-        return x.hh >= 8 && x.hh <= 20 && (x.top - elev) >= 400 &&
-               (x.cc === null || x.cc < 85) && (x.pr || 0) < 0.5;
+        if (x.hh < 8 || x.hh > 20) return false;
+        if ((x.cc !== null && x.cc >= 85) || (x.pr || 0) >= 0.5) return false;
+        return trigger !== null ? (x.T0 >= trigger) : ((x.top - elev) >= 400);
       });
 
       var von = null, bis = null, best = null;
@@ -2416,12 +2427,8 @@
         });
       }
 
-      // Auslösetemperatur, um 2000 m MSL zu erreichen (Profil vom Mittag)
-      var noon = hours[Math.min(12, hours.length - 1)];
-      var trigger = null, triggerAb = null;
-      var eZiel = envT(noon.pts, 2000);
-      if (eZiel !== null) {
-        trigger = eZiel + DALR * (2000 - elev) - EXC;
+      // Erste Stunde, in der die Auslösetemperatur erreicht wird (= Thermikbeginn)
+      if (trigger !== null) {
         for (var q = 0; q < hours.length; q++) {
           if (hours[q].T0 >= trigger) { triggerAb = hours[q].zeit; break; }
         }
