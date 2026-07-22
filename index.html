@@ -155,6 +155,7 @@
     .brf-item-head { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.88rem; }
     .brf-item-value { font-size: 0.82rem; color: var(--accent); margin: 3px 0 4px 18px; }
     .brf-item-text { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+    .brf-note { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--card-border); }
 
     /* === Wetter-Panel === */
     .wx-panel {
@@ -1181,6 +1182,9 @@
         <button class="lightbox-close" id="brf-modal-close" type="button" aria-label="Schliessen">×</button>
       </h3>
       <div id="brf-modal-content"></div>
+      <div class="brf-note">
+        <strong>Quellen &amp; Genauigkeit:</strong> Böen und Niederschlag sind aktuelle Messwerte der Wetterstation Speck am Platz, das QNH für den Föhn-/Bise-Index von MeteoSchweiz (Lugano/Zürich). Thermikfenster, Arbeitshöhe, Charakter, Auslösetemperatur, CAPE und Regenwahrscheinlichkeit sind Modellvorhersagen (Open-Meteo, nächste 12&nbsp;h) bzw. eine vereinfachte Abschätzung aus wenigen Höhenstufen. Das sind grobe Richtwerte zur ersten Orientierung – <strong>kein Ersatz</strong> für ein Emagramm, SoaringMeteo und die offizielle Flugwetterberatung.
+      </div>
       <div style="text-align:center;margin-top:14px;">
         <button class="top-btn" id="brf-modal-wx" type="button">Alle Wetterdetails öffnen</button>
       </div>
