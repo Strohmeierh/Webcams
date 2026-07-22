@@ -2408,11 +2408,16 @@
       var eZiel = envT(noon.pts, 2000);
       if (eZiel !== null) trigger = eZiel + DALR * (2000 - elev) - EXC;
 
+      // Thermik endet ~1,5 h vor Sonnenuntergang (unabhängig von der Bodentemp.)
+      function hhmmDec(s) { var mm = /^(\d{1,2}):(\d{2})$/.exec(s || ''); return mm ? (+mm[1] + (+mm[2]) / 60) : null; }
+      var sunsetDec = hhmmDec(calcSunTimes(47.37557, 8.76169).set);
+      var endCap = sunsetDec !== null ? sunsetDec - 1.5 : 20;
+
       // nutzbar: Tagstunden, in denen die Auslösetemperatur erreicht ist
-      // (Thermik trägt bis zur Arbeitshöhe), wenig Bewölkung, kein Regen.
-      // Fallback ≥ 400 m AGL, falls keine Auslösetemperatur berechenbar ist.
+      // (Thermik trägt bis zur Arbeitshöhe), wenig Bewölkung, kein Regen und
+      // noch nicht zu nah am Sonnenuntergang. Fallback ≥ 400 m AGL.
       var nutzbar = hours.filter(function (x) {
-        if (x.hh < 8 || x.hh > 20) return false;
+        if (x.hh < 8 || x.hh > endCap) return false;
         if ((x.cc !== null && x.cc >= 85) || (x.pr || 0) >= 0.5) return false;
         return trigger !== null ? (x.T0 >= trigger) : ((x.top - elev) >= 400);
       });
@@ -2457,7 +2462,7 @@
       }
       html += '</div>' +
         '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4;">' +
-        'Parcel-Abschätzung aus dem Open-Meteo-Höhenprofil (Boden/850/700/500&nbsp;hPa, +1,5&nbsp;K Überhitzung). ' +
+        'Parcel-Abschätzung aus dem Open-Meteo-Höhenprofil (Boden/850/700/500&nbsp;hPa, +1,5&nbsp;K Überhitzung); Thermikende rund 1,5&nbsp;h vor Sonnenuntergang. ' +
         'Grobe Näherung – für die Flugvorbereitung Emagramm/SoaringMeteo beiziehen.</div>';
 
       el.innerHTML = html;
