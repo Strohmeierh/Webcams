@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-07-30T20:51:20+00:00",
-  "station_last_received_utc": "2026-07-30T20:50:52+00:00",
+  "fetched_at_utc": "2026-07-30T21:01:15+00:00",
+  "station_last_received_utc": "2026-07-30T21:00:54+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 307,
@@ -8,33 +8,33 @@
       {
         "date": "2026-07-30",
         "morning": {
-          "weatherCode": 13,
+          "weatherCode": 1,
           "weatherDesc": "",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -6,
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
+          "temp": -22,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "afternoon": {
-          "weatherCode": 13,
+          "weatherCode": 1,
           "weatherDesc": "",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -6,
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
+          "temp": -22,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 13,
-          "weatherDesc": "Cloudy",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": 22,
+          "weatherCode": 1,
+          "weatherDesc": "",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
+          "temp": -22,
           "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "night": {
-          "weatherCode": 1,
-          "weatherDesc": "Clear",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
+          "weatherCode": 11,
+          "weatherDesc": "Broken Clouds",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": 17,
           "chanceofrain": 0,
           "rainInInches": 0.0
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "23",
     "temperature": "22",
     "hiTemp": "37",
-    "hiTempDate": 1785422900417,
+    "hiTempDate": 1785422895672,
     "loTemp": "16",
-    "loTempDate": 1785384440417,
+    "loTempDate": 1785384435672,
     "wind": "0",
     "gust": "25",
-    "gustAt": 1785424700417,
+    "gustAt": 1785424695672,
     "humidity": "66",
     "rain": "0.0",
     "seasonalRain": "383.4",
-    "barometer": "1013.7",
+    "barometer": "1013.6",
     "barometerTrend": "Steady",
-    "lastReceived": 1785444652000,
+    "lastReceived": 1785445254000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1785444652000,
+    "lastReceived": 1785445254000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1013.7,
-        "value": 1013.7,
-        "convertedValue": "1013.7",
+        "reportedValue": 1013.6,
+        "value": 1013.6,
+        "convertedValue": "1013.6",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -722,13 +722,13 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "DAY": 0.0,
           "YEAR": 383.4,
+          "DAY": 0.0,
           "MONTH": 38.2
         },
         "convertedValues": {
-          "DAY": "0.0",
           "YEAR": "383.4",
+          "DAY": "0.0",
           "MONTH": "38.2"
         },
         "assocSensorDataTypeId": null,
@@ -737,13 +737,13 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "DAY": 0.0,
           "YEAR": 0.0,
+          "DAY": 0.0,
           "MONTH": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
           "YEAR": "0.0",
+          "DAY": "0.0",
           "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
