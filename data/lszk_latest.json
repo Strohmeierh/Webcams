@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-08-01T07:51:14+00:00",
-  "station_last_received_utc": "2026-08-01T07:50:38+00:00",
+  "fetched_at_utc": "2026-08-01T08:01:15+00:00",
+  "station_last_received_utc": "2026-08-01T08:00:39+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 240,
+    "windDirection": 278,
     "forecastOverview": [
       {
         "date": "2026-08-01",
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "22",
     "temperature": "21",
     "hiTemp": "23",
-    "hiTempDate": 1785537674694,
+    "hiTempDate": 1785537675056,
     "loTemp": "18",
-    "loTempDate": 1785552734694,
+    "loTempDate": 1785552735056,
     "wind": "0",
     "gust": "13",
-    "gustAt": 1785537794694,
+    "gustAt": 1785537795056,
     "humidity": "88",
     "rain": "3.2",
     "seasonalRain": "386.6",
     "barometer": "1012.8",
-    "barometerTrend": "Steady",
-    "lastReceived": 1785570638000,
+    "barometerTrend": "Rising Slowly",
+    "lastReceived": 1785571239000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1785570638000,
+    "lastReceived": 1785571239000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 240,
-        "value": 240,
-        "convertedValue": "240",
+        "reportedValue": 278,
+        "value": 278,
+        "convertedValue": "278",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -238,9 +238,9 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Bar Trend",
         "displayName": null,
-        "reportedValue": 0,
-        "value": 0,
-        "convertedValue": "Steady",
+        "reportedValue": 20,
+        "value": 20,
+        "convertedValue": "Rising Slowly",
         "depthLabel": null,
         "category": null,
         "assocSensorDataTypeId": null,
@@ -722,13 +722,13 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "YEAR": 386.6,
           "DAY": 3.2,
+          "YEAR": 386.6,
           "MONTH": 3.2
         },
         "convertedValues": {
-          "YEAR": "386.6",
           "DAY": "3.2",
+          "YEAR": "386.6",
           "MONTH": "3.2"
         },
         "assocSensorDataTypeId": null,
@@ -737,13 +737,13 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "YEAR": 0.0,
           "DAY": 0.0,
+          "YEAR": 0.0,
           "MONTH": 0.0
         },
         "convertedValues": {
-          "YEAR": "0.0",
           "DAY": "0.0",
+          "YEAR": "0.0",
           "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
