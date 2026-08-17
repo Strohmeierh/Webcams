@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-08-17T20:51:13+00:00",
-  "station_last_received_utc": "2026-08-17T20:50:20+00:00",
+  "fetched_at_utc": "2026-08-17T21:01:15+00:00",
+  "station_last_received_utc": "2026-08-17T21:00:23+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 291,
@@ -8,27 +8,27 @@
       {
         "date": "2026-08-17",
         "morning": {
-          "weatherCode": 1,
+          "weatherCode": 34,
           "weatherDesc": "",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
-          "temp": -9,
-          "chanceofrain": 24,
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "temp": -23,
+          "chanceofrain": 45,
           "rainInInches": 0.0
         },
         "afternoon": {
-          "weatherCode": 1,
+          "weatherCode": 34,
           "weatherDesc": "",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
-          "temp": -9,
-          "chanceofrain": 24,
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "temp": -23,
+          "chanceofrain": 45,
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 1,
-          "weatherDesc": "Clear",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Clear.png",
-          "temp": 16,
-          "chanceofrain": 24,
+          "weatherCode": 34,
+          "weatherDesc": "",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
+          "temp": -23,
+          "chanceofrain": 45,
           "rainInInches": 0.0
         },
         "night": {
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "17",
     "temperature": "17",
     "hiTemp": "24",
-    "hiTempDate": 1786917613144,
+    "hiTempDate": 1786917615434,
     "loTemp": "-68",
-    "loTempDate": 1786941013144,
+    "loTempDate": 1786941015434,
     "wind": "0",
     "gust": "13",
-    "gustAt": 1786956253144,
+    "gustAt": 1786956255434,
     "humidity": "94",
     "rain": "29.8",
     "seasonalRain": "419.8",
-    "barometer": "1013.3",
+    "barometer": "1013.2",
     "barometerTrend": "Rising Slowly",
-    "lastReceived": 1786999820000,
+    "lastReceived": 1787000423000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1786999820000,
+    "lastReceived": 1787000423000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1013.3,
-        "value": 1013.3,
-        "convertedValue": "1013.3",
+        "reportedValue": 1013.2,
+        "value": 1013.2,
+        "convertedValue": "1013.2",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -723,13 +723,13 @@
         "sensorDataName": "Rain",
         "rawValues": {
           "DAY": 29.8,
-          "YEAR": 419.8,
-          "MONTH": 36.4
+          "MONTH": 36.4,
+          "YEAR": 419.8
         },
         "convertedValues": {
           "DAY": "29.8",
-          "YEAR": "419.8",
-          "MONTH": "36.4"
+          "MONTH": "36.4",
+          "YEAR": "419.8"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -738,13 +738,13 @@
         "sensorDataName": "ET",
         "rawValues": {
           "DAY": 0.0,
-          "YEAR": 0.0,
-          "MONTH": 0.0
+          "MONTH": 0.0,
+          "YEAR": 0.0
         },
         "convertedValues": {
           "DAY": "0.0",
-          "YEAR": "0.0",
-          "MONTH": "0.0"
+          "MONTH": "0.0",
+          "YEAR": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
