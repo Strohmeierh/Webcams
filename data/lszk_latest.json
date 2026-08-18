@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-08-18T17:51:13+00:00",
-  "station_last_received_utc": "2026-08-18T17:50:13+00:00",
+  "fetched_at_utc": "2026-08-18T18:01:14+00:00",
+  "station_last_received_utc": "2026-08-18T18:00:16+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 328,
+    "windDirection": 310,
     "forecastOverview": [
       {
         "date": "2026-08-18",
@@ -12,7 +12,7 @@
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": -6,
-          "chanceofrain": 10,
+          "chanceofrain": 9,
           "rainInInches": 0.0
         },
         "afternoon": {
@@ -20,7 +20,7 @@
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": -6,
-          "chanceofrain": 10,
+          "chanceofrain": 9,
           "rainInInches": 0.0
         },
         "evening": {
@@ -50,20 +50,20 @@
     "rainUnits": "mm",
     "tempUnits": "&deg;C",
     "temperatureFeelLike": "26",
-    "temperature": "26",
+    "temperature": "25",
     "hiTemp": "28",
-    "hiTempDate": 1787066413454,
+    "hiTempDate": 1787066414376,
     "loTemp": "-68",
-    "loTempDate": 1787027893454,
+    "loTempDate": 1787027894376,
     "wind": "0",
     "gust": "23",
-    "gustAt": 1787057113454,
-    "humidity": "51",
+    "gustAt": 1787057114376,
+    "humidity": "54",
     "rain": "0.0",
     "seasonalRain": "419.8",
     "barometer": "1009.0",
     "barometerTrend": "Steady",
-    "lastReceived": 1787075413000,
+    "lastReceived": 1787076016000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,15 +76,15 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1787075413000,
+    "lastReceived": 1787076016000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
         "sensorDataName": "Temp",
         "displayName": "Temp",
-        "reportedValue": 26,
-        "value": 26,
-        "convertedValue": "26",
+        "reportedValue": 25,
+        "value": 25,
+        "convertedValue": "25",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -95,9 +95,9 @@
         "sensorDataTypeId": 14,
         "sensorDataName": "Hum",
         "displayName": "Hum",
-        "reportedValue": 51,
-        "value": 51,
-        "convertedValue": "51",
+        "reportedValue": 54,
+        "value": 54,
+        "convertedValue": "54",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 328,
-        "value": 328,
-        "convertedValue": "328",
+        "reportedValue": 310,
+        "value": 310,
+        "convertedValue": "310",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -173,9 +173,9 @@
         "sensorDataTypeId": 55,
         "sensorDataName": "10 Min Avg Wind Speed",
         "displayName": "10 Min Avg Wind Speed",
-        "reportedValue": 1,
-        "value": 1,
-        "convertedValue": "1",
+        "reportedValue": 0,
+        "value": 0,
+        "convertedValue": "0",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -199,9 +199,9 @@
         "sensorDataTypeId": 56,
         "sensorDataName": "10 Min High Wind Speed",
         "displayName": "10 Min High Wind Speed",
-        "reportedValue": 4,
-        "value": 4,
-        "convertedValue": "4",
+        "reportedValue": 0,
+        "value": 0,
+        "convertedValue": "0",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -212,9 +212,9 @@
         "sensorDataTypeId": 10,
         "sensorDataName": "Dew Point",
         "displayName": "Dew Point",
-        "reportedValue": 15,
-        "value": 15,
-        "convertedValue": "15",
+        "reportedValue": 16,
+        "value": 16,
+        "convertedValue": "16",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "DAY": 0.0,
+          "YEAR": 419.8,
           "MONTH": 36.4,
-          "YEAR": 419.8
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "YEAR": "419.8",
           "MONTH": "36.4",
-          "YEAR": "419.8"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "DAY": 0.0,
+          "YEAR": 0.0,
           "MONTH": 0.0,
-          "YEAR": 0.0
+          "DAY": 0.0
         },
         "convertedValues": {
-          "DAY": "0.0",
+          "YEAR": "0.0",
           "MONTH": "0.0",
-          "YEAR": "0.0"
+          "DAY": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
