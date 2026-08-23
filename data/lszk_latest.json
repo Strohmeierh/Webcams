@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-08-23T07:11:13+00:00",
-  "station_last_received_utc": "2026-08-23T07:10:24+00:00",
+  "fetched_at_utc": "2026-08-23T07:21:11+00:00",
+  "station_last_received_utc": "2026-08-23T07:20:27+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 132,
+    "windDirection": 238,
     "forecastOverview": [
       {
         "date": "2026-08-23",
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "17",
     "temperature": "17",
     "hiTemp": "17",
-    "hiTempDate": 1787468953065,
+    "hiTempDate": 1787469611254,
     "loTemp": "-68",
-    "loTempDate": 1787458273065,
+    "loTempDate": 1787458271254,
     "wind": "0",
     "gust": "12",
-    "gustAt": 1787444473065,
-    "humidity": "77",
+    "gustAt": 1787444471254,
+    "humidity": "76",
     "rain": "0.0",
     "seasonalRain": "458.4",
     "barometer": "1019.1",
     "barometerTrend": "Rising Slowly",
-    "lastReceived": 1787469024000,
+    "lastReceived": 1787469627000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1787469024000,
+    "lastReceived": 1787469627000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -95,9 +95,9 @@
         "sensorDataTypeId": 14,
         "sensorDataName": "Hum",
         "displayName": "Hum",
-        "reportedValue": 77,
-        "value": 77,
-        "convertedValue": "77",
+        "reportedValue": 76,
+        "value": 76,
+        "convertedValue": "76",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 132,
-        "value": 132,
-        "convertedValue": "132",
+        "reportedValue": 238,
+        "value": 238,
+        "convertedValue": "238",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -290,9 +290,9 @@
         "sensorDataTypeId": 71,
         "sensorDataName": "Wet Bulb",
         "displayName": "Wet Bulb",
-        "reportedValue": 14,
-        "value": 14,
-        "convertedValue": "14",
+        "reportedValue": 15,
+        "value": 15,
+        "convertedValue": "15",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -539,8 +539,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "High Temp Time",
         "displayName": null,
-        "reportedValue": 909,
-        "value": 909,
+        "reportedValue": 920,
+        "value": 920,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -591,8 +591,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "High Heat Index Time",
         "displayName": null,
-        "reportedValue": 905,
-        "value": 905,
+        "reportedValue": 912,
+        "value": 912,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
+          "DAY": 0.0,
           "YEAR": 458.4,
-          "MONTH": 75.0,
-          "DAY": 0.0
+          "MONTH": 75.0
         },
         "convertedValues": {
+          "DAY": "0.0",
           "YEAR": "458.4",
-          "MONTH": "75.0",
-          "DAY": "0.0"
+          "MONTH": "75.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
+          "DAY": 0.0,
           "YEAR": 0.0,
-          "MONTH": 0.0,
-          "DAY": 0.0
+          "MONTH": 0.0
         },
         "convertedValues": {
+          "DAY": "0.0",
           "YEAR": "0.0",
-          "MONTH": "0.0",
-          "DAY": "0.0"
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
