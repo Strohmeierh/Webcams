@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-08-24T04:51:13+00:00",
-  "station_last_received_utc": "2026-08-24T04:50:47+00:00",
+  "fetched_at_utc": "2026-08-24T05:01:11+00:00",
+  "station_last_received_utc": "2026-08-24T05:00:50+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": null,
@@ -8,11 +8,11 @@
       {
         "date": "2026-08-24",
         "morning": {
-          "weatherCode": 14,
-          "weatherDesc": "Overcast",
+          "weatherCode": 13,
+          "weatherDesc": "Cloudy",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": 19,
-          "chanceofrain": 5,
+          "chanceofrain": 7,
           "rainInInches": 0.0
         },
         "afternoon": {
@@ -20,23 +20,23 @@
           "weatherDesc": "Overcast",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
           "temp": 24,
-          "chanceofrain": 0,
+          "chanceofrain": 9,
           "rainInInches": 0.0
         },
         "evening": {
-          "weatherCode": 47,
-          "weatherDesc": "Isolated Thunderstorms",
-          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Patchylightrainwiththunder.png",
-          "temp": 17,
-          "chanceofrain": 13,
+          "weatherCode": 14,
+          "weatherDesc": "Overcast",
+          "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
+          "temp": 18,
+          "chanceofrain": 0,
           "rainInInches": 0.0
         },
         "night": {
           "weatherCode": 31,
           "weatherDesc": "Drizzle",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
-          "temp": 15,
-          "chanceofrain": 26,
+          "temp": 14,
+          "chanceofrain": 32,
           "rainInInches": 0.0
         }
       }
@@ -52,18 +52,18 @@
     "temperatureFeelLike": null,
     "temperature": "0",
     "hiTemp": "18",
-    "hiTempDate": 1787522412879,
+    "hiTempDate": 1787522411219,
     "loTemp": "-68",
-    "loTempDate": 1787545272879,
+    "loTempDate": 1787545271219,
     "wind": "0",
     "gust": "3",
-    "gustAt": 1787523912879,
+    "gustAt": 1787523911219,
     "humidity": "0",
     "rain": "0.0",
     "seasonalRain": "458.4",
-    "barometer": "1015.7",
+    "barometer": "1015.6",
     "barometerTrend": "Steady",
-    "lastReceived": 1787547047000,
+    "lastReceived": 1787547650000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1787547047000,
+    "lastReceived": 1787547650000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -225,9 +225,9 @@
         "sensorDataTypeId": 26,
         "sensorDataName": "Barometer",
         "displayName": "Barometer",
-        "reportedValue": 1015.7,
-        "value": 1015.7,
-        "convertedValue": "1015.7",
+        "reportedValue": 1015.6,
+        "value": 1015.6,
+        "convertedValue": "1015.6",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -500,8 +500,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Bar",
         "displayName": null,
-        "reportedValue": 1015.7,
-        "value": 1015.7,
+        "reportedValue": 1015.5,
+        "value": 1015.5,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -656,8 +656,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Bar Time",
         "displayName": null,
-        "reportedValue": 650,
-        "value": 650,
+        "reportedValue": 657,
+        "value": 657,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
