@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-08-25T20:51:13+00:00",
-  "station_last_received_utc": "2026-08-25T20:50:42+00:00",
+  "fetched_at_utc": "2026-08-25T21:01:13+00:00",
+  "station_last_received_utc": "2026-08-25T21:00:45+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": 300,
@@ -11,7 +11,7 @@
           "weatherCode": 13,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -8,
+          "temp": -23,
           "chanceofrain": 10,
           "rainInInches": 0.0
         },
@@ -19,15 +19,15 @@
           "weatherCode": 13,
           "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": -8,
+          "temp": -23,
           "chanceofrain": 10,
           "rainInInches": 0.0
         },
         "evening": {
           "weatherCode": 13,
-          "weatherDesc": "Cloudy",
+          "weatherDesc": "",
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/Cloudy.png",
-          "temp": 17,
+          "temp": -23,
           "chanceofrain": 10,
           "rainInInches": 0.0
         },
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "18",
     "temperature": "18",
     "hiTemp": "25",
-    "hiTempDate": 1787674213542,
+    "hiTempDate": 1787674213280,
     "loTemp": "-68",
-    "loTempDate": 1787631373542,
+    "loTempDate": 1787631373280,
     "wind": "0",
     "gust": "10",
-    "gustAt": 1787653633542,
+    "gustAt": 1787653633280,
     "humidity": "94",
     "rain": "3.6",
     "seasonalRain": "462.0",
     "barometer": "1011.9",
     "barometerTrend": "Rising Slowly",
-    "lastReceived": 1787691042000,
+    "lastReceived": 1787691645000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1787691042000,
+    "lastReceived": 1787691645000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -199,9 +199,9 @@
         "sensorDataTypeId": 56,
         "sensorDataName": "10 Min High Wind Speed",
         "displayName": "10 Min High Wind Speed",
-        "reportedValue": 1,
-        "value": 1,
-        "convertedValue": "1",
+        "reportedValue": 0,
+        "value": 0,
+        "convertedValue": "0",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -723,13 +723,13 @@
         "sensorDataName": "Rain",
         "rawValues": {
           "DAY": 3.6,
-          "YEAR": 462.0,
-          "MONTH": 78.6
+          "MONTH": 78.6,
+          "YEAR": 462.0
         },
         "convertedValues": {
           "DAY": "3.6",
-          "YEAR": "462.0",
-          "MONTH": "78.6"
+          "MONTH": "78.6",
+          "YEAR": "462.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -738,13 +738,13 @@
         "sensorDataName": "ET",
         "rawValues": {
           "DAY": 0.0,
-          "YEAR": 0.0,
-          "MONTH": 0.0
+          "MONTH": 0.0,
+          "YEAR": 0.0
         },
         "convertedValues": {
           "DAY": "0.0",
-          "YEAR": "0.0",
-          "MONTH": "0.0"
+          "MONTH": "0.0",
+          "YEAR": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
