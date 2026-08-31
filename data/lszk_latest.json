@@ -1,9 +1,9 @@
 {
-  "fetched_at_utc": "2026-08-31T02:51:12+00:00",
-  "station_last_received_utc": "2026-08-31T02:50:34+00:00",
+  "fetched_at_utc": "2026-08-31T03:01:14+00:00",
+  "station_last_received_utc": "2026-08-31T03:00:35+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
-    "windDirection": 140,
+    "windDirection": 139,
     "forecastOverview": [
       {
         "date": "2026-08-31",
@@ -13,7 +13,7 @@
           "weatherIconUrl": "https://s3.amazonaws.com/static.weatherlink.com/images/forecast/LightRain.png",
           "temp": 20,
           "chanceofrain": 26,
-          "rainInInches": 0.02
+          "rainInInches": 0.01
         },
         "afternoon": {
           "weatherCode": 47,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": "16",
     "temperature": "15",
     "hiTemp": "19",
-    "hiTempDate": 1788135311976,
+    "hiTempDate": 1788135313929,
     "loTemp": "15",
-    "loTempDate": 1788144371976,
+    "loTempDate": 1788144793929,
     "wind": "0",
     "gust": "28",
-    "gustAt": 1788135431976,
+    "gustAt": 1788135433929,
     "humidity": "96",
     "rain": "2.0",
     "seasonalRain": "471.2",
     "barometer": "1013.9",
     "barometerTrend": "Rising Rapidly",
-    "lastReceived": 1788144634000,
+    "lastReceived": 1788145235000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1788144634000,
+    "lastReceived": 1788145235000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -147,9 +147,9 @@
         "sensorDataTypeId": 17,
         "sensorDataName": "Wind Direction",
         "displayName": "Wind Direction",
-        "reportedValue": 140,
-        "value": 140,
-        "convertedValue": "140",
+        "reportedValue": 139,
+        "value": 139,
+        "convertedValue": "139",
         "depthLabel": null,
         "category": "main",
         "assocSensorDataTypeId": null,
@@ -552,8 +552,8 @@
         "sensorDataTypeId": null,
         "sensorDataName": "Low Temp Time",
         "displayName": null,
-        "reportedValue": 446,
-        "value": 446,
+        "reportedValue": 453,
+        "value": 453,
         "convertedValue": null,
         "depthLabel": null,
         "category": null,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
-          "YEAR": 471.2,
+          "DAY": 2.0,
           "MONTH": 87.8,
-          "DAY": 2.0
+          "YEAR": 471.2
         },
         "convertedValues": {
-          "YEAR": "471.2",
+          "DAY": "2.0",
           "MONTH": "87.8",
-          "DAY": "2.0"
+          "YEAR": "471.2"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
-          "YEAR": 0.0,
+          "DAY": 0.0,
           "MONTH": 0.0,
-          "DAY": 0.0
+          "YEAR": 0.0
         },
         "convertedValues": {
-          "YEAR": "0.0",
+          "DAY": "0.0",
           "MONTH": "0.0",
-          "DAY": "0.0"
+          "YEAR": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
