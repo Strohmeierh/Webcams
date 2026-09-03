@@ -1,6 +1,6 @@
 {
-  "fetched_at_utc": "2026-09-03T05:21:12+00:00",
-  "station_last_received_utc": "2026-09-03T05:20:41+00:00",
+  "fetched_at_utc": "2026-09-03T05:31:48+00:00",
+  "station_last_received_utc": "2026-09-03T05:31:44+00:00",
   "device_token": "411b7945460c42848a14d053bb7c03c0",
   "current": {
     "windDirection": null,
@@ -52,18 +52,18 @@
     "temperatureFeelLike": null,
     "temperature": "0",
     "hiTemp": "17",
-    "hiTempDate": 1788395531915,
+    "hiTempDate": 1788395568368,
     "loTemp": "-68",
-    "loTempDate": 1788407891915,
+    "loTempDate": 1788407928368,
     "wind": "0",
     "gust": "0",
-    "gustAt": 1788652511915,
+    "gustAt": 1788652548368,
     "humidity": "0",
     "rain": "0.0",
     "seasonalRain": "471.4",
     "barometer": "1020.8",
     "barometerTrend": "Rising Slowly",
-    "lastReceived": 1788412841000,
+    "lastReceived": 1788413504000,
     "systemLocation": "Fehraltorf, ZH, CHE",
     "aqsLocation": null,
     "aqsLastReceived": null,
@@ -76,7 +76,7 @@
   },
   "summary": {
     "ownerName": null,
-    "lastReceived": 1788412841000,
+    "lastReceived": 1788413504000,
     "currConditionValues": [
       {
         "sensorDataTypeId": 7,
@@ -722,14 +722,14 @@
       {
         "sensorDataName": "Rain",
         "rawValues": {
+          "DAY": 0.0,
           "YEAR": 471.4,
-          "MONTH": 0.0,
-          "DAY": 0.0
+          "MONTH": 0.0
         },
         "convertedValues": {
+          "DAY": "0.0",
           "YEAR": "471.4",
-          "MONTH": "0.0",
-          "DAY": "0.0"
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
@@ -737,14 +737,14 @@
       {
         "sensorDataName": "ET",
         "rawValues": {
+          "DAY": 0.0,
           "YEAR": 0.0,
-          "MONTH": 0.0,
-          "DAY": 0.0
+          "MONTH": 0.0
         },
         "convertedValues": {
+          "DAY": "0.0",
           "YEAR": "0.0",
-          "MONTH": "0.0",
-          "DAY": "0.0"
+          "MONTH": "0.0"
         },
         "assocSensorDataTypeId": null,
         "unitLabel": "mm"
